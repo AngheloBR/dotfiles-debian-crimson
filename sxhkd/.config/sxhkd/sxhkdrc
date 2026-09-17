@@ -1,0 +1,141 @@
+#
+# atajos independientes del wm
+#
+
+# terminal
+super + Return
+        kitty
+
+# lanzador de aplicaciones
+super + d
+        rofi -show drun
+
+# Lanzador de thunat
+super + e
+        thunar
+
+# recargar la configuracion de sxhkd:
+super + Escape
+        pkill -USR1 -x sxhkd
+
+#navegador
+super + b
+        firefox
+
+# atajos de bspwm
+#
+
+# salir/reiniciar bspwm
+super + alt + {q,r}
+        bspc {quit,wm -r}
+
+# cerrar y matar ventana
+super + {_,shift + }w
+        bspc node -{c,k}
+
+# alternar entre layout tiled y monocle
+super + m
+        bspc desktop -l next
+
+# enviar la ventana marcada mas reciente a la preseleccion mas reciente
+super + y
+        bspc node newest.marked.local -n newest.!automatic.local
+
+# intercambiar la ventana actual con la mas grande
+super + g
+        bspc node -s biggest.window
+
+#
+# estados/flags
+#
+
+# estado de la ventana: tiling / pseudo-tiling / flotante / pantalla completa
+super + {t,shift + t,s,f}
+        bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# flags del nodo: marcada / bloqueada / pegajosa / privada
+super + ctrl + {m,x,y,z}
+        bspc node -g {marked,locked,sticky,private}
+
+#
+# enfoque/intercambio
+#
+
+# enfocar la ventana en la direccion dada (west/surd/north/este)
+# con shift: intercambiar ventana en esa direccion
+super + {_,shift + }{h,j,k,l}
+        bspc node -{f,s} {west,south,north,east}
+
+# enfocar el nodo segun el salto dado (padre/hermano/primero/segundo)
+super + {p,b,comma,period}
+        bspc node -f @{parent,brother,first,second}
+
+# enfocar la ventana siguiente/anterior del escritorio actual
+super + {_,shift + }c
+        bspc node -f {next,prev}.local.!hidden.window
+
+# enfocar el escritorio siguiente/anterior del monitor actual
+super + bracket{left,right}
+        bspc desktop -f {prev,next}.local
+
+# enfocar el ultimo nodo/escritorio usado
+super + {grave,Tab}
+        bspc {node,desktop} -f last
+
+# enfocar el nodo mas antiguo o mas nuevo del historial
+super + {o,i}
+        bspc wm -h off; \
+        bspc node {older,newer} -f; \
+        bspc wm -h on
+
+# enfocar o enviar ventana al escritorio dado (con shift: enviar)
+super + {_,shift + }{1-9,0}
+        bspc {desktop -f,node -d} '^{1-9,10}'
+
+#
+# preseleccion
+#
+
+# preseleccionar la direccion donde abrira la proxima ventana
+super + ctrl + {h,j,k,l}
+        bspc node -p {west,south,north,east}
+
+# preseleccionar la proporcion (10% ... 90%)
+super + ctrl + {1-9}
+        bspc node -o 0.{1-9}
+
+# cancelar la preseleccion del nodo enfocado
+super + ctrl + space
+        bspc node -p cancel
+
+# cancelar la preseleccion de todo el escritorio
+super + ctrl + shift + space
+        bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+#
+# mover/redimensionar
+#
+
+# expandir ventana hacia afuera
+super + alt + {h,j,k,l}
+        bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contraer ventana hacia adentro
+super + alt + shift + {h,j,k,l}
+        bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# mover ventana flotante con flechas
+super + {Left,Down,Up,Right}
+        bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# captura de pantalla con flameshot
+Print
+        flameshot gui
+
+# captura de pantalla completa (sin seleccionar)
+shift + Print
+        flameshot full -c
+
+# bloquear pantalla
+super + alt + l
+        i3lock -c 0f0f12

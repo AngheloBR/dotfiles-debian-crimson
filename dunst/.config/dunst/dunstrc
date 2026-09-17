@@ -1,0 +1,34 @@
+[global]
+    font = JetBrainsMono Nerd Font 11
+    frame_width = 2
+    frame_color = "#D70A53"
+    separator_color = frame
+    corner_radius = 8
+    padding = 12
+    horizontal_padding = 12
+    width = 350
+    offset = 12x40
+    origin = top-right
+    notification_limit = 5
+    progress_bar = true
+    sort = yes
+    idle_threshold = 120
+    transparency = 10
+
+[urgency_low]
+    background = "#1a1a1e"
+    foreground = "#b3b3b8"
+    timeout = 4
+    frame_color = "#45474e"
+
+[urgency_normal]
+    background = "#0f0f12"
+    foreground = "#d6d6d6"
+    timeout = 6
+    frame_color = "#E8B04B"
+
+[urgency_critical]
+    background = "#D70A53"
+    foreground = "#0f0f12"
+    frame_color = "#E8B04B"
+    timeout = 0

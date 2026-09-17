@@ -1,0 +1,343 @@
+════════════════════════════════════════════════════════════════
+ ██████╗  RICE BSPWM "DEBIAN CRIMSON" — DOCUMENTO MAESTRO
+════════════════════════════════════════════════════════════════
+
+⚠️ IMPORTANTE PARA LA IA / OPENCODE DEL FUTURO (lee esto primero):
+----------------------------------------------------------------
+Hola, yo (anghelo) instalé Debian 13 en HARDWARE REAL y te instalé
+(opencode) ahí. Este documento es la continuación de una sesión
+anterior. CONTEXTO:
+
+1. Todo el rice fue probado en VMs KVM (Debian 13 Trixie +
+   Debian 14 Forky testing). Funcionaba al 100%.
+2. Los dotfiles YA ESTÁN EN GITHUB (repo privado/público del usuario,
+   preguntar la URL — el usuario la conoce).
+3. Se usó GNU stow. El repo contiene: bspwm, sxhkd, polybar, kitty,
+   rofi, dunst, gtk, xinit, zsh, picom-vm, picom-real, scripts,
+   instalador.sh e instalar-paquetes.sh
+4. El instalador detecta VM vs real con: systemd-detect-virt
+5. PRIMERA TAREA al retomar: verificar que el usuario ya clonó el
+   repo y corrió instalador.sh + instalar-paquetes.sh. Preguntar
+   en qué paso va.
+6. TAREAS PENDIENTES EXPLÍCITAS (sección 9 de este documento):
+   - Tunear p10k con colores Debian (carmesí #D70A53, dorado #E8B04B)
+   - Verificar picom COMPLETO en hardware real (glx, sombras, blur)
+   - Configurar audio (pipewire), brillo (brightnessctl), red
+   - Navegador y perfiles
+   - Opcional: betterlockscreen compilado para lockscreen más bonito
+7. Filosofía del usuario: Debian por ESTABILIDAD (cansado de
+   actualizaciones frecuentes de Fedora). Prefiere minimalismo,
+   español, y aprender. Trátalo como alumno avanzado: explica
+   el porqué de las cosas.
+----------------------------------------------------------------
+
+════════════════════════════════════════════════════════════════
+ 1. DATOS DEL HARDWARE DESTINO
+════════════════════════════════════════════════════════════════
+
+Equipo: Lenovo IdeaPad 1 15ALC7 (laptop)
+  CPU: AMD Ryzen 7 5700U (8c/16t) @ 4.37 GHz
+  GPU: AMD Lucienne (integrada) — drivers amdgpu open-source
+  RAM: 13.48 GiB
+  Disco: ~951 GiB (btrfs era el FS en Fedora)
+  Pantallas: 1 integrada 1920x1080@60Hz + 1 externa 1920x1080@75Hz
+  (CONFIGURACIÓN MULTIMONITOR PENDIENTE EN HARDWARE REAL)
+  Batería + Wi-Fi (firmware non-free necesario en instalador)
+
+Sistema origen (abandonado): Fedora 44 Workstation con GNOME
+Motivo del cambio: estabilidad, menos actualizaciones, control total.
+
+════════════════════════════════════════════════════════════════
+ 2. PALETA "DEBIAN CRIMSON"
+════════════════════════════════════════════════════════════════
+
+  Negro profundo    #0f0f12   fondos principales
+  Gris oscuro       #2b2b2e   bordes inactivos, elementos apagados
+  Gris medio        #45474e   iconos de escritorios vacíos
+  Gris claro        #b3b3b8   texto normal
+  Texto brillante   #d6d6d6   texto principal
+  Carmesí Debian    #D70A53   FOCO, selección, acentos principales
+  Carmesí brillante #ff2e6e   color1 intenso de terminal
+  Dorado            #E8B04B   iconos, reloj, urgentes
+  Dorado claro      #ffd080   color11 terminal
+
+════════════════════════════════════════════════════════════════
+ 3. INSTALACIÓN RÁPIDA (resumen ejecutivo)
+════════════════════════════════════════════════════════════════
+
+# 1. Debian 13 netinstall (CON firmware, sin entorno de escritorio)
+# 2. Primer arranque:
+sudo apt update && sudo apt install -y git
+git clone <URL-REPO-GITHUB> ~/dotfiles
+cd ~/dotfiles
+./instalar-paquetes.sh
+./instalador.sh
+# 3. Reiniciar → LightDM → sesión bspwm
+# 4. Copiar wallpaper a ~/fondo.jpg
+# 5. p10k configure (asistente del prompt zsh)
+
+════════════════════════════════════════════════════════════════
+ 4. LISTA COMPLETA DE PAQUETES
+════════════════════════════════════════════════════════════════
+
+Base X11 y WM:     xorg xinit x11-xserver-utils bspwm sxhkd
+Rice visual:       picom polybar rofi kitty feh papirus-icon-theme
+Notificaciones:    dunst libnotify-bin
+Capturas:          flameshot  (maim como alternativa)
+Bloqueo y login:   i3lock imagemagick lightdm lightdm-gtk-greeter
+Navegador:         firefox-esr
+Archivos:          thunar gvfs gvfs-backends thunar-archive-plugin
+                   thunar-volman tumbler ffmpegthumbnailer file-roller
+Shell:             zsh zsh-autosuggestions zsh-syntax-highlighting
+Utilidades:        xdg-user-dirs git stow curl wget unzip
+Fuentes:           fonts-jetbrains-mono (apt) +
+                   JetBrainsMono Nerd Font (descarga GitHub releases)
+
+SOLO HARDWARE REAL (el script las instala si NO es VM):
+  network-manager brightnessctl pipewire pipewire-pulse pavucontrol blueman
+
+Instalaciones manuales:
+  powerlevel10k:  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+  Nerd Font:      wget github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+                  → descomprimir en ~/.local/share/fonts/JetBrainsMonoNerd
+                  → fc-cache -fv
+
+════════════════════════════════════════════════════════════════
+ 5. CONFIGS COMPLETAS (copia de seguridad)
+════════════════════════════════════════════════════════════════
+
+─── 5.1 ~/.xinitrc ───
+exec bspwm
+
+─── 5.2 ~/.config/bspwm/bspwmrc ───
+#!/bin/sh
+setxkbmap latam &
+sxhkd &
+polybar main &
+picom &
+dunst &
+feh --bg-scale ~/fondo.jpg &
+
+# 7 escritorios con ICONOS nerd font (ver 5.3 para generarlos)
+bspc monitor -d "" "" "" "" "" "" ""
+
+bspc config border_width         2
+bspc config window_gap           12
+bspc config focused_border_color "#D70A53"
+bspc config normal_border_color  "#2b2b2e"
+
+bspc rule -a flameshot state=floating
+bspc rule -a thunar state=floating rectangle=1000x650+0+0 center=true
+
+NOTA MULTIMONITOR (para el hardware real, PENDIENTE):
+  con dos pantallas se usa algo como:
+    bspc monitor HDMI-A-0 -d    (externo)
+    bspc monitor eDP -d         (laptop)
+  y antes xrandr para posicionarlas:
+    xrandr --output HDMI-A-0 --primary --right-of eDP
+  (nombres exactos salen de: xrandr | grep " connected")
+
+─── 5.3 Iconos de escritorios (generarlos así) ───
+TERM=$(printf '\uf120'); WEB=$(printf '\uf269'); CODE=$(printf '\uf121')
+FILES=$(printf '\uf07b'); MUS=$(printf '\uf001'); CHAT=$(printf '\uf086')
+GEAR=$(printf '\uf013')
+sed -i "s|^bspc monitor -d.*|bspc monitor -d \"$TERM\" \"$WEB\" \"$CODE\" \"$FILES\" \"$MUS\" \"$CHAT\" \"$GEAR\"|" ~/.config/bspwm/bspwmrc
+
+─── 5.4 ~/.config/sxhkd/sxhkdrc (resumen de bindings) ───
+super + Return            → kitty
+super + d                 → rofi -show drun
+super + e                 → thunar
+super + Escape            → pkill -USR1 -x sxhkd (recargar)
+super + ntilde            → ~/.local/bin/bloquear.sh  (lock con blur)
+Print                     → flameshot gui
+shift + Print             → flameshot full -c
+super + {_,shift+}w       → cerrar/matar ventana
+super + m                 → monocle
+super + g                 → swap con ventana mayor
+super + {t,S+t,s,f}       → tiled/pseudo/floating/fullscreen
+super + {_,shift+}{h,j,k,l} → foco/swap de ventanas
+super + alt +{,shift+}{h,j,k,l} → expandir/contraer
+super + {Left,Down,Up,Right}  → mover flotantes
+super + bracket{left,right}   → escritorio anterior/siguiente
+super + {_,shift+}{1-9,0}     → ir a/enviar a escritorio
+super + ctrl + {h,j,k,l}      → PRESELECCIÓN de dirección
+super + ctrl + {1-9}          → proporción preselección
+super + ctrl + space          → cancelar preselección
+super + alt + {q,r}           → salir/reiniciar bspwm
+
+─── 5.5 ~/.config/polybar/config.ini ───
+NOTA: los iconos en los labels se generaron con printf
+(el texto aquí los puede perder). Regenerar con script de la
+sesión anterior o editar a mano. Estructura:
+
+[bar/main]
+width = 100%, height = 28
+background = #ee0f0f12
+foreground = #b3b3b8
+padding-left = 1, padding-right = 1, module-margin = 1
+font-0 = JetBrainsMono Nerd Font Mono:size=11;2
+modules-left = logo bspwm
+modules-center = date
+modules-right = network cpu memory
+
+[module/logo] custom/text → icono debian , fore #E8B04B
+[module/bspwm] internal/bspwm
+  label-focused: bg #D70A53, fg #0f0f12, padding 2
+  label-occupied: fg #D70A53 ; label-empty: fg #45474e
+  label-urgent: bg #E8B04B
+[module/date] icono reloj dorado + %H:%M
+[module/network] internal/network (interface = la del default route)
+  icono wifi , muestra %local_ip%
+[module/cpu] icono carmesí  + %percentage%%
+[module/memory] icono dorado  + %percentage_used%%
+
+─── 5.6 ~/.config/kitty/kitty.conf ───
+font_family JetBrainsMono Nerd Font
+font_size 11
+background #0f0f12
+foreground #d6d6d6
+cursor #E8B04B
+selection_background #D70A53
+selection_foreground #0f0f12
+color0 #1a1a1e | color1 #D70A53 | color3 #E8B04B
+color8 #45474e | color9 #ff2e6e | color11 #ffd080
+background_opacity 0.92
+window_padding_width 6
+
+─── 5.7 Picom VM (~/.config/picom/picom.conf en VMs) ───
+backend = "xrender"; vsync = false;
+shadow = false; fading = false; corner-radius = 10;
+opacity-rule = [ "92:class_g = 'kitty'" ];
+
+─── 5.8 Picom HARDWARE REAL (activo ahora) ───
+backend = "glx"; vsync = true;
+shadow = true; shadow-radius = 12; shadow-opacity = 0.4;
+corner-radius = 10;
+inactive-opacity = 0.95; active-opacity = 1.0;
+opacity-rule = [ "90:class_g = 'kitty'", "95:class_g = 'Thunar'" ];
+blur-method = "dual_kawase"; blur-strength = 5;
+
+─── 5.9 ~/.config/dunst/dunstrc ───
+[global] font JetBrainsMono Nerd Font 11, frame_width 2,
+frame_color #D70A53, corner_radius 8, width 350,
+offset 12x40, origin top-right
+[urgency_normal] bg #0f0f12 fg #d6d6d6 frame #E8B04B
+[urgency_critical] bg #D70A53 fg #0f0f12 frame #E8B04B timeout 0
+
+─── 5.10 ~/.config/rofi/config.rasi ───
+configuration { font: "JetBrainsMono Nerd Font 12"; show-icons: true; }
+* { colores: bg #0f0f12, fg #b3b3b8, crimson #D70A53, gold #E8B04B }
+window { border 2px crimson, border-radius 8px, width 40% }
+element selected { bg crimson, fg #0f0f12 }
+prompt { text-color gold }
+
+─── 5.11 ~/.config/gtk-3.0/settings.ini y ~/.gtkrc-2.0 ───
+gtk-theme-name = Adwaita-dark
+gtk-icon-theme-name = Papirus-Dark
+gtk-font-name = JetBrainsMono Nerd Font 10
+gtk-application-prefer-dark-theme = true
+
+─── 5.12 LightDM → /etc/lightdm/lightdm-gtk-greeter.conf ───
+[greeter]
+theme-name = Adwaita-dark
+icon-theme-name = Papirus-Dark
+font-name = JetBrainsMono Nerd Font 11
+background = #0f0f12
+(activar: sudo systemctl enable lightdm)
+
+─── 5.13 ~/.zshrc ───
+- instant prompt p10k (bloque estándar al inicio)
+- HISTFILE=~/.zsh_history, SIZE 10000, SHARE_HISTORY,
+  HIST_IGNORE_DUPS
+- autoload -Uz compinit && compinit
+- source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+- source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+- source ~/.powerlevel10k/powerlevel10k.zsh-theme
+- [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+─── 5.14 ~/.local/bin/bloquear.sh (lock con blur) ───
+#!/bin/bash
+WALLPAPER=$(grep -oP "(?<=--bg-scale ).*?(?= &)" ~/.config/bspwm/bspwmrc | head -1)
+WALLPAPER="${WALLPAPER/#\~/$HOME}"
+CACHE=~/.cache/lockscreen.png
+HASH_FILE=~/.cache/lockscreen.md5
+mkdir -p ~/.cache
+HNEW=$(md5sum "$WALLPAPER" | cut -d' ' -f1)
+HOLD=$(cat "$HASH_FILE" 2>/dev/null)
+if [ "$HNEW" != "$HOLD" ] || [ ! -f "$CACHE" ]; then
+    magick "$WALLPAPER" -resize 1920x1080^ -gravity center \
+        -extent 1920x1080 -blur 0x8 "$CACHE"
+    echo "$HNEW" > "$HASH_FILE"
+fi
+i3lock -i "$CACHE"
+
+════════════════════════════════════════════════════════════════
+ 6. scripts del repo (instalador.sh e instalar-paquetes.sh)
+════════════════════════════════════════════════════════════════
+
+instalador.sh:
+  cd ~/dotfiles
+  stow bspwm sxhkd polybar kitty rofi dunst gtk xinit zsh
+  stow -D picom-vm picom-real 2>/dev/null
+  if systemd-detect-virt -q → stow picom-vm
+  else → stow picom-real
+
+instalar-paquetes.sh:
+  apt install (lista sección 4) + si NO es VM: extras de laptop
+  + Nerd Font (si no está) + p10k (si no está)
+  + LANG=es_ES.UTF-8 xdg-user-dirs-update
+  + chsh -s $(which zsh) si no es ya zsh
+
+════════════════════════════════════════════════════════════════
+ 7. SOLUCIÓN DE PROBLEMAS CONOCIDOS
+════════════════════════════════════════════════════════════════
+
+- Ejemplos de configs en Debian están en /usr/share/doc/<paquete>/,
+  a veces .gz o en subdirectorios /examples/. Buscar con:
+  dpkg -L <paquete> | grep -i <nombre>
+- Iconos Nerd Font se pierden al copiar por SSH → generarlos con
+  printf '\uf306' dentro de scripts bash
+- Tras chsh a zsh: CERRAR SESIÓN de TTY toda (exit, relogin).
+  $SHELL viejo se hereda a la sesión X.
+- Picom en KVM da glitches: es normal, GPU emulada.
+  En hardware real (AMD) funciona perfecto con backend glx.
+- Super+Alt+L no capturaba en KVM → Super+ñ (ntilde) como lock
+- Evitar acentos en comentarios de configs por compatibilidad
+- Nombres de interfaces: ip route | awk '/^default/ {print $5}'
+
+════════════════════════════════════════════════════════════════
+ 8. PENDIENTES TÉCNICOS (hardware real)
+════════════════════════════════════════════════════════════════
+
+[ ] AUDIO: verificar pipewire, alsamixer, pavucontrol.
+    Atajos de volumen pendientes en sxhkd:
+      XF86Audio{Raise,Lower}Volume → pactl set-sink-volume @DEFAULT_SINK@ {+,-}5%
+      XF86AudioMute → pactl set-sink-mute @DEFAULT_SINK@ toggle
+[ ] BRILLO: brightnessctl set 10%+ / 10%-
+    Atajos XF86MonBrightness{Up,Down}
+[ ] MULTIMONITOR (xrandr + bspc monitor, ver 5.2)
+[ ] Wi-Fi: network-manager, applet o nmtui
+[ ] p10k con colores Debian (POWERLEVEL9K_*_FOREGROUND)
+[ ] Snapshots/backups: btrfs o rsync de ~/ y ~/dotfiles
+[ ] Bluetooth: blueman si se usa
+[ ] Firefox: importar perfiles/marcadores; considerar auto-inicio
+[ ] Considerar: redshift/gammastep para luz nocturna
+[ ] Considerar: betterlockscreen compilado (lockscreen deluxe)
+
+════════════════════════════════════════════════════════════════
+ 9. CHECKLIST DEL PRIMER ARRANQUE REAL
+════════════════════════════════════════════════════════════════
+
+[ ] repo clonado, scripts corridos, stow OK
+[ ] teclado latam en X y TTY
+[ ] zsh es shell por defecto ($SHELL y ps -p $$)
+[ ] polybar con iconos (nerd font)
+[ ] lightdm aparece al arrancar
+[ ] Super+Enter, Super+D, Super+E, Super+ñ funcionan
+[ ] flameshot abre flotante
+[ ] sonido sale, brillo funciona, wi-fi conecta
+[ ] fondo de pantalla presente (~/fondo.jpg)
+
+════════════════════════════════════════════════════════════════
+FIN DEL DOCUMENTO — que la fuerza del carmesí te acompañe 🔴
+════════════════════════════════════════════════════════════════
