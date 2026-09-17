@@ -136,6 +136,36 @@ Print
 shift + Print
         flameshot full -c
 
-# bloquear pantalla
+# bloquear pantalla (blur del wallpaper si hay imagemagick)
 super + alt + l
-        i3lock -c 0f0f12
+	~/.local/bin/bloquear.sh
+
+# bloqueo alternativo estilo latam
+super + ntilde
+	~/.local/bin/bloquear.sh
+
+#
+# teclas multimedia (hardware real)
+#
+
+# volumen (pipewire) con notificacion de nivel
+XF86AudioRaiseVolume
+	pactl set-sink-volume @DEFAULT_SINK@ +5% && \
+	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -m1 -oP '[0-9]+(?=%)') "Volumen"
+
+XF86AudioLowerVolume
+	pactl set-sink-volume @DEFAULT_SINK@ -5% && \
+	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -m1 -oP '[0-9]+(?=%)') "Volumen"
+
+XF86AudioMute
+	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
+	dunstify -h string:x-dunst-stack-tag:volumen "Mute: $(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')"
+
+# brillo de pantalla con notificacion de nivel
+XF86MonBrightnessUp
+	brightnessctl -q set +10% && \
+	dunstify -h string:x-dunst-stack-tag:brillo -h int:value:$(brightnessctl -m | cut -d, -f4 | tr -d '%') "Brillo"
+
+XF86MonBrightnessDown
+	brightnessctl -q set 10%- && \
+	dunstify -h string:x-dunst-stack-tag:brillo -h int:value:$(brightnessctl -m | cut -d, -f4 | tr -d '%') "Brillo"

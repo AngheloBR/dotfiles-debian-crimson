@@ -21,7 +21,7 @@ bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 polybar main &
-feh --bg-scale ~/fondo.jpg &
+feh --bg-scale ~/.dotfiles/wallpapers/fondo.png &
 picom &
 dunst &
 bspc rule -a flameshot state=floating

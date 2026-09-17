@@ -23,5 +23,8 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # Config de p10k (se genera con el wizard)
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# binarios propios (bloquear.sh y cia)
+export PATH="$HOME/.local/bin:$PATH"
+
 # opencode
 export PATH=/home/anghelo/.opencode/bin:$PATH
