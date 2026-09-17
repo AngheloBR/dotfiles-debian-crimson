@@ -1,0 +1,6 @@
+# Symlinks locales de binarios (especificos de esta maquina)
+scripts/.local/bin/nvim
+
+# Caches
+.cache/
+*.log
