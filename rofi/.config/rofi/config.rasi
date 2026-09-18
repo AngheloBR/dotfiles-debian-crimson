@@ -1,14 +1,32 @@
+// ═══════════════════════════════════════════════
+//  rofi — Rice "Debian Crimson"
+//  Lanzador tipo grid con iconos (drun + run + ventanas)
+// ═══════════════════════════════════════════════
+
 configuration {
+    modi: "drun,run,window";
     font: "JetBrainsMono Nerd Font 12";
     show-icons: true;
+    icon-theme: "Papirus-Dark";
+
+    display-drun:   "  Apps";
+    display-run:    "  Ejecutar";
+    display-window: "  Ventanas";
+
+    hover-select: true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+
+    drun-display-format: "{name}";
 }
 
 * {
-    bg: #0f0f12;
-    bg-alt: #1a1a1e;
-    fg: #b3b3b8;
-    crimson: #D70A53;
-    gold: #E8B04B;
+    bg:        #0f0f12;
+    bg-alt:    #1a1a1e;
+    fg:        #d6d6d6;
+    fg-weak:   #45474e;
+    crimson:   #D70A53;
+    gold:      #E8B04B;
 
     background-color: transparent;
     text-color: @fg;
@@ -18,19 +36,90 @@ window {
     background-color: @bg;
     border: 2px;
     border-color: @crimson;
-    border-radius: 8px;
-    width: 40%;
+    border-radius: 12px;
+    width: 720px;
+    location: center;
+    anchor: center;
+    padding: 0px;
 }
 
+mainbox {
+    background-color: transparent;
+    children: [ inputbar, listview ];
+    spacing: 14px;
+    padding: 18px;
+}
+
+// "-- barra de busqueda --"
 inputbar {
     background-color: @bg-alt;
-    text-color: @fg;
-    padding: 8px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    spacing: 10px;
+    children: [ prompt, entry ];
 }
 
-prompt { text-color: @gold; }
+prompt {
+    text-color: @gold;
+}
 
-element selected {
+entry {
+    placeholder: "Buscar...";
+    placeholder-color: @fg-weak;
+    text-color: @fg;
+    cursor: text;
+}
+
+// "-- lista en rejilla con iconos --"
+listview {
+    columns: 4;
+    lines: 3;
+    cycle: true;
+    scrollbar: false;
+    spacing: 10px;
+    fixed-height: true;
+    fixed-columns: true;
+    layout: vertical;
+}
+
+element {
+    orientation: vertical;
+    padding: 10px 6px;
+    spacing: 8px;
+    border-radius: 10px;
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element-icon {
+    size: 42px;
+    horizontal-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
+}
+
+element selected.normal {
     background-color: @crimson;
-    text-color: #0f0f12;
+    text-color: @bg;
+}
+
+element-text selected.normal,
+element-icon selected.normal {
+    text-color: @bg;
+}
+
+//"-- mensajes de error/aviso --"
+error-message {
+    background-color: @bg;
+    border: 2px;
+    border-color: @crimson;
+    border-radius: 10px;
+    padding: 12px;
 }

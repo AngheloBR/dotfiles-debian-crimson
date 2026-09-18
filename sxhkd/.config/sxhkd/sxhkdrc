@@ -136,12 +136,12 @@ Print
 shift + Print
         flameshot full -c
 
-# bloquear pantalla (blur del wallpaper si hay imagemagick)
-super + alt + l
+# bloquear pantalla — tecla fisica del candado (F10 en la tapa del Lenovo)
+F10
 	~/.local/bin/bloquear.sh
 
-# bloqueo alternativo estilo latam
-super + ntilde
+# si Fn-lock la emite como XF86ScreenSaver, tambien funciona
+XF86ScreenSaver
 	~/.local/bin/bloquear.sh
 
 #
