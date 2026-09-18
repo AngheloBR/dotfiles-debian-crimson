@@ -22,6 +22,10 @@ super + Escape
 super + b
         firefox
 
+# editor de codigo (LazyVim dentro de kitty)
+super + n
+	kitty -e ~/.local/bin/nvim
+
 # atajos de bspwm
 #
 

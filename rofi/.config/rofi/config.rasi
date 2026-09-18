@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════
 //  rofi — Rice "Debian Crimson"
-//  Lanzador tipo grid con iconos (drun + run + ventanas)
+//  Tema OSCURO con acento carmesi / dorado
 // ═══════════════════════════════════════════════
 
 configuration {
@@ -21,10 +21,11 @@ configuration {
 }
 
 * {
-    bg:        #0f0f12;
-    bg-alt:    #1a1a1e;
-    fg:        #d6d6d6;
-    fg-weak:   #45474e;
+    bg:        #0f0f12;   /* negro profundo */
+    bg-alt:    #191920;   /* casi negro, un punto mas claro */
+    bg-sel:    #D70A53;   /* carmesi para lo seleccionado */
+    fg:        #d6d6d6;   /* texto normal */
+    fg-weak:   #45474e;   /* gris para placeholder */
     crimson:   #D70A53;
     gold:      #E8B04B;
 
@@ -36,63 +37,65 @@ window {
     background-color: @bg;
     border: 2px;
     border-color: @crimson;
-    border-radius: 12px;
-    width: 720px;
+    border-radius: 14px;
+    width: 640px;
     location: center;
     anchor: center;
-    padding: 0px;
 }
 
 mainbox {
-    background-color: transparent;
+    background-color: @bg;
+    border-radius: 14px;
     children: [ inputbar, listview ];
-    spacing: 14px;
-    padding: 18px;
+    spacing: 12px;
+    padding: 16px;
 }
 
 // "-- barra de busqueda --"
 inputbar {
     background-color: @bg-alt;
     border-radius: 10px;
-    padding: 12px 14px;
-    spacing: 10px;
+    padding: 10px 12px;
+    spacing: 8px;
     children: [ prompt, entry ];
 }
 
 prompt {
     text-color: @gold;
+    padding: 2px 4px 2px 2px;
 }
 
 entry {
-    placeholder: "Buscar...";
+    placeholder: "Buscar programa...";
     placeholder-color: @fg-weak;
     text-color: @fg;
     cursor: text;
 }
 
-// "-- lista en rejilla con iconos --"
+// "-- rejilla de programas --"
 listview {
     columns: 4;
     lines: 3;
     cycle: true;
     scrollbar: false;
-    spacing: 10px;
+    spacing: 8px;
     fixed-height: true;
     fixed-columns: true;
     layout: vertical;
+    background-color: transparent;
 }
 
 element {
     orientation: vertical;
     padding: 10px 6px;
-    spacing: 8px;
+    spacing: 6px;
     border-radius: 10px;
-    background-color: transparent;
+    background-color: @bg-alt;   /* tarjeta oscura */
     text-color: @fg;
 }
 
 element-icon {
-    size: 42px;
+    size: 40px;
     horizontal-align: 0.5;
     background-color: transparent;
     text-color: inherit;
@@ -106,16 +109,17 @@ element-text {
 }
 
 element selected.normal {
-    background-color: @crimson;
+    background-color: @bg-sel;    /* tarjeta carmesi */
     text-color: @bg;
 }
 
 element-text selected.normal,
 element-icon selected.normal {
+    background-color: transparent;
     text-color: @bg;
 }
 
-//"-- mensajes de error/aviso --"
+// "-- errores --"
 error-message {
     background-color: @bg;
     border: 2px;
