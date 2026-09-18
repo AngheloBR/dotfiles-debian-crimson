@@ -100,7 +100,9 @@ ffmpegthumbnailer
 file
 file-roller
 findutils
+firefox
 firefox-esr
+firefox-l10n-es-es
 firmware-amd-graphics
 firmware-mediatek
 firmware-sof-signed
@@ -381,7 +383,6 @@ libepoxy0:amd64
 liberror-perl
 libev4t64:amd64
 libevdev2:amd64
-libevent-2.1-7t64:amd64
 libexif12:amd64
 libexo-2-0:amd64
 libexo-common
