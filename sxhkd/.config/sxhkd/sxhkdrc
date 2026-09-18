@@ -155,11 +155,11 @@ XF86ScreenSaver
 # volumen (pipewire) con notificacion de nivel
 XF86AudioRaiseVolume
 	pactl set-sink-volume @DEFAULT_SINK@ +5% && \
-	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -m1 -oP '[0-9]+(?=%)') "Volumen"
+	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '[0-9]+(?=%)' | head -1) "Volumen"
 
 XF86AudioLowerVolume
 	pactl set-sink-volume @DEFAULT_SINK@ -5% && \
-	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -m1 -oP '[0-9]+(?=%)') "Volumen"
+	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '[0-9]+(?=%)' | head -1) "Volumen"
 
 XF86AudioMute
 	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
@@ -173,3 +173,38 @@ XF86MonBrightnessUp
 XF86MonBrightnessDown
 	brightnessctl -q set 10%- && \
 	dunstify -h string:x-dunst-stack-tag:brillo -h int:value:$(brightnessctl -m | cut -d, -f4 | tr -d '%') "Brillo"
+
+#
+# teclas fisicas del Lenovo (fila Fn)
+#
+
+# microfono mute/unmute (F4)
+F4
+	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
+	dunstify -h string:x-dunst-stack-tag:mic "Microfono: $(LANG=C pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}' | sed 's/yes/MUTEADO/;s/no/activo/')"
+
+XF86AudioMicMute
+	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
+	dunstify -h string:x-dunst-stack-tag:mic "Microfono: $(LANG=C pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}' | sed 's/yes/MUTEADO/;s/no/activo/')"
+
+# modo avion (F8): toggle del Wi-Fi
+F8
+	if LANG=C nmcli radio wifi | grep -q enabled; then \
+		nmcli radio wifi off && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi APAGADO"; \
+	else \
+		nmcli radio wifi on && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi ENCENDIDO"; \
+	fi
+
+XF86AirplaneMode
+	if LANG=C nmcli radio wifi | grep -q enabled; then \
+		nmcli radio wifi off && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi APAGADO"; \
+	else \
+		nmcli radio wifi on && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi ENCENDIDO"; \
+	fi
+
+# ajustes del sistema (F9)
+F9
+	~/.local/bin/ajustes.sh
+
+XF86Tools
+	~/.local/bin/ajustes.sh
