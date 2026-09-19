@@ -31,7 +31,8 @@ case "$ELEC" in
         pkill -USR1 -x sxhkd && dunstify "sxhkd recargado" ;;
     "Reiniciar polybar")
         pkill -x polybar; sleep 1
-        setsid polybar main >/dev/null 2>&1 < /dev/null & ;;
+        setsid polybar main >/dev/null 2>&1 < /dev/null &
+        setsid polybar hdmi >/dev/null 2>&1 < /dev/null & ;;
     "Reiniciar bspwm")
         bspc wm -r ;;
 esac
