@@ -3,7 +3,13 @@ setxkbmap latam &
 
 pgrep -x sxhkd > /dev/null || sxhkd &
 
-bspc monitor -d "" "" "" "" "" "" "" "" "" ""
+# escritorios solo en la laptop (10 iconos)
+bspc monitor eDP -d "" "" "" "" "" "" "" "" "" ""
+
+# monitor externo: un unico escritorio (si esta conectado)
+if bspc query -M --names | grep -q '^HDMI-A-0$'; then
+	bspc monitor HDMI-A-0 -d ""
+fi
 
 bspc config border_width         2
 bspc config window_gap          12
