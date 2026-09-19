@@ -3,7 +3,7 @@ setxkbmap latam &
 
 pgrep -x sxhkd > /dev/null || sxhkd &
 
-bspc monitor -d "" "" "" "" "" "" ""
+bspc monitor -d "" "" "" "" "" "" "" "" "" ""
 
 bspc config border_width         2
 bspc config window_gap          12
@@ -26,3 +26,4 @@ picom &
 dunst &
 bspc rule -a flameshot state=floating
 bspc rule -a thunar state=floating rectangle=1000x650+0+0 center=true
+bspc rule -a calendario state=floating rectangle=700x560+0+0 center=true

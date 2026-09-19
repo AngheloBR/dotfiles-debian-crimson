@@ -189,18 +189,10 @@ XF86AudioMicMute
 
 # modo avion (F8): toggle del Wi-Fi
 F8
-	if LANG=C nmcli radio wifi | grep -q enabled; then \
-		nmcli radio wifi off && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi APAGADO"; \
-	else \
-		nmcli radio wifi on && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi ENCENDIDO"; \
-	fi
+	~/.local/bin/red-wifi.sh toggle
 
 XF86AirplaneMode
-	if LANG=C nmcli radio wifi | grep -q enabled; then \
-		nmcli radio wifi off && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi APAGADO"; \
-	else \
-		nmcli radio wifi on && dunstify -h string:x-dunst-stack-tag:avion "Modo avion: Wi-Fi ENCENDIDO"; \
-	fi
+	~/.local/bin/red-wifi.sh toggle
 
 # ajustes del sistema (F9)
 F9
