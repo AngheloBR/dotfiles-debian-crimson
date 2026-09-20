@@ -38,8 +38,10 @@ dotfiles/
 │                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
 │                wifi-menu.sh (redes con señal/clave desde rofi),
+│                portapapeles.sh (historial del clipboard, super+v),
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
+├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
 ```
 
@@ -71,6 +73,9 @@ sus plugins solo en el primer arranque.
 | F9 → Cambiar fondo | elige entre los fondos de `wallpapers/` |
 | `Print` / `shift + Print` | flameshot gui / captura completa |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
+| `super + shift + Tab` | cambiar de ventana (rofi, todas las abiertas) |
+| `super + v` | historial del portapapeles |
+| `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + Escape` | recargar sxhkd |
 
 ## Dependencias manuales

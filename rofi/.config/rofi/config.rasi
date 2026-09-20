@@ -21,6 +21,8 @@ configuration {
     me-accept-entry: "MousePrimary";
 
     drun-display-format: "{name}";
+    // modo window: "escritorio  clase  titulo"
+    window-format: "{w}   {c}   {t}";
 }
 
 * {

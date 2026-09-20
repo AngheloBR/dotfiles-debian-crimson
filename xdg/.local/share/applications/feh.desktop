@@ -1,0 +1,13 @@
+[Desktop Entry]
+# Sobreescribe el feh.desktop del sistema: con --start-at se abre la
+# imagen elegida pero se puede pasar a las demas de la carpeta con las
+# flechas; --scale-down ajusta las grandes a la ventana.
+Type=Application
+Name=Feh
+GenericName=Visor de imagenes
+Exec=feh --scale-down --auto-zoom --start-at %f
+Icon=feh
+Terminal=false
+Categories=Graphics;Viewer;
+MimeType=image/png;image/jpeg;image/gif;image/webp;image/bmp;image/tiff;image/svg+xml;
+NoDisplay=true

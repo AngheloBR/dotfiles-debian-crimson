@@ -1,0 +1,54 @@
+# mimeapps.list — apps por defecto del Rice "Debian Crimson"
+# Lo lee xdg-open (y thunar, firefox, rofi...) para saber con que abrir
+# cada tipo de archivo. Los .desktop viven en /usr/share/applications
+# o en ~/.local/share/applications (nvim.desktop y feh.desktop son
+# propios, ver el paquete stow "xdg").
+#
+# Comprobar:   xdg-mime query default image/png
+# Tipo de un archivo:  xdg-mime query filetype foto.jpg
+
+[Default Applications]
+# web
+x-scheme-handler/http=firefox-esr.desktop
+x-scheme-handler/https=firefox-esr.desktop
+text/html=firefox-esr.desktop
+application/xhtml+xml=firefox-esr.desktop
+# PDF: no hay lector instalado, firefox lo hace bien
+application/pdf=firefox-esr.desktop
+# imagenes
+image/png=feh.desktop
+image/jpeg=feh.desktop
+image/gif=feh.desktop
+image/webp=feh.desktop
+image/bmp=feh.desktop
+image/tiff=feh.desktop
+image/svg+xml=feh.desktop
+# texto y codigo
+text/plain=nvim.desktop
+text/markdown=nvim.desktop
+text/x-shellscript=nvim.desktop
+application/x-shellscript=nvim.desktop
+text/x-python=nvim.desktop
+text/x-lua=nvim.desktop
+text/x-c=nvim.desktop
+text/x-c++=nvim.desktop
+application/json=nvim.desktop
+application/x-yaml=nvim.desktop
+text/yaml=nvim.desktop
+text/csv=nvim.desktop
+text/x-log=nvim.desktop
+# carpetas y comprimidos
+inode/directory=thunar.desktop
+application/zip=org.gnome.FileRoller.desktop
+application/x-tar=org.gnome.FileRoller.desktop
+application/gzip=org.gnome.FileRoller.desktop
+application/x-xz=org.gnome.FileRoller.desktop
+application/x-7z-compressed=org.gnome.FileRoller.desktop
+application/vnd.rar=org.gnome.FileRoller.desktop
+# claude (app de escritorio y claude code)
+x-scheme-handler/claude=com.anthropic.Claude.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+
+[Added Associations]
+text/plain=nvim.desktop;
+application/pdf=firefox-esr.desktop;

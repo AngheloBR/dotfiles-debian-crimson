@@ -26,6 +26,20 @@ super + b
 super + n
 	kitty -e ~/.local/bin/nvim
 
+# cambiar de ventana: lista de TODAS las ventanas abiertas, con busqueda
+super + shift + Tab
+	rofi -show window -theme-str 'listview { columns: 1; lines: 8; } element { orientation: horizontal; }'
+
+# notificaciones: volver a mostrar la ultima que se cerro / cerrar todas
+super + shift + n
+	dunstctl history-pop
+super + ctrl + n
+	dunstctl close-all
+
+# portapapeles: historial de lo copiado
+super + v
+	~/.local/bin/portapapeles.sh menu
+
 #
 # atajos de bspwm
 #

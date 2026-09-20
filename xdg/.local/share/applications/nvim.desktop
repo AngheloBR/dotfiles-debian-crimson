@@ -1,0 +1,14 @@
+[Desktop Entry]
+# Sobreescribe /usr/share/applications/nvim.desktop (mismo nombre = gana
+# el del usuario). El del sistema lanza el nvim 0.10 de Debian en una
+# terminal generica; este abre el 0.12 de ~/.local/bin dentro de kitty.
+Type=Application
+Name=Neovim
+GenericName=Editor de texto
+Comment=LazyVim (Rice Debian Crimson)
+Exec=kitty -e nvim %F
+Icon=nvim
+Terminal=false
+Categories=Utility;TextEditor;Development;
+MimeType=text/plain;text/markdown;text/x-shellscript;text/x-python;text/x-c;text/x-c++;text/x-lua;text/x-script.python;application/json;application/x-yaml;text/yaml;text/csv;text/x-log;application/x-shellscript;
+StartupNotify=false
