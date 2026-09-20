@@ -333,6 +333,17 @@ instalar-paquetes.sh:
 - rofi: el tema base define "element normal.normal" y
   "element alternate.normal" (mas especificos que "element"): hay que
   sobreescribir esos estados o las tarjetas salen del color default.
+- HDMI: al quitar el cable, X marca la salida "disconnected" pero NO la
+  apaga (conserva su modo), y bspwm solo olvida monitores apagados:
+  remove_unplugged_monitors no basta, hace falta "xrandr --off". El
+  evento fiable es el del kernel: udevadm monitor --subsystem-match=drm
+  (funciona sin root). bspc subscribe monitor_* NO avisa en ese caso.
+- flock + demonios: si el comando bajo "flock" lanza algo que se queda
+  vivo (polybar y sus scripts tail), ese hijo hereda el descriptor del
+  candado y lo deja cogido para siempre. No usar flock alrededor de
+  algo que arranca demonios.
+- Si el cable sigue enchufado y solo se apaga el monitor, no hay evento
+  (el pin HPD no cambia): es fisica, no software.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)
