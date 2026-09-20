@@ -84,6 +84,12 @@ sudo install -m755 "$REPO/sistema/etc/NetworkManager/dispatcher.d/50-firewall-pe
 sudo install -m440 "$REPO/sistema/etc/sudoers.d/firewall-perfil" /etc/sudoers.d/firewall-perfil
 sudo systemctl enable --now nftables
 sudo /usr/local/sbin/firewall-perfil auto
+# libvirt (si esta): que use nftables como nosotros, no iptables. Asi su
+# tabla de NAT para las VMs convive con la nuestra sin pisarse.
+if [ -f /etc/libvirt/network.conf ]; then
+  sudo sed -i 's/^#\?firewall_backend *=.*/firewall_backend = "nftables"/' /etc/libvirt/network.conf
+  sudo systemctl restart libvirtd
+fi
 
 echo "=== Pantalla de login (lightdm-gtk-greeter) ==="
 REPO="$(cd "$(dirname "$0")" && pwd)"
