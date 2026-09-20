@@ -10,6 +10,7 @@ I_COG=$(printf '\U000f0493')      # nf-md-cog
 I_WIFI=$(printf '\U000f0928')     # nf-md-wifi_strength_4
 I_BT=$(printf '\U000f00af')       # nf-md-bluetooth
 I_VPN=$(printf '\U000f0582')      # nf-md-shield_check
+I_FW=$(printf '\U000f068a')       # nf-md-shield_home
 I_AUDIO=$(printf '\U000f04c3')    # nf-md-speaker
 I_PRINT=$(printf '\U000f042a')    # nf-md-printer
 I_SCAN=$(printf '\U000f0c56')     # nf-md-scanner
@@ -30,6 +31,7 @@ OPC=(
     "${I_WIFI}  Redes Wi-Fi"
     "${I_BT}  Bluetooth on/off"
     "${I_VPN}  VPN"
+    "${I_FW}  Firewall (privada/publica)"
     "${I_AUDIO}  Audio (pavucontrol)"
     "${I_PRINT}  Impresoras"
     "${I_SCAN}  Escanear documento"
@@ -55,6 +57,7 @@ case "$ELEC" in
     *"Redes Wi-Fi")         ~/.local/bin/wifi-menu.sh ;;
     *"Bluetooth on/off")    ~/.local/bin/bluetooth-menu.sh toggle ;;
     *"VPN")                 ~/.local/bin/vpn.sh menu ;;
+    *"Firewall"*)           ~/.local/bin/firewall.sh menu ;;
     *"Audio (pavucontrol)") pavucontrol >/dev/null 2>&1 & ;;
     # system-config-printer: añadir/quitar impresoras (CUPS) por red o USB
     *"Impresoras")          system-config-printer >/dev/null 2>&1 & ;;

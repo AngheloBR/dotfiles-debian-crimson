@@ -1,0 +1,53 @@
+#!/bin/bash
+# firewall-perfil — cambia el perfil del firewall (Rice "Debian Crimson")
+# Corre como ROOT (sudoers lo permite sin contraseña solo para este script).
+#
+#   firewall-perfil privada         aplica perfil privada
+#   firewall-perfil publica         aplica perfil publica
+#   firewall-perfil auto            elige segun la red Wi-Fi actual
+#   firewall-perfil confiar  SSID   añade SSID a las redes privadas (y aplica)
+#   firewall-perfil olvidar  SSID   la quita (y aplica)
+#   firewall-perfil estado          imprime "privada" o "publica"
+#
+# Redes de confianza: /etc/nftables.d/redes-privadas.txt (una por linea).
+# Estado actual: /run/firewall-perfil (lo lee polybar; /run se vacia al
+# reiniciar, y al arrancar el perfil es publica hasta que NM conecta).
+
+set -e
+DIR=/etc/nftables.d
+LISTA=$DIR/redes-privadas.txt
+ESTADO=/run/firewall-perfil
+
+aplicar() {
+    nft -f "$DIR/perfil-$1.nft"
+    echo "$1" > "$ESTADO"
+    chmod 644 "$ESTADO"
+    echo "$1"
+}
+
+ssid_actual() {
+    nmcli -t -f NAME,TYPE connection show --active 2>/dev/null | awk -F: '$2=="802-11-wireless"{print $1; exit}'
+}
+
+case "$1" in
+    privada|publica) aplicar "$1" ;;
+    auto)
+        SSID=$(ssid_actual)
+        if [ -n "$SSID" ] && grep -qxF "$SSID" "$LISTA" 2>/dev/null; then
+            aplicar privada
+        else
+            aplicar publica
+        fi ;;
+    confiar)
+        [ -n "$2" ] || { echo "falta el SSID" >&2; exit 1; }
+        grep -qxF "$2" "$LISTA" 2>/dev/null || echo "$2" >> "$LISTA"
+        "$0" auto ;;
+    olvidar)
+        [ -n "$2" ] || { echo "falta el SSID" >&2; exit 1; }
+        grep -vxF "$2" "$LISTA" > "$LISTA.tmp" || true; mv "$LISTA.tmp" "$LISTA"
+        "$0" auto ;;
+    estado)
+        cat "$ESTADO" 2>/dev/null || echo publica ;;
+    *)
+        echo "uso: firewall-perfil {privada|publica|auto|confiar SSID|olvidar SSID|estado}" >&2; exit 1 ;;
+esac

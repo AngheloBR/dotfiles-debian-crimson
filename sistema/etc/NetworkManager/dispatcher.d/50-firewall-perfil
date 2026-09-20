@@ -1,0 +1,8 @@
+#!/bin/bash
+# NetworkManager llama a esto (como root) en cada cambio de conexion.
+# Al conectar o desconectar una red, se elige el perfil del firewall
+# segun la red sea de confianza o no (Rice "Debian Crimson").
+case "$2" in
+    up|down|connectivity-change) /usr/local/sbin/firewall-perfil auto >/dev/null 2>&1 ;;
+esac
+exit 0

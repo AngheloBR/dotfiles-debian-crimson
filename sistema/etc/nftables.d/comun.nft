@@ -1,0 +1,33 @@
+# Reglas COMUNES a los dos perfiles del firewall — Rice "Debian Crimson"
+# (las incluyen perfil-privada.nft y perfil-publica.nft)
+#
+# OJO: se hace "flush table", NO "flush ruleset": libvirt tiene su propia
+# tabla (NAT de las VMs) y un flush global la borraria -> VMs sin internet.
+
+table inet filter
+flush table inet filter
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        iif "lo" accept                                  # localhost
+        ct state established,related accept             # respuestas a lo que pedimos
+        ct state invalid drop
+        ip6 nexthdr icmpv6 accept                        # ipv6 necesita esto (vecinos, router)
+        udp dport 546 accept                             # DHCPv6
+        iifname "virbr0" accept                          # VMs de KVM: DHCP/DNS de la laptop
+
+        jump perfil                                      # lo que depende del perfil
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+        iifname "virbr0" accept                          # VMs hacia internet (NAT lo pone libvirt)
+        oifname "virbr0" ct state established,related accept
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}

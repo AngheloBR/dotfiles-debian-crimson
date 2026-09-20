@@ -1,0 +1,3 @@
+# Permite cambiar el perfil del firewall desde el menu F9 sin contraseña.
+# Solo ese script, nada mas. Instalar con permisos 0440.
+anghelo ALL=(root) NOPASSWD: /usr/local/sbin/firewall-perfil

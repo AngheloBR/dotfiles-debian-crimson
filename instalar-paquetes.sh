@@ -73,9 +73,17 @@ if ! ~/.local/bin/nvim --version 2>/dev/null | grep -q 'NVIM v0\.1[2-9]'; then
 fi
 # nvim del sistema (0.10 de Debian) queda, ~/.local/bin gana el PATH
 
-echo "=== Firewall (nftables) ==="
-sudo cp "$(dirname "$0")/sistema/etc/nftables.conf" /etc/nftables.conf
+echo "=== Firewall (nftables) con perfiles privada/publica ==="
+REPO="$(cd "$(dirname "$0")" && pwd)"
+sudo install -d /etc/nftables.d
+sudo install -m644 "$REPO"/sistema/etc/nftables.d/*.nft /etc/nftables.d/
+[ -f /etc/nftables.d/redes-privadas.txt ] || sudo install -m644 "$REPO/sistema/etc/nftables.d/redes-privadas.txt" /etc/nftables.d/
+sudo install -m644 "$REPO/sistema/etc/nftables.conf" /etc/nftables.conf
+sudo install -m755 "$REPO/sistema/usr/local/sbin/firewall-perfil" /usr/local/sbin/firewall-perfil
+sudo install -m755 "$REPO/sistema/etc/NetworkManager/dispatcher.d/50-firewall-perfil" /etc/NetworkManager/dispatcher.d/
+sudo install -m440 "$REPO/sistema/etc/sudoers.d/firewall-perfil" /etc/sudoers.d/firewall-perfil
 sudo systemctl enable --now nftables
+sudo /usr/local/sbin/firewall-perfil auto
 
 echo "=== Pantalla de login (lightdm-gtk-greeter) ==="
 REPO="$(cd "$(dirname "$0")" && pwd)"

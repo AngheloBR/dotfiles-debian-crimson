@@ -1,0 +1,13 @@
+# Perfil PRIVADA (casa, amigos, colegio, zona wifi del celular)
+# Redes en las que confias: se permite ser "visible" en la red local.
+
+include "/etc/nftables.d/comun.nft"
+
+table inet filter {
+    chain perfil {
+        ip protocol icmp accept                          # responder a ping
+        udp dport 5353 accept                            # mDNS: impresora y escaner por Wi-Fi
+        # SSH hacia esta laptop solo desde redes privadas (descomentar si se usa):
+        # ip saddr { 192.168.0.0/16, 10.0.0.0/8 } tcp dport 22 accept
+    }
+}

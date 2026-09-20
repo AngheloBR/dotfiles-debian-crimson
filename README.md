@@ -129,8 +129,12 @@ si `instalar-paquetes.sh` se queda corto.
 - **HDMI**: `monitor-hotplug.sh` escucha `bspc subscribe monitor_add/remove` y llama a
   `ajustar-monitores.sh` al enchufar/desenchufar. Si el cable sigue puesto y solo se
   apaga el monitor, nadie puede detectarlo (el pin de deteccion no cambia): F9 → Detectar.
-- **Firewall**: nftables, todo lo entrante cerrado salvo respuestas, ping y mDNS
-  (impresora). SSH entrante bloqueado: descomentar la regla en `sistema/etc/nftables.conf`.
+- **Firewall** (nftables) con dos perfiles: **privada** (casa, amigos, celular: ping,
+  mDNS para impresora) y **publica** (calle: invisible). Se elige solo al conectar
+  segun la red este en `/etc/nftables.d/redes-privadas.txt`; F9 → Firewall lo fuerza
+  o marca la red actual como privada. Icono en la barra: escudo dorado/carmesi.
+  Las VMs de KVM tienen red en ambos perfiles (flush por tabla, no global: libvirt
+  tiene su propia tabla de NAT).
 - **USB**: udiskie monta pendrives solo y avisa; F9 → Expulsar USB.
 - **Bateria**: `tlp` con sus defaults (`sudo tlp-stat -s` para ver el modo).
   LazyVim no comprueba updates al arrancar: `:Lazy update` a mano.

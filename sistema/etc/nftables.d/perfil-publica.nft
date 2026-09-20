@@ -1,0 +1,10 @@
+# Perfil PUBLICA (plazas, cafes, aeropuertos, cualquier red desconocida)
+# Invisible: ni ping, ni mDNS, ni SSH. Solo respuestas a lo que pedimos.
+
+include "/etc/nftables.d/comun.nft"
+
+table inet filter {
+    chain perfil {
+        # nada: todo lo entrante no solicitado se descarta sin responder
+    }
+}
