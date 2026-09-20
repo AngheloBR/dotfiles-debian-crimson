@@ -25,31 +25,30 @@ fi
 
 sleep 0.7   # dejar que bspwm procese el evento de monitores
 
+# 1) limpiar SIEMPRE escritorios huerfanos con el icono del externo en eDP.
+#    Aparecen cuando bspwm mueve el escritorio del HDMI a eDP al quitarlo
+#    (remove_unplugged_monitors). Sus ventanas van al escritorio 1.
+for DID in $(bspc query -m eDP -D); do
+    if [ "$(bspc query -d "$DID" -D --names)" = "$ICON_EXTERNO" ]; then
+        for NID in $(bspc query -d "$DID" -N -n .window); do
+            bspc node "$NID" -d 'eDP:^1'
+        done
+        bspc desktop "$DID" -r
+    fi
+done
+
+# 2) si el HDMI esta, asegurar UN escritorio vacio con su icono
 if [ -n "$HDMI_CONECTADO" ] && bspc query -M --names | grep -qx 'HDMI-A-0'; then
-    # asegurar UN escritorio vacio en el HDMI con su icono
     IDS=$(bspc query -m HDMI-A-0 -D)
     N=$(echo "$IDS" | grep -c .)
     if [ "$N" -eq 0 ]; then
         bspc monitor HDMI-A-0 -a "$ICON_EXTERNO"
-    elif [ "$N" -eq 1 ]; then
+    else
         DID=$(echo "$IDS" | head -1)
-        if [ "$(bspc query -d "$DID" -D --names)" != "$ICON_EXTERNO" ]; then
-            bspc desktop "$DID" --rename "$ICON_EXTERNO"
-        fi
+        [ "$(bspc query -d "$DID" -D --names)" != "$ICON_EXTERNO" ] && bspc desktop "$DID" --rename "$ICON_EXTERNO"
+        # si por lo que sea hay mas de uno, fuera los sobrantes
+        for EXTRA in $(echo "$IDS" | tail -n +2); do bspc desktop "$EXTRA" -r; done
     fi
-else
-    # el HDMI se fue: bspwm movio su escritorio a eDP.
-    # Eliminar el huerfano (con sus ventanas de vuelta al escritorio 1)
-    for DID in $(bspc query -m eDP -D); do
-        if [ "$(bspc query -d "$DID" --name)" = "$ICON_EXTERNO" ]; then
-            if [ -n "$(bspc query -d "$DID" -N)" ]; then
-                for NID in $(bspc query -d "$DID" -N); do
-                    bspc node "$NID" -d eDP:^1
-                done
-            fi
-            bspc desktop "$DID" -r
-        fi
-    done
 fi
 
 # barras: solo la de la laptop (el HDMI no lleva barra)

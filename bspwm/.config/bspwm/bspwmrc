@@ -93,3 +93,5 @@ fondo.sh &
 
 # monitores + polybar (HDMI solo wallpaper; la barra vive en eDP)
 ajustar-monitores.sh &
+# ...y volver a ajustar solo cada vez que se enchufa/desenchufa un monitor
+pgrep -f monitor-hotplug.sh >/dev/null || monitor-hotplug.sh &

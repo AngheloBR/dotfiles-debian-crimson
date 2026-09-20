@@ -126,6 +126,9 @@ si `instalar-paquetes.sh` se queda corto.
 - **Login (lightdm)**: fondo debian.png, Adwaita-dark + el gtk.css del rice copiado
   al home del usuario lightdm (por eso el cuadro sale carmesi). Probar sin cerrar
   sesion: `dm-tool add-nested-seat` (paquete xserver-xephyr).
+- **HDMI**: `monitor-hotplug.sh` escucha `bspc subscribe monitor_add/remove` y llama a
+  `ajustar-monitores.sh` al enchufar/desenchufar. Si el cable sigue puesto y solo se
+  apaga el monitor, nadie puede detectarlo (el pin de deteccion no cambia): F9 → Detectar.
 - **Firewall**: nftables, todo lo entrante cerrado salvo respuestas, ping y mDNS
   (impresora). SSH entrante bloqueado: descomentar la regla en `sistema/etc/nftables.conf`.
 - **USB**: udiskie monta pendrives solo y avisa; F9 → Expulsar USB.
