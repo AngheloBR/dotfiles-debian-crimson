@@ -39,7 +39,6 @@ dotfiles/
 │                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
 │                wifi-menu.sh (redes con señal/clave desde rofi),
-│                movil.sh (KDE Connect: bateria del movil, sonar, clipboard),
 │                vpn.sh, actualizaciones.sh, luz-nocturna.sh, estado-*.sh,
 │                portapapeles.sh (historial del clipboard, super+v),
 │                atajos.sh (chuleta de atajos, super+F1),

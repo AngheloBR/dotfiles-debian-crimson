@@ -32,7 +32,7 @@ if ! systemd-detect-virt -q; then
     brightnessctl \
     pipewire pipewire-pulse pavucontrol \
     bluez blueman gammastep xss-lock tlp \
-    kdeconnect cups system-config-printer sane-airscan simple-scan
+    cups system-config-printer printer-driver-escpr sane-airscan simple-scan
   sudo systemctl enable --now cups
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon
