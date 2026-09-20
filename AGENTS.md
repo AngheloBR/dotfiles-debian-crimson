@@ -32,6 +32,10 @@ Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
 - iconos Nerd Font: generan pérdida al copiar; usar escapes `\uXXXX`
   con printf/python dentro de scripts (lección de la guía §7)
 
+## Antes de commitear
+
+`./comprobar.sh` (shellcheck, configs, paquetes). Debe decir TODO OK.
+
 ## Git
 
 - Commits en ESPAÑOL, descriptivos, y push directo (gh autenticado).

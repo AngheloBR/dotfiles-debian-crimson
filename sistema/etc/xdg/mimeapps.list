@@ -1,8 +1,9 @@
 # mimeapps.list — apps por defecto del Rice "Debian Crimson"
-# Lo lee xdg-open (y thunar, firefox, rofi...) para saber con que abrir
-# cada tipo de archivo. Los .desktop viven en /usr/share/applications
-# o en ~/.local/share/applications (nvim.desktop y feh.desktop son
-# propios, ver el paquete stow "xdg").
+# Va en /etc/xdg/mimeapps.list (nivel SISTEMA): xdg-open, thunar, rofi...
+# lo usan como respaldo para todo lo que el usuario no haya cambiado.
+# NO se gestiona ~/.config/mimeapps.list con stow: Firefox y xdg-mime lo
+# reescriben (y rompen el symlink) cada vez que se ponen por defecto.
+# Los .desktop propios (nvim, feh) viven en el paquete stow "xdg".
 #
 # Comprobar:   xdg-mime query default image/png
 # Tipo de un archivo:  xdg-mime query filetype foto.jpg

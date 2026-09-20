@@ -71,7 +71,7 @@ pgrep -x dunst >/dev/null || dunst &
 # y tras 10 min sin actividad (timeout del salvapantallas de X, "xset q").
 # --transfer-sleep-lock retrasa la suspension hasta que i3lock ya esta puesto,
 # asi al abrir la tapa nunca se ve el escritorio.
-pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- bloquear.sh &
+command -v xss-lock >/dev/null && { pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- bloquear.sh & }
 
 # aviso de bateria baja (20% y 10%)
 pgrep -f aviso-bateria.sh >/dev/null || aviso-bateria.sh &

@@ -12,25 +12,28 @@ sudo apt install -y \
   bspwm sxhkd \
   picom polybar rofi \
   kitty \
-  feh dunst libnotify-bin pulseaudio-utils \
+  feh dunst libnotify-bin \
+  network-manager pipewire pipewire-pulse pulseaudio-utils pavucontrol \
   flameshot maim \
   lightdm lightdm-gtk-greeter i3lock imagemagick \
   firefox-esr \
   thunar gvfs gvfs-backends thunar-archive-plugin thunar-volman \
-  tumbler ffmpegthumbnailer file-roller papirus-icon-theme \
+  tumbler ffmpegthumbnailer file-roller papirus-icon-theme gnome-themes-extra \
   zsh zsh-autosuggestions zsh-syntax-highlighting \
   xdg-user-dirs \
   fonts-jetbrains-mono \
-  ripgrep fd-find fzf lazygit xclip shellcheck shfmt \
+  ripgrep fd-find fzf lazygit xclip shellcheck shfmt gcc make \
   mpv zathura playerctl fastfetch udiskie nftables \
   git stow curl wget unzip
+
+# (network-manager y pipewire van en base: los scripts de la barra usan
+#  nmcli y pactl tambien en una VM; gcc/make los necesita LazyVim para
+#  compilar los parsers de treesitter)
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="
 if ! systemd-detect-virt -q; then
   sudo apt install -y \
-    network-manager \
     brightnessctl \
-    pipewire pipewire-pulse pavucontrol \
     bluez blueman gammastep xss-lock tlp \
     cups system-config-printer printer-driver-escpr sane-airscan simple-scan
   sudo systemctl enable --now cups
@@ -89,10 +92,17 @@ sudo /usr/local/sbin/firewall-perfil auto
 if [ -f /etc/libvirt/network.conf ]; then
   sudo sed -i 's/^#\?firewall_backend *=.*/firewall_backend = "nftables"/' /etc/libvirt/network.conf
   sudo systemctl restart libvirtd
+  # red NAT "default" de las VMs en 192.168.50.0/24 (ver sistema/libvirt)
+  if ! virsh -c qemu:///system net-dumpxml default 2>/dev/null | grep -q '192.168.50.1'; then
+    virsh -c qemu:///system net-destroy default 2>/dev/null || true
+    virsh -c qemu:///system net-undefine default 2>/dev/null || true
+    virsh -c qemu:///system net-define "$REPO/sistema/libvirt/red-default.xml"
+    virsh -c qemu:///system net-autostart default
+    virsh -c qemu:///system net-start default
+  fi
 fi
 
 echo "=== Pantalla de login (lightdm-gtk-greeter) ==="
-REPO="$(cd "$(dirname "$0")" && pwd)"
 sudo install -D -m644 "$REPO/sistema/etc/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
 sudo install -D -m644 "$REPO/sistema/etc/lightdm/lightdm.conf.d/50-crimson.conf" /etc/lightdm/lightdm.conf.d/50-crimson.conf
 sudo install -D -m644 "$REPO/wallpapers/debian.png" /usr/share/backgrounds/crimson/debian.png
@@ -100,8 +110,11 @@ sudo install -D -m644 "$REPO/wallpapers/debian.png" /usr/share/backgrounds/crims
 sudo install -D -m644 -o lightdm -g lightdm "$REPO/gtk/.config/gtk-3.0/gtk.css" /var/lib/lightdm/.config/gtk-3.0/gtk.css
 sudo install -D -m644 -o lightdm -g lightdm "$REPO/gtk/.config/gtk-3.0/settings.ini" /var/lib/lightdm/.config/gtk-3.0/settings.ini
 
-echo "=== Carpetas de usuario en espanol ==="
-LANG=es_ES.UTF-8 xdg-user-dirs-update
+echo "=== Apps por defecto (nivel sistema) ==="
+sudo install -D -m644 "$REPO/sistema/etc/xdg/mimeapps.list" /etc/xdg/mimeapps.list
+
+echo "=== Carpetas de usuario (en el idioma del sistema) ==="
+xdg-user-dirs-update
 
 echo "=== Zsh como shell por defecto ==="
 if [ "$SHELL" != "$(which zsh)" ]; then

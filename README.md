@@ -46,7 +46,7 @@ dotfiles/
 │                atajos.sh (chuleta de atajos, super+F1),
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
-├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
+├── xdg/         nvim/feh .desktop propios (apps por defecto: sistema/etc/xdg)
 ├── zathura/     lector de PDF en la paleta (modo oscuro con "i")
 ├── fastfetch/   logo Debian propio en carmesi/dorado, claves con iconos
 ├── sistema/     archivos de /etc (nftables.conf, lightdm-gtk-greeter.conf):
@@ -56,13 +56,28 @@ dotfiles/
 
 ## Instalación en un Debian 13 limpio
 
+Instala Debian 13 (netinst) con **solo "Utilidades estándar del sistema"**
+(sin escritorio). Dos cosas del instalador que importan:
+
+- **Deja la contraseña de root VACÍA**: así tu usuario entra en `sudo`.
+  Si pones contraseña de root, `sudo` ni siquiera se instala y nada de
+  lo de abajo funciona.
+- Teclado **latinoamericano**, idioma español.
+
+Al primer login en la consola:
+
 ```bash
+sudo apt install -y git
 git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
 cd ~/.dotfiles
-./instalar-paquetes.sh   # apt + nerd fonts + nvim 0.12 + p10k
+./instalar-paquetes.sh   # apt + nerd fonts + nvim 0.12 + p10k + firewall + lightdm
 ./instalador.sh          # stow (detecta VM vs hardware real)
-reboot
+sudo reboot
 ```
+
+Tras reiniciar, lightdm muestra el login del rice; entra y ya estás en
+bspwm. En una VM no hay batería, Wi-Fi ni bluetooth: esos módulos de la
+barra se ocultan solos.
 
 Después de reiniciar, abre kitty y ejecuta `nvim` — LazyVim instala
 sus plugins solo en el primer arranque.
@@ -86,6 +101,13 @@ sus plugins solo en el primer arranque.
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
+
+## Comprobar el repo
+
+`./comprobar.sh` valida todo antes de commitear o reinstalar: shellcheck de
+los scripts, sintaxis de cada config, que cada paquete stow este en el
+instalador, que cada paquete apt exista en Debian y que ningun script use un
+binario que el instalador no aporte.
 
 ## Dependencias manuales
 
