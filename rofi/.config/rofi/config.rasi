@@ -10,9 +10,11 @@ configuration {
     show-icons: true;
     icon-theme: "Papirus-Dark";
 
-    display-drun:   "  Apps";
-    display-run:    "  Ejecutar";
-    display-window: "  Ventanas";
+    // iconos literales (rasi no interpreta \u): nf-md-apps U+F003B,
+    // nf-md-console_line U+F0B98, nf-md-window_restore U+F05AF
+    display-drun:   "󰀻  Apps";
+    display-run:    "󰮘  Ejecutar";
+    display-window: "󰖯  Ventanas";
 
     hover-select: true;
     me-select-entry: "";

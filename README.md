@@ -21,7 +21,8 @@ Minimalista, en español, gestionado con GNU **stow**.
 dotfiles/
 ├── bspwm/       gestor de ventanas
 ├── sxhkd/       atajos de teclado (+ teclas multimedia c/ notifs)
-├── polybar/     barra superior (Wi-Fi, cpu, mem, reloj)
+├── polybar/     barra superior (escritorios, Wi-Fi, bluetooth, cpu, mem,
+│                bateria, volumen, mic, power) — iconos Material Nerd Font
 ├── kitty/       terminal (JetBrainsMono Nerd Font, transparencia)
 ├── nvim/        LazyVim con tema "Debian Crimson" custom
 ├── rofi/        lanzador de apps
@@ -31,7 +32,9 @@ dotfiles/
 ├── gtk/         tema oscuro Adwaita-dark + Papirus
 ├── xinit/       .xinitrc
 ├── zsh/         .zshrc + powerlevel10k
-├── scripts/     bloquear.sh (lock con blur del wallpaper)
+├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
+│                estado-* para polybar, multimedia.sh (teclas Fn),
+│                ajustar-monitores.sh, bloquear.sh (lock con blur)
 └── wallpapers/  fondos de pantalla
 ```
 
@@ -58,9 +61,11 @@ sus plugins solo en el primer arranque.
 | `super + b` | firefox |
 | `super + w` / `super + shift + w` | cerrar / matar ventana |
 | `super + 1..0` | cambiar escritorio |
-| `super + alt + l` o `super + ñ` | bloquear pantalla (con blur) |
+| `F10` (candado) | bloquear pantalla (con blur) |
+| `F4` / `F8` / `F9` | mic mute / modo avion / menu de ajustes |
 | `Print` / `shift + Print` | flameshot gui / captura completa |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
+| `super + Escape` | recargar sxhkd |
 
 ## Dependencias manuales
 
@@ -80,3 +85,14 @@ quieres revisar algo puntual.
 - Minimalismo: solo lo que se usa
 - Todo versado en git — si rompo algo, `git checkout .` y listo
 - Aprender entendiendo el *porqué* de cada config
+
+## Notas técnicas
+
+- **PATH en la sesión gráfica**: lightdm arranca bspwm con un PATH sin
+  `~/.local/bin`. El `bspwmrc` lo exporta al principio; sin eso ningún
+  script del rice (ni polybar) arranca.
+- **Iconos Nerd Font**: en scripts bash van como `printf '\U000fXXXX'`
+  (ASCII puro, no se pierden al copiar). En `config.ini` de polybar y en
+  `config.rasi` de rofi tienen que ir literales; cada uno lleva su
+  codepoint en un comentario al lado por si hay que restaurarlo.
+- **Reiniciar polybar**: `polybar-msg cmd restart` (IPC), no `pkill`.

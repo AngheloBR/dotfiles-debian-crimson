@@ -10,7 +10,7 @@ super + Return
 super + d
         rofi -show drun
 
-# Lanzador de thunat
+# gestor de archivos
 super + e
         thunar
 
@@ -18,7 +18,7 @@ super + e
 super + Escape
         pkill -USR1 -x sxhkd
 
-#navegador
+# navegador
 super + b
         firefox
 
@@ -26,6 +26,7 @@ super + b
 super + n
 	kitty -e ~/.local/bin/nvim
 
+#
 # atajos de bspwm
 #
 
@@ -140,63 +141,41 @@ Print
 shift + Print
         flameshot full -c
 
-# bloquear pantalla — tecla fisica del candado (F10 en la tapa del Lenovo)
-F10
-	~/.local/bin/bloquear.sh
-
-# si Fn-lock la emite como XF86ScreenSaver, tambien funciona
-XF86ScreenSaver
+# bloquear pantalla: tecla del candado (F10) o su version XF86 si Fn-lock
+# la emite asi. Las llaves {a,b} en sxhkd = "cualquiera de las dos".
+{F10,XF86ScreenSaver}
 	~/.local/bin/bloquear.sh
 
 #
 # teclas multimedia (hardware real)
+# Toda la logica (pactl/brightnessctl + notificacion) vive en
+# ~/.local/bin/multimedia.sh: aqui solo se mapea la tecla.
 #
 
-# volumen (pipewire) con notificacion de nivel
 XF86AudioRaiseVolume
-	pactl set-sink-volume @DEFAULT_SINK@ +5% && \
-	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '[0-9]+(?=%)' | head -1) "Volumen"
+	~/.local/bin/multimedia.sh vol +
 
 XF86AudioLowerVolume
-	pactl set-sink-volume @DEFAULT_SINK@ -5% && \
-	dunstify -h string:x-dunst-stack-tag:volumen -h int:value:$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '[0-9]+(?=%)' | head -1) "Volumen"
+	~/.local/bin/multimedia.sh vol -
 
 XF86AudioMute
-	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
-	dunstify -h string:x-dunst-stack-tag:volumen "Mute: $(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')"
+	~/.local/bin/multimedia.sh vol mute
 
-# brillo de pantalla con notificacion de nivel
-XF86MonBrightnessUp
-	brightnessctl -q set +10% && \
-	dunstify -h string:x-dunst-stack-tag:brillo -h int:value:$(brightnessctl -m | cut -d, -f4 | tr -d '%') "Brillo"
-
-XF86MonBrightnessDown
-	brightnessctl -q set 10%- && \
-	dunstify -h string:x-dunst-stack-tag:brillo -h int:value:$(brightnessctl -m | cut -d, -f4 | tr -d '%') "Brillo"
+XF86MonBrightness{Up,Down}
+	~/.local/bin/multimedia.sh brillo {+,-}
 
 #
 # teclas fisicas del Lenovo (fila Fn)
 #
 
 # microfono mute/unmute (F4)
-F4
-	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
-	dunstify -h string:x-dunst-stack-tag:mic "Microfono: $(LANG=C pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}' | sed 's/yes/MUTEADO/;s/no/activo/')"
-
-XF86AudioMicMute
-	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
-	dunstify -h string:x-dunst-stack-tag:mic "Microfono: $(LANG=C pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}' | sed 's/yes/MUTEADO/;s/no/activo/')"
+{F4,XF86AudioMicMute}
+	~/.local/bin/multimedia.sh mic
 
 # modo avion (F8): toggle del Wi-Fi
-F8
-	~/.local/bin/red-wifi.sh toggle
-
-XF86AirplaneMode
+{F8,XF86AirplaneMode}
 	~/.local/bin/red-wifi.sh toggle
 
 # ajustes del sistema (F9)
-F9
-	~/.local/bin/ajustes.sh
-
-XF86Tools
+{F9,XF86Tools}
 	~/.local/bin/ajustes.sh

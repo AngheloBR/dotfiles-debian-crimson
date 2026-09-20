@@ -5,8 +5,9 @@
 #  Fallback: i3lock con negro carmesi si falta algo.
 # ═══════════════════════════════════════════════════════
 
-WALLPAPER=$(grep -oP '(?<=--bg-scale ).*?(?= &)' ~/.config/bspwm/bspwmrc | head -1)
-WALLPAPER="${WALLPAPER/#\~/$HOME}"
+# mismo fondo que pone bspwmrc/ajustar-monitores.sh (antes se sacaba con
+# un grep sobre bspwmrc: fragil, se rompia con cualquier cambio de formato)
+WALLPAPER="$HOME/.dotfiles/wallpapers/fondo.png"
 
 if ! command -v i3lock >/dev/null; then
     echo "i3lock no instalado" >&2; exit 1

@@ -10,7 +10,7 @@
 
 sleep 0.3   # estabilizar xrandr/X (utile al arrancar la sesion)
 
-ICON_EXTERNO=$(printf '\uf108')
+ICON_EXTERNO=$(printf '\U000f0379')   # nf-md-monitor
 
 CONECTADOS=$(xrandr | awk '/ connected/ {print $1}')
 HDMI_CONECTADO=$(echo "$CONECTADOS" | grep -x 'HDMI-A-0')
