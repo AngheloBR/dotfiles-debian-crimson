@@ -14,6 +14,7 @@
 DIR=~/.cache/portapapeles
 MAX=30
 ICON=$(printf '\U000f018f')   # nf-md-clipboard_text
+I_DEL=$(printf '\U000f01b4')  # nf-md-delete
 mkdir -p "$DIR"
 
 case "$1" in
@@ -39,16 +40,23 @@ case "$1" in
         fi
         # una linea por entrada: primera linea del contenido, recortada a 70
         LINEAS=$(for f in "${ARCHIVOS[@]}"; do
-            head -c 300 "$DIR/$f" | tr '\n\t' '  ' | cut -c1-70; echo
+            head -c 300 "$DIR/$f" | tr '\n\t' '  ' | cut -c1-70
         done)
-        N=${#ARCHIVOS[@]}; [ $N -gt 10 ] && N=10
-        IDX=$(printf '%s' "$LINEAS" | rofi -dmenu -i -format i -p " ${ICON}  Portapapeles " \
+        # ultima linea del menu: borrar todo (indice = numero de entradas)
+        N=$(( ${#ARCHIVOS[@]} + 1 )); [ $N -gt 10 ] && N=10
+        IDX=$(printf '%s\n%s  Borrar historial' "$LINEAS" "$I_DEL" | \
+            rofi -dmenu -i -format i -p " ${ICON}  Portapapeles " \
             -theme-str "listview { columns: 1; lines: $N; } element { orientation: horizontal; } element-text { horizontal-align: 0; }")
         [ -z "$IDX" ] && exit 0
+        if [ "$IDX" -eq ${#ARCHIVOS[@]} ]; then exec "$0" borrar; fi
         xclip -i -selection clipboard < "$DIR/${ARCHIVOS[$IDX]}"
         dunstify -h string:x-dunst-stack-tag:clip "${ICON}  Copiado al portapapeles" ;;
     borrar)
-        rm -f "$DIR"/*; dunstify "${ICON}  Historial del portapapeles borrado" ;;
+        rm -f "$DIR"/*
+        # vaciar tambien el portapapeles actual: si no, el daemon lo
+        # volveria a guardar al segundo siguiente
+        printf '' | xclip -i -selection clipboard
+        dunstify -h string:x-dunst-stack-tag:clip "${I_DEL}  Historial del portapapeles borrado" ;;
     *)
         echo "uso: portapapeles.sh {daemon|menu|borrar}" >&2; exit 1 ;;
 esac

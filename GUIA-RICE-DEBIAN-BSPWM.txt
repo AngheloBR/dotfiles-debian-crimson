@@ -322,6 +322,17 @@ instalar-paquetes.sh:
   nada de pkill + sleep.
 - batsignal no existe en Debian 13: aviso-bateria.sh lo reemplaza
   leyendo /sys/class/power_supply/BAT0 cada 60 s.
+- En X11, Shift+Tab NO es "Tab con shift": es el keysym ISO_Left_Tab
+  (xmodmap -pke | grep Tab). En sxhkd: super + shift + ISO_Left_Tab.
+- pgrep -f / pkill -f buscan en la linea de comando COMPLETA, incluida
+  la de la shell que los ejecuta: "pkill -f foo" desde un comando que
+  contiene "foo" se mata a si mismo. Usar patrones anclados
+  (^/bin/bash /ruta/script) o pgrep -x con el nombre del proceso.
+- cut termina siempre su salida con salto de linea: no añadir echo
+  detras o salen lineas vacias.
+- rofi: el tema base define "element normal.normal" y
+  "element alternate.normal" (mas especificos que "element"): hay que
+  sobreescribir esos estados o las tarjetas salen del color default.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)

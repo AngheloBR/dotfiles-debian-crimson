@@ -64,7 +64,7 @@ prompt {
 }
 
 entry {
-    placeholder: "Buscar programa...";
+    placeholder: "Buscar...";
     placeholder-color: #45474e;
     text-color: #d6d6d6;
     cursor: text;
