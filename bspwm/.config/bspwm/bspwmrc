@@ -23,8 +23,10 @@ D6=$(printf '\U000f0b79')   # chat
 D7=$(printf '\U000f0493')   # ajustes
 D8=$(printf '\U000f01ee')   # correo
 
-# escritorios solo en la laptop (8 iconos; super+1..8)
-bspc monitor eDP -d "$D1" "$D2" "$D3" "$D4" "$D5" "$D6" "$D7" "$D8"
+# escritorios solo en el monitor interno (8 iconos; super+1..8).
+# El nombre no va a fuego: eDP en la laptop, Virtual-1 en una VM...
+INTERNO=$(monitor-interno.sh)
+bspc monitor "$INTERNO" -d "$D1" "$D2" "$D3" "$D4" "$D5" "$D6" "$D7" "$D8"
 
 # ── aspecto ──
 bspc config border_width          2

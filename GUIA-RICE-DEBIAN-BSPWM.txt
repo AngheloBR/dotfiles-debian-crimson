@@ -352,6 +352,11 @@ instalar-paquetes.sh:
 - libvirt en Debian 13 usa iptables por defecto y crea sus cadenas UNA
   vez al arrancar el demonio; si se borran no las regenera. Poner
   firewall_backend = "nftables" en /etc/libvirt/network.conf.
+- Nombres de monitor: NUNCA a fuego. eDP en la laptop, Virtual-1 en una
+  VM (virtio), eDP-1/LVDS-1 en otros equipos. monitor-interno.sh da el
+  primario de xrandr; los externos son "los demas conectados". Lo
+  descubrio la prueba en VM: polybar no arrancaba y los escritorios no
+  se creaban.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)

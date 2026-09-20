@@ -38,7 +38,7 @@ dotfiles/
 ├── zsh/         .zshrc + powerlevel10k + fzf (Ctrl+R/Ctrl+T/Alt+C)
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),
-│                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
+│                ajustar-monitores.sh (+ monitor-interno.sh), aviso-bateria.sh, fondo.sh,
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
 │                wifi-menu.sh (redes con señal/clave desde rofi),
 │                vpn.sh, actualizaciones.sh, luz-nocturna.sh, estado-*.sh,
