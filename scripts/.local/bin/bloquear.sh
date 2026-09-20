@@ -3,6 +3,11 @@
 #  bloquear.sh — Lock del Rice "Debian Crimson"
 #  Blur + atenuado del wallpaper activo (imagemagick)
 #  Fallback: i3lock con negro carmesi si falta algo.
+#
+#  Lo llaman: la tecla F10, el powermenu y xss-lock (que lo
+#  dispara antes de suspender y tras 10 min sin actividad).
+#  i3lock va con -n (no hacer fork) para que xss-lock sepa
+#  cuando se desbloqueo la pantalla.
 # ═══════════════════════════════════════════════════════
 
 # mismo fondo que pone bspwmrc/ajustar-monitores.sh (antes se sacaba con
@@ -15,7 +20,7 @@ fi
 
 # Sin imagemagick o sin wallpaper: color solido y listo
 if ! command -v magick >/dev/null || [ ! -f "$WALLPAPER" ]; then
-    i3lock -c 0f0f12
+    i3lock -n -c 0f0f12
     exit 0
 fi
 
@@ -40,4 +45,4 @@ if [ "$HNEW" != "$HOLD" ] || [ ! -f "$CACHE" ]; then
     echo "$HNEW" > "$HASH_FILE"
 fi
 
-i3lock -i "$CACHE"
+i3lock -n -i "$CACHE"

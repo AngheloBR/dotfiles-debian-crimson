@@ -49,6 +49,15 @@ pgrep -x sxhkd >/dev/null || sxhkd &
 pgrep -x picom >/dev/null || picom &
 pgrep -x dunst >/dev/null || dunst &
 
+# candado automatico: antes de suspender (tapa cerrada, systemctl suspend)
+# y tras 10 min sin actividad (timeout del salvapantallas de X, "xset q").
+# --transfer-sleep-lock retrasa la suspension hasta que i3lock ya esta puesto,
+# asi al abrir la tapa nunca se ve el escritorio.
+pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- bloquear.sh &
+
+# aviso de bateria baja (20% y 10%)
+pgrep -f aviso-bateria.sh >/dev/null || aviso-bateria.sh &
+
 # wallpaper inmediato (ajustar-monitores lo re-aplica tras acomodar el HDMI)
 feh --bg-scale ~/.dotfiles/wallpapers/fondo.png &
 

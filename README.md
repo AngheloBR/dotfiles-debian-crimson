@@ -30,11 +30,11 @@ dotfiles/
 ├── picom/       compositor glx + blur (hardware real)
 ├── picom-vm/    versión ligera para VMs
 ├── gtk/         tema oscuro Adwaita-dark + Papirus
-├── xinit/       .xinitrc
 ├── zsh/         .zshrc + powerlevel10k
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),
-│                ajustar-monitores.sh, bloquear.sh (lock con blur)
+│                ajustar-monitores.sh, aviso-bateria.sh,
+│                bloquear.sh (lock con blur; automatico via xss-lock)
 └── wallpapers/  fondos de pantalla
 ```
 
@@ -76,8 +76,9 @@ Algunas cosas no van por apt y el script las instala aparte:
 - **Nerd Font JetBrainsMono** → `~/.local/share/fonts`
 - **powerline10k** → `~/.powerlevel10k`
 
-`LISTA-PAQUETES.txt` tiene el `dpkg --get-selections` completo por si
-quieres revisar algo puntual.
+`LISTA-PAQUETES.txt` lista solo los paquetes instalados **a mano**
+(`apt-mark showmanual`), sin dependencias: es lo que hay que revisar
+si `instalar-paquetes.sh` se queda corto.
 
 ## Filosofía
 

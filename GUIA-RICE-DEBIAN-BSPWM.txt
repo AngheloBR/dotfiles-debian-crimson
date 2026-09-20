@@ -304,6 +304,24 @@ instalar-paquetes.sh:
 - Super+Alt+L no capturaba en KVM → Super+ñ (ntilde) como lock
 - Evitar acentos en comentarios de configs por compatibilidad
 - Nombres de interfaces: ip route | awk '/^default/ {print $5}'
+- lightdm arranca bspwm con un PATH SIN ~/.local/bin (no lee .zshrc
+  ni .profile). Si bspwmrc llama a un script del rice sin ruta
+  completa, falla en silencio (asi estuvo polybar sin arrancar).
+  Solucion: export PATH="$HOME/.local/bin:$PATH" al inicio de bspwmrc.
+- bspwm corre como "x-window-manager" (alternativa de Debian), asi
+  que pgrep -x bspwm no lo encuentra. Usar bspc para saber si vive.
+- Iconos Nerd Font, precision: los Material Design (U+F0000-F0FFF,
+  plano 15) sobreviven al copiar/pegar; los del BMP (U+E000-F8FF,
+  Font Awesome, logo Debian U+F306) se pierden. En bash: printf
+  '\U000fXXXX' (8 digitos, mayuscula). dash/sh NO lo soporta ->
+  bspwmrc es #!/bin/bash por eso. En polybar/rofi van literales:
+  anotar el codepoint en un comentario al lado para restaurarlo.
+- polybar internal/date sale en ingles aunque LANG=es: poner
+  "locale = es_PE.UTF-8" en [bar/main].
+- Reiniciar polybar: polybar-msg cmd restart (con enable-ipc = true),
+  nada de pkill + sleep.
+- batsignal no existe en Debian 13: aviso-bateria.sh lo reemplaza
+  leyendo /sys/class/power_supply/BAT0 cada 60 s.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)
