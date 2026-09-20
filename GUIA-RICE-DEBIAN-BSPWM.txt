@@ -344,6 +344,14 @@ instalar-paquetes.sh:
   algo que arranca demonios.
 - Si el cable sigue enchufado y solo se apaga el monitor, no hay evento
   (el pin HPD no cambia): es fisica, no software.
+- nftables: NUNCA "flush ruleset" en /etc/nftables.conf si hay libvirt
+  (o docker): borra las tablas de NAT de las VMs y se quedan sin red.
+  Usar "table inet filter" + "flush table inet filter" (solo la nuestra).
+- nft lee el archivo en orden: un "jump cadena" necesita que la cadena
+  exista antes (declararla vacia arriba y añadirle reglas despues).
+- libvirt en Debian 13 usa iptables por defecto y crea sus cadenas UNA
+  vez al arrancar el demonio; si se borran no las regenera. Poner
+  firewall_backend = "nftables" en /etc/libvirt/network.conf.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)
