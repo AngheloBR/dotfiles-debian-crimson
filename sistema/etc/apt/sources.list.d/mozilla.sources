@@ -1,0 +1,8 @@
+# Repositorio oficial de Mozilla: Firefox actual (no el ESR de Debian).
+# Rice "Debian Crimson". La clave la descarga instalar-paquetes.sh a
+# /etc/apt/keyrings/packages.mozilla.org.asc
+Types: deb
+URIs: https://packages.mozilla.org/apt
+Suites: mozilla
+Components: main
+Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc

@@ -115,6 +115,7 @@ Algunas cosas no van por apt y el script las instala aparte:
 
 - **Neovim 0.12+** → `~/.local/opt/nvim` (el 0.10 de Debian 13 es
   demasiado viejo para LazyVim ≥ 0.11.2)
+- **Firefox** → del repo oficial de Mozilla (`sistema/etc/apt/`), no el ESR
 - **Nerd Font JetBrainsMono** → `~/.local/share/fonts`
 - **powerline10k** → `~/.powerlevel10k`
 

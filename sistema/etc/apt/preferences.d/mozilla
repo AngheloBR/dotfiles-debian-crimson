@@ -1,0 +1,5 @@
+# Que el "firefox" de Mozilla gane siempre al de Debian (si algun dia
+# Debian empaqueta uno con el mismo nombre). Rice "Debian Crimson".
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000

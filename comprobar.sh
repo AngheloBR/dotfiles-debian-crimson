@@ -39,7 +39,8 @@ for d in */; do d=${d%/}; case $d in docs|sistema|wallpapers|nvim|picom|picom-vm
 for s in $LISTA; do [ -d "$s" ] || ko "instalador.sh cita paquete inexistente: $s"; done
 
 echo "4. paquetes apt del instalador (existen en Debian)"
-PKGS=$(sed -n '/apt install -y/,/^$/p' instalar-paquetes.sh | grep -vE '^\s*#' | tr -d '\\' | tr ' ' '\n' | grep -E '^[a-z0-9.+-]+$' | grep -vE '^(sudo|apt|install|-y|if|fi|then|systemctl|enable|--now)$' | sort -u)
+# solo las lineas del "apt install -y" y sus continuaciones con barra invertida
+PKGS=$(awk '/apt install -y/{p=1} p{print; if ($0 !~ /\\$/) p=0}' instalar-paquetes.sh | tr -d '\\' | tr ' ' '\n' | grep -E '^[a-z0-9.+-]+$' | grep -vE '^(sudo|apt|install|-y)$' | sort -u)
 N=0; for p in $PKGS; do N=$((N+1)); apt-cache policy "$p" 2>/dev/null | grep -q 'Candidat[oe]: [^(]' || ko "no existe en los repos: $p"; done; ok "$N paquetes comprobados"
 
 echo "5. binarios de los scripts sin paquete en el instalador"

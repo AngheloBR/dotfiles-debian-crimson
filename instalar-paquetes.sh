@@ -16,7 +16,6 @@ sudo apt install -y \
   network-manager pipewire pipewire-pulse pulseaudio-utils pavucontrol \
   flameshot maim \
   lightdm lightdm-gtk-greeter i3lock imagemagick \
-  firefox-esr \
   thunar gvfs gvfs-backends thunar-archive-plugin thunar-volman \
   tumbler ffmpegthumbnailer file-roller papirus-icon-theme gnome-themes-extra \
   zsh zsh-autosuggestions zsh-syntax-highlighting \
@@ -41,6 +40,19 @@ if ! systemd-detect-virt -q; then
   # con sus defaults; no coexiste con power-profiles-daemon
   sudo systemctl enable --now tlp
 fi
+
+echo "=== Firefox actual (repo oficial de Mozilla, no el ESR de Debian) ==="
+if [ ! -f /etc/apt/keyrings/packages.mozilla.org.asc ]; then
+  sudo install -d -m 0755 /etc/apt/keyrings
+  wget -qO- https://packages.mozilla.org/apt/repo-signing-key.gpg | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc >/dev/null
+fi
+sudo install -m644 "$(dirname "$0")/sistema/etc/apt/sources.list.d/mozilla.sources" /etc/apt/sources.list.d/mozilla.sources
+sudo install -m644 "$(dirname "$0")/sistema/etc/apt/preferences.d/mozilla" /etc/apt/preferences.d/mozilla
+sudo apt update
+# firefox-l10n-es-mx: interfaz en español (latinoamericano)
+sudo apt install -y firefox firefox-l10n-es-mx
+# fuera el ESR si quedo de una instalacion anterior
+dpkg -l firefox-esr 2>/dev/null | grep -q '^ii' && sudo apt purge -y firefox-esr && sudo apt autoremove -y
 
 echo "=== Nerd Fonts (iconos) ==="
 if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
