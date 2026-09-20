@@ -8,7 +8,7 @@ set -e
 echo "=== Paquetes base ==="
 sudo apt update
 sudo apt install -y \
-  xorg xinit x11-xserver-utils \
+  xorg x11-xserver-utils xinput \
   bspwm sxhkd \
   picom polybar rofi \
   kitty \
@@ -30,7 +30,7 @@ if ! systemd-detect-virt -q; then
     network-manager \
     brightnessctl \
     pipewire pipewire-pulse pavucontrol \
-    blueman
+    blueman gammastep xss-lock
 fi
 
 echo "=== Nerd Fonts (iconos) ==="

@@ -40,7 +40,7 @@ bspc config normal_border_color   "#2b2b2e"
 # ── reglas de ventanas (solo apps que existen en el sistema) ──
 bspc rule -a flameshot  state=floating
 bspc rule -a thunar     state=floating rectangle=1000x650+0+0 center=true
-bspc rule -a calendario state=floating rectangle=700x560+0+0 center=true
+bspc rule -a limpiar    state=floating rectangle=760x300+0+0 center=true
 
 # ── demonios ──
 # Los "pgrep ||" evitan procesos duplicados si se hace "bspc wm -r"
@@ -58,8 +58,11 @@ pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- bloquear.sh &
 # aviso de bateria baja (20% y 10%)
 pgrep -f aviso-bateria.sh >/dev/null || aviso-bateria.sh &
 
+# luz nocturna (temperatura de color segun la hora; config en ~/.config/gammastep)
+command -v gammastep >/dev/null && { pgrep -x gammastep >/dev/null || gammastep &}
+
 # wallpaper inmediato (ajustar-monitores lo re-aplica tras acomodar el HDMI)
-feh --bg-scale ~/.dotfiles/wallpapers/fondo.png &
+fondo.sh &
 
 # monitores + polybar (HDMI solo wallpaper; la barra vive en eDP)
 ajustar-monitores.sh &

@@ -3,7 +3,9 @@
 Rice de **Debian 13 (trixie) + bspwm** con paleta carmesí/dorado.
 Minimalista, en español, gestionado con GNU **stow**.
 
-![Wallpaper](wallpapers/fondo.png)
+![Barra](docs/barra.png)
+
+![Wallpaper](wallpapers/debian.png)
 
 ## Paleta
 
@@ -33,9 +35,11 @@ dotfiles/
 ├── zsh/         .zshrc + powerlevel10k
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),
-│                ajustar-monitores.sh, aviso-bateria.sh,
-│                bloquear.sh (lock con blur; automatico via xss-lock)
-└── wallpapers/  fondos de pantalla
+│                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
+│                bloquear.sh (lock con blur + candado; auto via xss-lock),
+│                screen-clean (desactiva teclado/touchpad para limpiar)
+├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
+└── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
 ```
 
 ## Instalación en un Debian 13 limpio
@@ -63,6 +67,7 @@ sus plugins solo en el primer arranque.
 | `super + 1..0` | cambiar escritorio |
 | `F10` (candado) | bloquear pantalla (con blur) |
 | `F4` / `F8` / `F9` | mic mute / modo avion / menu de ajustes |
+| F9 → Cambiar fondo | elige entre los fondos de `wallpapers/` |
 | `Print` / `shift + Print` | flameshot gui / captura completa |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
 | `super + Escape` | recargar sxhkd |

@@ -1,0 +1,480 @@
+#!/usr/bin/env bash
+# [Rice Debian Crimson] Desactiva teclado/touchpad/raton 60 s para limpiar
+# la laptop encendida. Se abre desde el menu F9 ("Limpiar pantalla").
+# Herramienta generica en ingles; si el proceso muere, un watchdog
+# vuelve a activar los dispositivos solo. Requiere el paquete xinput.
+#
+# screen-clean — temporarily disable input devices so you can clean your
+# laptop without shutting it down or triggering accidental input.
+#
+# Requires an X11 session and xinput(1). Wayland is not supported: the
+# Wayland protocol intentionally does not let clients disable input devices.
+
+set -o nounset
+set -o pipefail
+
+readonly PROG="screen-clean"
+readonly VERSION="0.1.0"
+
+# Exit codes (documented in README.md).
+readonly EX_GENERAL=1
+readonly EX_USAGE=2
+readonly EX_SESSION=3
+readonly EX_DEPS=4
+readonly EX_CONFLICT=5
+
+# Tunables. The SC_* variables exist so the test suite can redirect behavior
+# without touching real hardware; they are not part of the public interface.
+XI_BIN="${SC_XINPUT:-xinput}"
+WATCHDOG_GRACE="${SC_WATCHDOG_GRACE:-3}"
+
+DURATION=60
+readonly MIN_DURATION=1
+readonly MAX_DURATION=3600
+
+readonly RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+STATE_FILE="$RUNTIME_DIR/$PROG.$UID.lock"
+DONE_FILE="$STATE_FILE.done"
+
+WANT_KEYBOARD=0
+WANT_TOUCHPAD=0
+WANT_MOUSE=0
+DRY_RUN=0
+ACTION=""
+
+TARGET_IDS=()
+TARGET_CATS=()
+TARGET_DESCS=()
+
+# Ids we actually disabled. Only these are re-enabled on restore, so devices
+# that were already disabled keep their previous state untouched.
+LOCKED_IDS=()
+RESTORED=0
+WATCHDOG_PID=""
+
+# ---------------------------------------------------------------------------
+# Output helpers
+# ---------------------------------------------------------------------------
+
+say() {
+  printf '%s: %s\n' "$PROG" "$*"
+}
+
+warn() {
+  printf '%s: warning: %s\n' "$PROG" "$*" >&2
+}
+
+die() {
+  local code="$1"
+  shift
+  printf '%s: error: %s\n' "$PROG" "$*" >&2
+  exit "$code"
+}
+
+usage_die() {
+  printf '%s: error: %s\n' "$PROG" "$*" >&2
+  printf 'Try '\''%s --help'\'' for more information.\n' "$PROG" >&2
+  exit "$EX_USAGE"
+}
+
+usage() {
+  cat <<EOF
+$PROG $VERSION — temporarily disable input devices to clean your laptop.
+
+USAGE:
+    $PROG [OPTIONS]
+
+OPTIONS:
+    --keyboard       Disable keyboard device(s)
+    --touchpad       Disable touchpad device(s)
+    --mouse          Disable mouse device(s)
+    --all            Disable all of the above (default when no device
+                     option is given)
+    --duration N     Keep devices disabled for N seconds
+                     ($MIN_DURATION-$MAX_DURATION, default: 60)
+    --status         Show session info and detected devices, then exit
+    --dry-run        Show what would be disabled, without touching anything
+    -h, --help       Show this help and exit
+    --version        Print version and exit
+
+EXIT CODES:
+    0  success
+    1  general error
+    2  usage error
+    3  unsupported session (X11 required)
+    4  missing dependency
+    5  another instance appears to be running
+EOF
+}
+
+# ---------------------------------------------------------------------------
+# Preconditions
+# ---------------------------------------------------------------------------
+
+check_session() {
+  if [[ ${XDG_SESSION_TYPE:-} == wayland ]]; then
+    die "$EX_SESSION" "Wayland session detected; $PROG only supports X11 (xinput cannot disable devices on Wayland)."
+  fi
+  if [[ -z ${DISPLAY:-} ]]; then
+    die "$EX_SESSION" "no X11 display detected (DISPLAY is not set)."
+  fi
+}
+
+require_xinput() {
+  command -v "$XI_BIN" >/dev/null 2>&1 ||
+    die "$EX_DEPS" "'$XI_BIN' not found. Install it, e.g.: sudo apt install xinput"
+}
+
+# ---------------------------------------------------------------------------
+# Device discovery
+# ---------------------------------------------------------------------------
+
+# Prints one line per slave device known to the X server:
+#   <id>\t<class>\t<name>
+list_slave_devices() {
+  "$XI_BIN" list | awk '
+    /↳/ {
+      id = $0
+      sub(/^.*id=/, "", id)
+      sub(/[^0-9].*$/, "", id)
+
+      class = ""
+      if ($0 ~ /slave[[:space:]]+pointer/)        class = "pointer"
+      else if ($0 ~ /slave[[:space:]]+keyboard/)  class = "keyboard"
+
+      name = $0
+      sub(/[[:space:]]*id=[0-9]+.*$/, "", name)
+      sub(/^.*↳[[:space:]]*/, "", name)
+
+      printf "%s\t%s\t%s\n", id, class, name
+    }'
+}
+
+# Prints 1 if the device is enabled, 0 otherwise. Devices without the
+# "Device Enabled" property are assumed to be enabled.
+device_enabled() {
+  "$XI_BIN" list-props "$1" 2>/dev/null | awk '
+    /Device[[:space:]]+Enabled/ { found = 1; v = $NF }
+    END { print (found ? v + 0 : 1) }'
+}
+
+# Fills TARGET_IDS, TARGET_CATS and TARGET_DESCS based on the WANT_* flags.
+# Detection is name-based and heuristic; pseudo-devices are always skipped.
+collect_targets() {
+  local id class name cat
+  while IFS=$'\t' read -r id class name; do
+    [[ -n ${id:-} && -n ${class:-} ]] || continue
+    case $name in
+      *"Virtual core"*) continue ;;
+    esac
+
+    cat=""
+    if ((WANT_KEYBOARD)) && [[ $class == keyboard && ${name,,} == *keyboard* ]]; then
+      cat="keyboard"
+    fi
+    if [[ -z $cat ]] && ((WANT_TOUCHPAD)) && [[ $class == pointer ]]; then
+      case ${name,,} in
+        *touchpad* | *trackpad*) cat="touchpad" ;;
+      esac
+    fi
+    if [[ -z $cat ]] && ((WANT_MOUSE)) && [[ $class == pointer ]]; then
+      case ${name,,} in
+        *mouse*) cat="mouse" ;;
+      esac
+    fi
+    [[ -n $cat ]] || continue
+
+    TARGET_IDS+=("$id")
+    TARGET_CATS+=("$cat")
+    TARGET_DESCS+=("$name")
+  done < <(list_slave_devices)
+}
+
+warn_missing_categories() {
+  local cat want
+  for cat in keyboard touchpad mouse; do
+    want=0
+    case $cat in
+      keyboard) want=$WANT_KEYBOARD ;;
+      touchpad) want=$WANT_TOUCHPAD ;;
+      mouse) want=$WANT_MOUSE ;;
+    esac
+    ((want)) || continue
+    [[ " ${TARGET_CATS[*]:-} " == *" $cat "* ]] || warn "no $cat device detected; skipping"
+  done
+}
+
+# ---------------------------------------------------------------------------
+# Lock, restore, watchdog
+# ---------------------------------------------------------------------------
+
+# The state file is the watchdog's only source of truth: it lists exactly the
+# device ids that screen-clean disabled and therefore must re-enable if the
+# main process dies unexpectedly.
+write_state_file() {
+  printf '%s\n' "${LOCKED_IDS[@]}" >"$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"
+}
+
+lock_devices() {
+  local id st
+  for id in "${TARGET_IDS[@]}"; do
+    st=$(device_enabled "$id")
+    if [[ $st != 1 ]]; then
+      warn "device id $id is already disabled; leaving it untouched"
+      continue
+    fi
+    if ! "$XI_BIN" disable "$id"; then
+      warn "failed to disable device id $id"
+      return 1
+    fi
+    LOCKED_IDS+=("$id")
+    write_state_file
+  done
+}
+
+restore_devices() {
+  ((RESTORED)) && return 0
+  RESTORED=1
+  ((${#LOCKED_IDS[@]})) || return 0
+  local i id rc=0
+  # Restore in reverse order (LIFO), mirroring a classic rollback.
+  for ((i = ${#LOCKED_IDS[@]} - 1; i >= 0; i--)); do
+    id="${LOCKED_IDS[$i]}"
+    if ! "$XI_BIN" enable "$id"; then
+      warn "failed to re-enable device id $id"
+      rc=1
+    fi
+  done
+  return "$rc"
+}
+
+watchdog_restore() {
+  [[ -f $STATE_FILE ]] || return 0
+  local dev_id
+  while IFS= read -r dev_id; do
+    [[ -n $dev_id ]] || continue
+    "$XI_BIN" enable "$dev_id" 2>/dev/null || :
+  done <"$STATE_FILE"
+  rm -f "$STATE_FILE"
+}
+
+# If the main process dies (e.g. kill -9) or hangs past the deadline, the
+# watchdog re-enables every device listed in the state file.
+start_watchdog() {
+  # $$ (instead of $PPID): inside a subshell $PPID still points to the
+  # parent of the main shell, not to the screen-clean process itself.
+  local main_pid=$$
+  (
+    deadline=$(($(date +%s) + DURATION + WATCHDOG_GRACE))
+    while :; do
+      if [[ -f $DONE_FILE ]]; then
+        exit 0
+      fi
+      if ! kill -0 "$main_pid" 2>/dev/null; then
+        watchdog_restore
+        exit 3
+      fi
+      if (($(date +%s) >= deadline)); then
+        watchdog_restore
+        exit 4
+      fi
+      sleep 1
+    done
+  ) &
+  WATCHDOG_PID=$!
+}
+
+# ---------------------------------------------------------------------------
+# Countdown
+# ---------------------------------------------------------------------------
+
+countdown() {
+  local remaining=$DURATION
+  say "devices locked. Clean away! Everything is restored automatically."
+  say "manual recovery from a TTY if ever needed: Ctrl+Alt+F2, then run: DISPLAY=$DISPLAY $XI_BIN enable <id>"
+  while ((remaining > 0)); do
+    printf '\r%s: restoring in %3ds...' "$PROG" "$remaining"
+    sleep 1
+    ((--remaining))
+  done
+  printf '\r%s: restoring now.          \n' "$PROG"
+}
+
+# ---------------------------------------------------------------------------
+# Cleanup
+# ---------------------------------------------------------------------------
+
+on_exit() {
+  local rc=$?
+  local restore_result=0
+  restore_devices || restore_result=1
+  if [[ -n $WATCHDOG_PID ]]; then
+    kill "$WATCHDOG_PID" 2>/dev/null || :
+    wait "$WATCHDOG_PID" 2>/dev/null || :
+  fi
+  if ((RESTORED)); then
+    : >"$DONE_FILE" 2>/dev/null || :
+    rm -f "$STATE_FILE" "$DONE_FILE" 2>/dev/null || :
+  fi
+  if ((rc == 0 && restore_result != 0)); then
+    rc=$EX_GENERAL
+  fi
+  exit "$rc"
+}
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+parse_args() {
+  local have_selection=0
+  while (($#)); do
+    case $1 in
+      --keyboard)
+        WANT_KEYBOARD=1
+        have_selection=1
+        ;;
+      --touchpad)
+        WANT_TOUCHPAD=1
+        have_selection=1
+        ;;
+      --mouse)
+        WANT_MOUSE=1
+        have_selection=1
+        ;;
+      --all)
+        WANT_KEYBOARD=1
+        WANT_TOUCHPAD=1
+        WANT_MOUSE=1
+        have_selection=1
+        ;;
+      --duration)
+        (($# >= 2)) || usage_die "--duration requires a value"
+        DURATION=$2
+        shift
+        ;;
+      --duration=*) DURATION=${1#*=} ;;
+      --dry-run) DRY_RUN=1 ;;
+      --status) ACTION=status ;;
+      --version) ACTION=version ;;
+      -h | --help) ACTION=help ;;
+      --)
+        shift
+        break
+        ;;
+      -*) usage_die "unknown option: $1" ;;
+      *) usage_die "unexpected argument: $1" ;;
+    esac
+    shift
+  done
+
+  # No device selection means "everything": that is the safe default for
+  # cleaning a laptop.
+  if ((have_selection == 0)); then
+    WANT_KEYBOARD=1
+    WANT_TOUCHPAD=1
+    WANT_MOUSE=1
+  fi
+
+  if ! [[ $DURATION =~ ^[0-9]+$ ]] ||
+    ((DURATION < MIN_DURATION || DURATION > MAX_DURATION)); then
+    usage_die "invalid duration: '$DURATION' (expected $MIN_DURATION-$MAX_DURATION seconds)"
+  fi
+}
+
+guard_single_instance() {
+  [[ -f $STATE_FILE ]] &&
+    die "$EX_CONFLICT" "another $PROG instance appears to be running (state file: $STATE_FILE). If it is stale, remove that file."
+}
+
+cmd_status() {
+  local ver
+  ver=$("$XI_BIN" --version 2>/dev/null || true)
+  ver=${ver%%$'\n'*}
+
+  printf 'session type : %s\n' "${XDG_SESSION_TYPE:-unknown}"
+  printf 'display      : %s\n' "${DISPLAY:-none}"
+  printf 'xinput       : %s\n' "${ver:-unknown}"
+  printf 'devices:\n'
+
+  local id class name st label found=0
+  while IFS=$'\t' read -r id class name; do
+    [[ -n ${id:-} ]] || continue
+    [[ $name == *"Virtual core"* ]] && continue
+    st=$(device_enabled "$id")
+    if [[ $st == 1 ]]; then
+      label="enabled"
+    else
+      label="disabled"
+    fi
+    printf '  %-8s id=%-4s %-9s %s\n' "$label" "$id" "$class" "$name"
+    found=1
+  done < <(list_slave_devices)
+  ((found)) || printf '  (none detected)\n'
+}
+
+dry_run_report() {
+  local i st
+  say "dry-run: no device will be touched."
+  for i in "${!TARGET_IDS[@]}"; do
+    st=$(device_enabled "${TARGET_IDS[$i]}")
+    if [[ $st == 1 ]]; then
+      printf '  would disable   : %s (%s, id %s)\n' "${TARGET_DESCS[$i]}" "${TARGET_CATS[$i]}" "${TARGET_IDS[$i]}"
+    else
+      printf '  already disabled: %s (id %s) — left untouched\n' "${TARGET_DESCS[$i]}" "${TARGET_IDS[$i]}"
+    fi
+  done
+}
+
+run_clean_session() {
+  trap on_exit EXIT
+  trap 'exit 129' HUP
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+
+  lock_devices || die "$EX_GENERAL" "could not lock all requested devices; rolling back"
+  start_watchdog
+  countdown
+  restore_devices
+  say "all input devices restored."
+}
+
+main() {
+  parse_args "$@"
+  case ${ACTION:-} in
+    help)
+      usage
+      exit 0
+      ;;
+    version)
+      printf '%s\n' "$VERSION"
+      exit 0
+      ;;
+  esac
+
+  check_session
+  require_xinput
+
+  if [[ ${ACTION:-} == status ]]; then
+    cmd_status
+    exit 0
+  fi
+
+  guard_single_instance
+  collect_targets
+  if ((${#TARGET_IDS[@]} == 0)); then
+    die "$EX_GENERAL" "no matching input devices found. Try '$PROG --status' to inspect device detection."
+  fi
+  warn_missing_categories
+
+  if ((DRY_RUN)); then
+    dry_run_report
+    exit 0
+  fi
+
+  run_clean_session
+}
+
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+  main "$@"
+fi

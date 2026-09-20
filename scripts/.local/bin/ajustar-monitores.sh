@@ -58,4 +58,4 @@ sleep 0.4
 setsid polybar main >/dev/null 2>&1 < /dev/null &
 
 # re-aplicar el wallpaper al nuevo acomodo de monitores
-feh --bg-scale ~/.dotfiles/wallpapers/fondo.png >/dev/null 2>&1
+~/.local/bin/fondo.sh >/dev/null 2>&1

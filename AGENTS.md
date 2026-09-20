@@ -9,14 +9,14 @@ Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
   son ENLACES SIMBÓLICOS a este repo (GNU stow). **Cualquier cambio aquí
   afecta el sistema en vivo inmediatamente.**
 - Paquetes: bspwm sxhkd polybar kitty rofi dunst picom picom-vm gtk
-  zsh nvim(LazyVim) scripts wallpapers
+  gammastep zsh nvim(LazyVim) scripts wallpapers
 - Teclado: `latam`. Shell: zsh + p10k. Terminal: kitty. Editor: LazyVim
   (nvim 0.12 en `~/.local/opt`, NO el 0.10 de Debian).
 
 ## Reglas de la casa (no negociables)
 
 1. TODO vive en la laptop (eDP): barra completa con 10 escritorios,
-   power menu, calendario, bluetooth, etc.
+   power menu, bluetooth, ajustes (F9), etc.
 2. El HDMI externo, si existe, SOLO muestra wallpaper: un escritorio
    vacío y SIN barra. `ajustar-monitores.sh` se encarga de todo.
 3. Paleta: fondo `#0f0f12`, carmesí `#D70A53` (foco/selección),

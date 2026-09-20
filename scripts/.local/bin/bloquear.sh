@@ -10,9 +10,8 @@
 #  cuando se desbloqueo la pantalla.
 # ═══════════════════════════════════════════════════════
 
-# mismo fondo que pone bspwmrc/ajustar-monitores.sh (antes se sacaba con
-# un grep sobre bspwmrc: fragil, se rompia con cualquier cambio de formato)
-WALLPAPER="$HOME/.dotfiles/wallpapers/fondo.png"
+# el fondo que este puesto ahora mismo (fondo.sh es la unica fuente)
+WALLPAPER=$(~/.local/bin/fondo.sh ruta)
 
 if ! command -v i3lock >/dev/null; then
     echo "i3lock no instalado" >&2; exit 1
@@ -32,15 +31,27 @@ CACHE=~/.cache/lockscreen.png
 HASH_FILE=~/.cache/lockscreen.md5
 mkdir -p ~/.cache
 
-HNEW=$(md5sum "$WALLPAPER" | cut -d' ' -f1)
+# el hash lleva un sufijo de version: si cambia el dibujo (candado, texto)
+# se regenera aunque el wallpaper sea el mismo
+HNEW="$(md5sum "$WALLPAPER" | cut -d' ' -f1)-v2"
 HOLD=$(cat "$HASH_FILE" 2>/dev/null)
 
 if [ "$HNEW" != "$HOLD" ] || [ ! -f "$CACHE" ]; then
-    # blur fuerte + oscurecer al 65% (para que se lea el candado/hora)
+    FUENTE=~/.local/share/fonts/JetBrainsMonoNerd/JetBrainsMonoNerdFont-Regular.ttf
+    CANDADO=$(printf '\U000f033e')   # nf-md-lock
+    # blur fuerte + oscurecer al 65%, y encima el candado carmesi con halo
+    # (arriba del centro: i3lock dibuja su circulo de "escribiendo" en el
+    # centro exacto y no queremos que se pisen) + usuario@equipo en dorado
     magick "$WALLPAPER" \
         -resize "${RES}^" -gravity center -extent "$RES" \
         -blur 0x10 \
         -modulate 65,85 \
+        -font "$FUENTE" -gravity center \
+        \( +clone -fill none -pointsize 170 -fill '#D70A53' -annotate +0-200 "$CANDADO" \
+           -blur 0x18 \) -compose lighten -composite \
+        -pointsize 170 -fill '#D70A53' -annotate +0-200 "$CANDADO" \
+        -pointsize 22 -fill '#E8B04B' -annotate +0+190 "$USER @ $(hostname)" \
+        -pointsize 16 -fill '#b3b3b8' -annotate +0+225 "escribe tu contrasena y pulsa Enter" \
         "$CACHE"
     echo "$HNEW" > "$HASH_FILE"
 fi
