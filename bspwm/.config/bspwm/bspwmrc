@@ -37,6 +37,13 @@ bspc config normal_border_color   "#2b2b2e"
 # zona que se pinta al preseleccionar (super+ctrl+h/j/k/l): carmesi oscuro
 bspc config presel_feedback_color "#7a0a30"
 
+# ── monitores ──
+# bspwm olvida solo el HDMI al desenchufarlo (o al apagarlo con xrandr)
+# y pasa su escritorio a eDP; ajustar-monitores.sh solo tiene que borrar
+# ese escritorio huerfano y re-aplicar el fondo
+bspc config remove_unplugged_monitors true
+bspc config remove_disabled_monitors  true
+
 # ── raton ──
 # el foco sigue al puntero: pasar el raton por encima de una ventana la
 # enfoca, sin click (la que tiene el borde carmesi es la que recibe teclas)

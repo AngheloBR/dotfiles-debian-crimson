@@ -61,8 +61,11 @@ case "$ELEC" in
     # simple-scan: escaner (sane-airscan encuentra multifunciones por Wi-Fi)
     *"Escanear documento")  simple-scan >/dev/null 2>&1 & ;;
     # desmonta con seguridad todo lo que monto udiskie (pendrives, discos)
-    *"Expulsar USB")        udiskie-umount -a >/dev/null 2>&1 && dunstify "${I_USB}  USB expulsado: ya puedes quitarlo" \
-                                || dunstify -u critical "${I_USB}  No se pudo expulsar (¿algo abierto en el USB?)" ;;
+    *"Expulsar USB")        if udiskie-umount -a >/dev/null 2>&1; then
+                                dunstify "${I_USB}  USB expulsado: ya puedes quitarlo"
+                            else
+                                dunstify -u critical "${I_USB}  No se pudo expulsar (¿algo abierto en el USB?)"
+                            fi ;;
     *"Brillo 50%")          brightnessctl -q set 50% && dunstify -h int:value:50 "${I_SOL}  Brillo 50%" ;;
     *"Luz nocturna on/off") ~/.local/bin/luz-nocturna.sh toggle ;;
     *"Cambiar fondo")       ~/.local/bin/fondo.sh elegir ;;

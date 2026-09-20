@@ -55,4 +55,4 @@ magick -size ${W}x${H} radial-gradient:'#1c1216-#0f0f12' \
 for f in debian lineas puntos horizonte; do
     magick "$f.png" -strip -define png:compression-level=9 "$f.png"
 done
-echo "fondos generados:"; ls -la *.png
+echo "fondos generados:"; ls -la ./*.png

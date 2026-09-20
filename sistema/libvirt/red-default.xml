@@ -1,0 +1,19 @@
+<!--
+  Red NAT "default" de libvirt/KVM — Rice "Debian Crimson"
+  Las VMs salen a internet a traves de la laptop (NAT) y tienen su
+  propia subred 192.168.50.0/24 (la red real de casa es 192.168.100.0/24,
+  asi no se pisan). La laptop es la .1 y hace de DHCP para las VMs.
+  Aplicar:  virsh -c qemu:///system net-define red-default.xml
+            virsh -c qemu:///system net-autostart default
+            virsh -c qemu:///system net-start default
+-->
+<network>
+  <name>default</name>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <ip address='192.168.50.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.50.100' end='192.168.50.200'/>
+    </dhcp>
+  </ip>
+</network>

@@ -24,7 +24,9 @@ I_KEY=$(printf '\U000f0306')       # nf-md-key
 I_DEL=$(printf '\U000f01b4')       # nf-md-delete
 I_DISC=$(printf '\U000f0319')      # nf-md-lan_disconnect
 
-TAG="-h string:x-dunst-stack-tag:wifi"
+# array (no cadena): asi los argumentos llegan enteros a dunstify sin
+# depender de la division por espacios de la shell
+TAG=(-h "string:x-dunst-stack-tag:wifi")
 
 menu() {   # menu "prompt" "lineas" <<< opciones  -> imprime el indice elegido
     rofi -dmenu -i -format i -p " $1 " \
@@ -46,7 +48,7 @@ if ! LANG=C nmcli radio wifi | grep -q enabled; then
 fi
 
 # ── escanear (bloquea 2-4 s: avisar) ──
-dunstify $TAG -t 3000 "${I_RESCAN}  Buscando redes Wi-Fi..."
+dunstify "${TAG[@]}" -t 3000 "${I_RESCAN}  Buscando redes Wi-Fi..."
 GUARDADAS=$(nmcli -t -f NAME,TYPE con show | awk -F: '$2=="802-11-wireless"{print $1}')
 
 SSIDS=(); SEGS=(); ACTIVA=""; LINEAS=""
@@ -79,19 +81,19 @@ SEG="${SEGS[$((IDX - 2))]}"
 if [ "$SSID" = "$ACTIVA" ]; then
     SUB=$(printf '%s  Desconectar\n%s  Olvidar esta red' "$I_DISC" "$I_DEL" | menu "${I_OK}  $SSID" 2)
     case "$SUB" in
-        0) nmcli con down id "$SSID" >/dev/null 2>&1 && dunstify $TAG "${I_DISC}  Desconectado de $SSID" ;;
-        1) nmcli con delete id "$SSID" >/dev/null 2>&1 && dunstify $TAG "${I_DEL}  Red olvidada: $SSID" ;;
+        0) nmcli con down id "$SSID" >/dev/null 2>&1 && dunstify "${TAG[@]}" "${I_DISC}  Desconectado de $SSID" ;;
+        1) nmcli con delete id "$SSID" >/dev/null 2>&1 && dunstify "${TAG[@]}" "${I_DEL}  Red olvidada: $SSID" ;;
     esac
     exit 0
 fi
 
 # ── guardada: conectar directo ──
 if grep -qxF "$SSID" <<< "$GUARDADAS"; then
-    dunstify $TAG "${I_WIFI}  Conectando a $SSID..."
+    dunstify "${TAG[@]}" "${I_WIFI}  Conectando a $SSID..."
     if nmcli con up id "$SSID" >/dev/null 2>&1; then
-        dunstify $TAG "${I_OK}  Conectado a $SSID"
+        dunstify "${TAG[@]}" "${I_OK}  Conectado a $SSID"
     else
-        dunstify -u critical $TAG "${I_OFF}  No se pudo conectar a $SSID"
+        dunstify -u critical "${TAG[@]}" "${I_OFF}  No se pudo conectar a $SSID"
     fi
     exit 0
 fi
@@ -101,21 +103,21 @@ if [ -n "$SEG" ]; then
     CLAVE=$(rofi -dmenu -password -p " ${I_KEY}  Clave de $SSID " \
             -theme-str "listview { enabled: false; }")
     [ -z "$CLAVE" ] && exit 0
-    dunstify $TAG "${I_WIFI}  Conectando a $SSID..."
+    dunstify "${TAG[@]}" "${I_WIFI}  Conectando a $SSID..."
     if nmcli dev wifi connect "$SSID" password "$CLAVE" >/dev/null 2>&1; then
-        dunstify $TAG "${I_OK}  Conectado a $SSID (guardada)"
+        dunstify "${TAG[@]}" "${I_OK}  Conectado a $SSID (guardada)"
     else
         # nmcli deja creada la conexion aunque falle: borrarla para
         # que no aparezca como "guardada" con la clave mala
         nmcli con delete id "$SSID" >/dev/null 2>&1
-        dunstify -u critical $TAG "${I_OFF}  Clave incorrecta o sin señal: $SSID"
+        dunstify -u critical "${TAG[@]}" "${I_OFF}  Clave incorrecta o sin señal: $SSID"
     fi
 else
-    dunstify $TAG "${I_WIFI}  Conectando a $SSID (abierta)..."
+    dunstify "${TAG[@]}" "${I_WIFI}  Conectando a $SSID (abierta)..."
     if nmcli dev wifi connect "$SSID" >/dev/null 2>&1; then
-        dunstify $TAG "${I_OK}  Conectado a $SSID"
+        dunstify "${TAG[@]}" "${I_OK}  Conectado a $SSID"
     else
         nmcli con delete id "$SSID" >/dev/null 2>&1
-        dunstify -u critical $TAG "${I_OFF}  No se pudo conectar a $SSID"
+        dunstify -u critical "${TAG[@]}" "${I_OFF}  No se pudo conectar a $SSID"
     fi
 fi

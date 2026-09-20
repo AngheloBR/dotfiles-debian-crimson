@@ -69,7 +69,7 @@ if ! ~/.local/bin/nvim --version 2>/dev/null | grep -q 'NVIM v0\.1[2-9]'; then
   mv "$tmpd/nvim-linux-x86_64" ~/.local/opt/nvim
   ln -sf ~/.local/opt/nvim/bin/nvim ~/.local/bin/nvim
   rm -rf "$tmpd"
-  echo "-> nvim $(${HOME}/.local/bin/nvim --version | head -1) instalado en ~/.local/opt"
+  echo "-> nvim $("${HOME}/.local/bin/nvim" --version | head -1) instalado en ~/.local/opt"
 fi
 # nvim del sistema (0.10 de Debian) queda, ~/.local/bin gana el PATH
 

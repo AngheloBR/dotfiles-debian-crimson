@@ -28,7 +28,9 @@ case "$1" in
                 rm -f "$DIR"/*-"$HASH"
                 printf '%s' "$ACTUAL" > "$DIR/$(date +%s%N)-$HASH"
                 ULTIMO="$ACTUAL"
-                # recortar a MAX (los mas viejos primero por nombre = timestamp)
+                # recortar a MAX (los mas viejos primero por nombre = timestamp).
+                # ls es seguro aqui: los nombres los pone este script (digitos-hash)
+                # shellcheck disable=SC2012
                 ls -1 "$DIR" | head -n -$MAX | sed "s|^|$DIR/|" | xargs -r rm -f
             fi
             sleep 1

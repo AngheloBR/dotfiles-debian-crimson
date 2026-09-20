@@ -20,7 +20,9 @@ I_ON=$(printf '\U000f0582')    # nf-md-shield_check
 I_OFF=$(printf '\U000f0581')   # nf-md-shield_outline (menu sin vpn)
 I_UP=$(printf '\U000f0337')    # nf-md-link
 I_DOWN=$(printf '\U000f0338')  # nf-md-link_off
-TAG="-h string:x-dunst-stack-tag:vpn"
+# array (no cadena): asi los argumentos llegan enteros a dunstify sin
+# depender de la division por espacios de la shell
+TAG=(-h "string:x-dunst-stack-tag:vpn")
 
 # interfaz de VPN activa (la primera que haya), o vacio
 iface_vpn() {
@@ -74,17 +76,17 @@ for f in /etc/wireguard/*.conf; do
 done
 
 if [ ${#OPC[@]} -eq 0 ]; then
-    dunstify $TAG "${I_OFF}  Sin VPN configurada" "Importa una: nmcli con import type openvpn file X.ovpn (o wireguard)"
+    dunstify "${TAG[@]}" "${I_OFF}  Sin VPN configurada" "Importa una: nmcli con import type openvpn file X.ovpn (o wireguard)"
     exit 0
 fi
 
-N=${#OPC[@]}; [ $N -gt 8 ] && N=8
+N=${#OPC[@]}; [ "$N" -gt 8 ] && N=8
 IDX=$(printf '%s\n' "${OPC[@]}" | rofi -dmenu -i -format i -p " ${I_ON}  VPN " \
     -theme-str "listview { columns: 1; lines: $N; } element { orientation: horizontal; }")
 [ -z "$IDX" ] && exit 0
-dunstify $TAG "${I_ON}  ${OPC[$IDX]#*  }..."
+dunstify "${TAG[@]}" "${I_ON}  ${OPC[$IDX]#*  }..."
 if eval "${CMD[$IDX]}" >/dev/null 2>&1; then
-    dunstify $TAG "${I_ON}  VPN: ${OPC[$IDX]#*  } listo"
+    dunstify "${TAG[@]}" "${I_ON}  VPN: ${OPC[$IDX]#*  } listo"
 else
-    dunstify -u critical $TAG "${I_OFF}  Fallo: ${OPC[$IDX]#*  }"
+    dunstify -u critical "${TAG[@]}" "${I_OFF}  Fallo: ${OPC[$IDX]#*  }"
 fi

@@ -16,19 +16,21 @@ I_PREV=$(printf '\U000f04ae')    # nf-md-skip_previous
 I_NEXT=$(printf '\U000f04ad')    # nf-md-skip_next
 I_PLAY=$(printf '\U000f040a')    # nf-md-play
 I_PAUSE=$(printf '\U000f03e4')   # nf-md-pause
-TAG="-h string:x-dunst-stack-tag:musica"
+# array (no cadena): asi los argumentos llegan enteros a dunstify sin
+# depender de la division por espacios de la shell
+TAG=(-h "string:x-dunst-stack-tag:musica")
 
 if [ "$1" = "accion" ]; then
     case "$2" in
         anterior)  playerctl previous;   sleep 0.3
-                   dunstify $TAG "${I_PREV}  Anterior" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)" ;;
+                   dunstify "${TAG[@]}" "${I_PREV}  Anterior" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)" ;;
         siguiente) playerctl next;       sleep 0.3
-                   dunstify $TAG "${I_NEXT}  Siguiente" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)" ;;
+                   dunstify "${TAG[@]}" "${I_NEXT}  Siguiente" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)" ;;
         pausa)     playerctl play-pause; sleep 0.2
                    if [ "$(playerctl status 2>/dev/null)" = "Playing" ]; then
-                       dunstify $TAG "${I_PLAY}  Reproduciendo" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)"
+                       dunstify "${TAG[@]}" "${I_PLAY}  Reproduciendo" "$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)"
                    else
-                       dunstify $TAG "${I_PAUSE}  En pausa"
+                       dunstify "${TAG[@]}" "${I_PAUSE}  En pausa"
                    fi ;;
     esac
     exit 0
