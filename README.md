@@ -102,6 +102,15 @@ sus plugins solo en el primer arranque.
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
 
+## Actualizar una instalacion
+
+```bash
+cd ~/.dotfiles && git pull && ./instalador.sh
+```
+
+El `instalador.sh` hace falta si el pull trae scripts nuevos (stow enlaza
+archivo por archivo en `~/.local/bin`). Si cambio el bspwmrc: `bspc wm -r`.
+
 ## Comprobar el repo
 
 `./comprobar.sh` valida todo antes de commitear o reinstalar: shellcheck de
