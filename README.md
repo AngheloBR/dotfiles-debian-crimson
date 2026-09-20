@@ -37,6 +37,7 @@ dotfiles/
 │                estado-* para polybar, multimedia.sh (teclas Fn),
 │                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
+│                wifi-menu.sh (redes con señal/clave desde rofi),
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)

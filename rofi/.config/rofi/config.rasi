@@ -92,10 +92,33 @@ element {
     text-color: #d6d6d6;
 }
 
+// OJO: el tema base de rofi define "element normal.normal" y
+// "element alternate.normal" (mas especificos que "element" a secas),
+// y ganan: sin estas lineas las tarjetas salen CREMA del tema default.
+element normal.normal,
+element alternate.normal {
+    background-color: #191920;
+    text-color: #d6d6d6;
+}
+
 // seleccion carmesi (estado explicito con espacio)
-element selected.normal {
+element selected.normal,
+element selected.active,
+element selected.urgent {
     background-color: #D70A53;
     text-color: #0f0f12;
+}
+
+// urgente/activo (ventanas que piden atencion en el modo "window")
+element normal.urgent,
+element alternate.urgent {
+    background-color: #191920;
+    text-color: #D70A53;
+}
+element normal.active,
+element alternate.active {
+    background-color: #191920;
+    text-color: #E8B04B;
 }
 
 element-icon {

@@ -1,7 +1,7 @@
 #!/bin/bash
 # red-wifi.sh — estado de la red para polybar (Rice Debian Crimson)
 #   sin args  -> imprime icono + nombre de la red (o avion si esta apagada)
-#   toggle    -> alterna Wi-Fi (tecla F8, click en la barra y menu F9)
+#   toggle    -> alterna Wi-Fi (tecla F8 y opcion "Apagar" de wifi-menu.sh)
 
 ICON_WIFI=$(printf '\U000f0928')      # nf-md-wifi_strength_4
 ICON_WIFI_OFF=$(printf '\U000f092e')  # nf-md-wifi_strength_off

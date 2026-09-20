@@ -19,13 +19,13 @@ I_CLEAN=$(printf '\U000f0322')    # nf-md-laptop
 I_NOCHE=$(printf '\U000f0594')    # nf-md-weather_night
 I_FONDO=$(printf '\U000f02e9')    # nf-md-image
 
-ELEC=$(printf '%s  Wi-Fi on/off\n%s  Bluetooth on/off\n%s  Audio (pavucontrol)\n%s  Brillo 50%%\n%s  Luz nocturna on/off\n%s  Cambiar fondo\n%s  Detectar monitores\n%s  Editar dotfiles\n%s  Recargar sxhkd\n%s  Reiniciar polybar\n%s  Reiniciar bspwm\n%s  Limpiar pantalla (60 s)' \
+ELEC=$(printf '%s  Redes Wi-Fi\n%s  Bluetooth on/off\n%s  Audio (pavucontrol)\n%s  Brillo 50%%\n%s  Luz nocturna on/off\n%s  Cambiar fondo\n%s  Detectar monitores\n%s  Editar dotfiles\n%s  Recargar sxhkd\n%s  Reiniciar polybar\n%s  Reiniciar bspwm\n%s  Limpiar pantalla (60 s)' \
         "$I_WIFI" "$I_BT" "$I_AUDIO" "$I_SOL" "$I_NOCHE" "$I_FONDO" "$I_MON" "$I_EDIT" "$I_RELOAD" "$I_BAR" "$I_WM" "$I_CLEAN" | \
     rofi -dmenu -i -p " ${I_COG}  Ajustes " \
     -theme-str "listview { columns: 1; lines: 12; } element { orientation: horizontal; }")
 
 case "$ELEC" in
-    *"Wi-Fi on/off")       ~/.local/bin/red-wifi.sh toggle ;;
+    *"Redes Wi-Fi")        ~/.local/bin/wifi-menu.sh ;;
     *"Bluetooth on/off")   ~/.local/bin/bluetooth-menu.sh toggle ;;
     *"Audio (pavucontrol)") pavucontrol >/dev/null 2>&1 & ;;
     *"Brillo 50%")         brightnessctl -q set 50% && dunstify -h int:value:50 "${I_SOL}  Brillo 50%" ;;
