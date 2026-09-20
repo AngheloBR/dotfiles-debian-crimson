@@ -39,11 +39,14 @@ dotfiles/
 │                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
 │                wifi-menu.sh (redes con señal/clave desde rofi),
+│                movil.sh (KDE Connect: bateria del movil, sonar, clipboard),
+│                vpn.sh, actualizaciones.sh, luz-nocturna.sh, estado-*.sh,
 │                portapapeles.sh (historial del clipboard, super+v),
 │                atajos.sh (chuleta de atajos, super+F1),
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
 ├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
+├── zathura/     lector de PDF en la paleta (modo oscuro con "i")
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
 ```
 

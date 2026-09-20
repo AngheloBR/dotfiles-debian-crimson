@@ -72,6 +72,10 @@ pgrep -f aviso-bateria.sh >/dev/null || aviso-bateria.sh &
 # historial del portapapeles (super+v)
 pgrep -f "portapapeles.sh daemon" >/dev/null || portapapeles.sh daemon &
 
+# KDE Connect (movil): el demonio que habla con la app del telefono.
+# Sin bandeja del sistema no hay icono; polybar pregunta por dbus.
+command -v kdeconnectd >/dev/null && { pgrep -x kdeconnectd >/dev/null || kdeconnectd >/dev/null 2>&1 & }
+
 # luz nocturna (temperatura de color segun la hora; config en ~/.config/gammastep)
 command -v gammastep >/dev/null && { pgrep -x gammastep >/dev/null || gammastep &}
 

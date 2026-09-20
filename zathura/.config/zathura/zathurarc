@@ -1,0 +1,38 @@
+# zathura — lector de PDF del Rice "Debian Crimson"
+# Teclas: j/k bajar/subir, J/K pagina, / buscar, a ajustar ancho,
+#         s ajustar pagina, r recargar, i invertir colores (modo oscuro)
+
+# fondo y texto de la interfaz (barra de estado, entrada de comandos)
+set default-bg              "#0f0f12"
+set default-fg              "#d6d6d6"
+set statusbar-bg            "#0f0f12"
+set statusbar-fg            "#b3b3b8"
+set inputbar-bg             "#191920"
+set inputbar-fg             "#d6d6d6"
+set completion-bg           "#191920"
+set completion-fg           "#d6d6d6"
+set completion-highlight-bg "#D70A53"
+set completion-highlight-fg "#0f0f12"
+set notification-bg         "#191920"
+set notification-fg         "#E8B04B"
+set notification-error-bg   "#D70A53"
+set notification-error-fg   "#0f0f12"
+set index-bg                "#0f0f12"
+set index-fg                "#d6d6d6"
+set index-active-bg         "#D70A53"
+set index-active-fg         "#0f0f12"
+set highlight-color         "#E8B04B"
+set highlight-active-color  "#D70A53"
+
+# modo oscuro del documento (recolor): papel del rice, texto claro.
+# "i" lo activa/desactiva; keephue conserva los colores de las figuras
+set recolor                 true
+set recolor-darkcolor       "#d6d6d6"
+set recolor-lightcolor      "#0f0f12"
+set recolor-keephue         true
+
+set font                    "JetBrainsMono Nerd Font 10"
+set adjust-open             "best-fit"
+set window-title-basename   true
+set statusbar-home-tilde    true
+set selection-clipboard     clipboard
