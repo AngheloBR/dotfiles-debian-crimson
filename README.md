@@ -71,9 +71,9 @@ sus plugins solo en el primer arranque.
 | `super + e` | thunar (archivos) |
 | `super + b` | firefox |
 | `super + w` / `super + shift + w` | cerrar / matar ventana |
-| `super + 1..0` | cambiar escritorio |
+| `super + 1..8` | cambiar escritorio |
 | `F10` (candado) | bloquear pantalla (con blur) |
-| `F4` / `F8` / `F9` | mic mute / modo avion / menu de ajustes |
+| `F4` / `F8` / `F9` | mic mute / modo avion / menu de ajustes (Wi-Fi, BT, VPN, audio, impresoras, escaner, brillo, luz nocturna, fondo, monitores, limpiar, actualizar, atajos, dotfiles, recargas) |
 | F9 → Cambiar fondo | elige entre los fondos de `wallpapers/` |
 | `Print` / `shift + Print` | flameshot gui / captura completa |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |

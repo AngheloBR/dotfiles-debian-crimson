@@ -110,8 +110,8 @@ super + {o,i}
         bspc wm -h on
 
 # enfocar o enviar ventana al escritorio dado (con shift: enviar)
-super + {_,shift + }{1-9,0}
-        bspc {desktop -f,node -d} '^{1-9,10}'
+super + {_,shift + }{1-8}
+        bspc {desktop -f,node -d} '^{1-8}'
 
 #
 # preseleccion

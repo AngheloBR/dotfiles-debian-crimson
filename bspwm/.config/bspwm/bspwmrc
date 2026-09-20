@@ -22,11 +22,9 @@ D5=$(printf '\U000f075a')   # musica
 D6=$(printf '\U000f0b79')   # chat
 D7=$(printf '\U000f0493')   # ajustes
 D8=$(printf '\U000f01ee')   # correo
-D9=$(printf '\U000f01da')   # descargas
-D10=$(printf '\U000f00ba')  # lectura
 
-# escritorios solo en la laptop (10 iconos)
-bspc monitor eDP -d "$D1" "$D2" "$D3" "$D4" "$D5" "$D6" "$D7" "$D8" "$D9" "$D10"
+# escritorios solo en la laptop (8 iconos; super+1..8)
+bspc monitor eDP -d "$D1" "$D2" "$D3" "$D4" "$D5" "$D6" "$D7" "$D8"
 
 # ── aspecto ──
 bspc config border_width          2
@@ -52,6 +50,7 @@ bspc config pointer_follows_monitor true
 bspc rule -a flameshot  state=floating
 bspc rule -a thunar     state=floating rectangle=1000x650+0+0 center=true
 bspc rule -a limpiar    state=floating rectangle=760x300+0+0 center=true
+bspc rule -a actualizar state=floating rectangle=1000x600+0+0 center=true
 
 # ── demonios ──
 # Los "pgrep ||" evitan procesos duplicados si se hace "bspc wm -r"

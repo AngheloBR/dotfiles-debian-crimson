@@ -15,7 +15,7 @@ Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
 
 ## Reglas de la casa (no negociables)
 
-1. TODO vive en la laptop (eDP): barra completa con 10 escritorios,
+1. TODO vive en la laptop (eDP): barra completa con 8 escritorios,
    power menu, bluetooth, ajustes (F9), etc.
 2. El HDMI externo, si existe, SOLO muestra wallpaper: un escritorio
    vacío y SIN barra. `ajustar-monitores.sh` se encarga de todo.
