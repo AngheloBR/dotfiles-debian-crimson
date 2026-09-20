@@ -51,6 +51,7 @@ bspc rule -a flameshot  state=floating
 bspc rule -a thunar     state=floating rectangle=1000x650+0+0 center=true
 bspc rule -a limpiar    state=floating rectangle=760x300+0+0 center=true
 bspc rule -a actualizar state=floating rectangle=1000x600+0+0 center=true
+bspc rule -a limpieza   state=floating rectangle=900x520+0+0 center=true
 
 # ── demonios ──
 # Los "pgrep ||" evitan procesos duplicados si se hace "bspc wm -r"
@@ -67,6 +68,12 @@ pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- bloquear.sh &
 
 # aviso de bateria baja (20% y 10%)
 pgrep -f aviso-bateria.sh >/dev/null || aviso-bateria.sh &
+
+# sin candado mientras se reproduce video/musica
+pgrep -f inhibir-bloqueo.sh >/dev/null || inhibir-bloqueo.sh &
+
+# USB/pendrives: montar solos al conectarlos, con aviso (udiskie)
+command -v udiskie >/dev/null && { pgrep -x udiskie >/dev/null || udiskie --automount --notify --no-tray & }
 
 # historial del portapapeles (super+v)
 pgrep -f "portapapeles.sh daemon" >/dev/null || portapapeles.sh daemon &

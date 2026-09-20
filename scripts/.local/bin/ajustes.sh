@@ -31,12 +31,14 @@ OPC=(
     "${I_AUDIO}  Audio (pavucontrol)"
     "${I_PRINT}  Impresoras"
     "${I_SCAN}  Escanear documento"
+    "${I_USB}  Expulsar USB"
     "${I_SOL}  Brillo 50%"
     "${I_NOCHE}  Luz nocturna on/off"
     "${I_FONDO}  Cambiar fondo"
     "${I_MON}  Detectar monitores"
     "${I_CLEAN}  Limpiar pantalla (60 s)"
     "${I_UPD}  Actualizar sistema"
+    "${I_BROOM}  Limpiar sistema"
     "${I_KEYS}  Chuleta de atajos"
     "${I_EDIT}  Editar dotfiles"
     "${I_RELOAD}  Recargar sxhkd"
@@ -56,6 +58,9 @@ case "$ELEC" in
     *"Impresoras")          system-config-printer >/dev/null 2>&1 & ;;
     # simple-scan: escaner (sane-airscan encuentra multifunciones por Wi-Fi)
     *"Escanear documento")  simple-scan >/dev/null 2>&1 & ;;
+    # desmonta con seguridad todo lo que monto udiskie (pendrives, discos)
+    *"Expulsar USB")        udiskie-umount -a >/dev/null 2>&1 && dunstify "${I_USB}  USB expulsado: ya puedes quitarlo" \
+                                || dunstify -u critical "${I_USB}  No se pudo expulsar (¿algo abierto en el USB?)" ;;
     *"Brillo 50%")          brightnessctl -q set 50% && dunstify -h int:value:50 "${I_SOL}  Brillo 50%" ;;
     *"Luz nocturna on/off") ~/.local/bin/luz-nocturna.sh toggle ;;
     *"Cambiar fondo")       ~/.local/bin/fondo.sh elegir ;;
@@ -64,6 +69,7 @@ case "$ELEC" in
     # flotante con la cuenta atras; al terminar se cierra sola
     *"Limpiar pantalla"*)   kitty --class limpiar -e ~/.local/bin/screen-clean --duration 60 >/dev/null 2>&1 & ;;
     *"Actualizar sistema")  ~/.local/bin/actualizaciones.sh instalar ;;
+    *"Limpiar sistema")     kitty --class limpieza -e ~/.local/bin/limpiar-sistema.sh >/dev/null 2>&1 & ;;
     *"Chuleta de atajos")   ~/.local/bin/atajos.sh ;;
     *"Editar dotfiles")     kitty -e nvim ~/.dotfiles >/dev/null 2>&1 & ;;
     *"Recargar sxhkd")      pkill -USR1 -x sxhkd && dunstify "${I_RELOAD}  sxhkd recargado" ;;

@@ -22,7 +22,7 @@ sudo apt install -y \
   xdg-user-dirs \
   fonts-jetbrains-mono \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt \
-  mpv zathura playerctl fastfetch \
+  mpv zathura playerctl fastfetch udiskie nftables \
   git stow curl wget unzip
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="
@@ -72,6 +72,10 @@ if ! ~/.local/bin/nvim --version 2>/dev/null | grep -q 'NVIM v0\.1[2-9]'; then
   echo "-> nvim $(${HOME}/.local/bin/nvim --version | head -1) instalado en ~/.local/opt"
 fi
 # nvim del sistema (0.10 de Debian) queda, ~/.local/bin gana el PATH
+
+echo "=== Firewall (nftables) ==="
+sudo cp "$(dirname "$0")/sistema/etc/nftables.conf" /etc/nftables.conf
+sudo systemctl enable --now nftables
 
 echo "=== Carpetas de usuario en espanol ==="
 LANG=es_ES.UTF-8 xdg-user-dirs-update
