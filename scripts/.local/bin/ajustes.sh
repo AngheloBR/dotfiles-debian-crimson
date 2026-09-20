@@ -29,8 +29,7 @@ case "$ELEC" in
     *"Bluetooth on/off")   ~/.local/bin/bluetooth-menu.sh toggle ;;
     *"Audio (pavucontrol)") pavucontrol >/dev/null 2>&1 & ;;
     *"Brillo 50%")         brightnessctl -q set 50% && dunstify -h int:value:50 "${I_SOL}  Brillo 50%" ;;
-    # USR1 alterna gammastep entre activo y neutro (6500K) sin cerrarlo
-    *"Luz nocturna on/off") pkill -USR1 -x gammastep && dunstify -h string:x-dunst-stack-tag:noche "${I_NOCHE}  Luz nocturna alternada" ;;
+    *"Luz nocturna on/off") ~/.local/bin/luz-nocturna.sh toggle ;;
     *"Cambiar fondo")      ~/.local/bin/fondo.sh elegir ;;
     *"Detectar monitores") ~/.local/bin/ajustar-monitores.sh && dunstify "${I_MON}  Monitores ajustados" ;;
     *"Editar dotfiles")    kitty -e ~/.local/bin/nvim ~/.dotfiles >/dev/null 2>&1 & ;;

@@ -23,8 +23,9 @@ Minimalista, en español, gestionado con GNU **stow**.
 dotfiles/
 ├── bspwm/       gestor de ventanas
 ├── sxhkd/       atajos de teclado (+ teclas multimedia c/ notifs)
-├── polybar/     barra superior (escritorios, Wi-Fi, bluetooth, cpu, mem,
-│                bateria, volumen, mic, power) — iconos Material Nerd Font
+├── polybar/     barra superior (escritorios, musica, actualizaciones, vpn,
+│                Wi-Fi, bluetooth, temperatura, cpu, mem, bateria, volumen,
+│                mic, luz nocturna, power) — iconos Material Nerd Font
 ├── kitty/       terminal (JetBrainsMono Nerd Font, transparencia)
 ├── nvim/        LazyVim con tema "Debian Crimson" custom + shellcheck
 ├── rofi/        lanzador de apps
@@ -109,5 +110,11 @@ si `instalar-paquetes.sh` se queda corto.
   `config.rasi` de rofi tienen que ir literales; cada uno lleva su
   codepoint en un comentario al lado por si hay que restaurarlo.
 - **Reiniciar polybar**: `polybar-msg cmd restart` (IPC), no `pkill`.
+- **Actualizaciones en la barra**: cuenta contra las listas locales de apt;
+  para que se refresquen solas hace falta
+  `APT::Periodic::Update-Package-Lists "1";` en `/etc/apt/apt.conf.d/20auto-upgrades`.
+- **VPN**: el modulo detecta cualquier VPN por su interfaz (tun/wg/tailscale0/wt0)
+  y el menu ofrece lo que haya: conexiones de NetworkManager, tailscale, netbird,
+  wg-quick. Importar: `nmcli con import type openvpn file X.ovpn`.
 - **Bateria**: `tlp` con sus defaults (`sudo tlp-stat -s` para ver el modo).
   LazyVim no comprueba updates al arrancar: `:Lazy update` a mano.

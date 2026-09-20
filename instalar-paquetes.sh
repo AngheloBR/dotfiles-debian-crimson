@@ -22,6 +22,7 @@ sudo apt install -y \
   xdg-user-dirs \
   fonts-jetbrains-mono \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt \
+  mpv zathura playerctl \
   git stow curl wget unzip
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="
@@ -30,7 +31,9 @@ if ! systemd-detect-virt -q; then
     network-manager \
     brightnessctl \
     pipewire pipewire-pulse pavucontrol \
-    bluez blueman gammastep xss-lock tlp
+    bluez blueman gammastep xss-lock tlp \
+    kdeconnect cups system-config-printer sane-airscan simple-scan
+  sudo systemctl enable --now cups
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon
   sudo systemctl enable --now tlp
