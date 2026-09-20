@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Acciones del click derecho de Thunar - Rice "Debian Crimson"
+  %f = archivo/carpeta elegido, %F = todos los elegidos, %d = carpeta actual
+  Se editan tambien desde Thunar: Editar > Configurar acciones personalizadas
+  (Thunar reescribe este archivo; al estar en stow, cambia en el repo).
+  Los iconos son nombres del tema Papirus.
+-->
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Abrir terminal aqui</name>
+	<submenu></submenu>
+	<unique-id>1-crimson</unique-id>
+	<command>kitty --directory %f</command>
+	<description>kitty en esta carpeta</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>nvim</icon>
+	<name>Abrir con Neovim</name>
+	<submenu></submenu>
+	<unique-id>2-crimson</unique-id>
+	<command>kitty -e nvim %F</command>
+	<description>LazyVim con el archivo (o archivos)</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<text-files/>
+	<other-files/>
+</action>
+<action>
+	<icon>edit-copy</icon>
+	<name>Copiar ruta</name>
+	<submenu></submenu>
+	<unique-id>3-crimson</unique-id>
+	<command>sh -c 'printf "%%s" "%f" | xclip -selection clipboard'</command>
+	<description>Ruta completa al portapapeles</description>
+	<range></range>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>package-x-generic</icon>
+	<name>Extraer aqui</name>
+	<submenu></submenu>
+	<unique-id>4-crimson</unique-id>
+	<command>file-roller -h %F</command>
+	<description>Descomprimir en esta carpeta</description>
+	<range></range>
+	<patterns>*.zip;*.tar;*.tar.gz;*.tgz;*.tar.xz;*.tar.bz2;*.7z;*.rar;*.deb</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon>package-x-generic</icon>
+	<name>Comprimir...</name>
+	<submenu></submenu>
+	<unique-id>5-crimson</unique-id>
+	<command>file-roller -d %F</command>
+	<description>Crear un comprimido con lo seleccionado</description>
+	<range></range>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>preferences-desktop-wallpaper</icon>
+	<name>Poner como fondo</name>
+	<submenu></submenu>
+	<unique-id>6-crimson</unique-id>
+	<command>fondo.sh usar %f</command>
+	<description>Usar esta imagen como fondo de pantalla</description>
+	<range></range>
+	<patterns>*.png;*.jpg;*.jpeg;*.webp</patterns>
+	<image-files/>
+</action>
+</actions>

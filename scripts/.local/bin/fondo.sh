@@ -3,6 +3,7 @@
 #   fondo.sh          aplica el fondo elegido (bspwmrc, ajustar-monitores)
 #   fondo.sh ruta     imprime la ruta del fondo actual (la usa bloquear.sh)
 #   fondo.sh elegir   menu rofi con los fondos de ~/.dotfiles/wallpapers
+#   fondo.sh usar X   usa la imagen X (click derecho en Thunar)
 #
 # La eleccion se guarda en ~/.cache/fondo-actual (es estado de esta
 # maquina, no config: por eso no vive en el repo). Sin eleccion, fondo.png.
@@ -29,6 +30,12 @@ case "$1" in
         echo "$DIR/$ELEC.png" > "$GUARDADO"
         feh --bg-scale "$DIR/$ELEC.png" && \
             dunstify -h string:x-dunst-stack-tag:fondo "${ICON}  Fondo: $ELEC" ;;
+    usar)
+        [ -f "$2" ] || exit 1
+        mkdir -p ~/.cache
+        echo "$2" > "$GUARDADO"
+        feh --bg-scale "$2" && \
+            dunstify -h string:x-dunst-stack-tag:fondo "${ICON}  Fondo: $(basename "$2")" ;;
     *)
         feh --bg-scale "$(ruta_actual)" ;;
 esac

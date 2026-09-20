@@ -32,7 +32,9 @@ dotfiles/
 ├── dunst/       notificaciones
 ├── picom/       compositor glx + blur (hardware real)
 ├── picom-vm/    versión ligera para VMs
-├── gtk/         tema oscuro Adwaita-dark + Papirus
+├── gtk/         Adwaita-dark + Papirus + gtk.css con la paleta (sin azules)
+├── thunar/      acciones de click derecho (terminal aqui, nvim, copiar ruta,
+│                extraer, comprimir, poner como fondo)
 ├── zsh/         .zshrc + powerlevel10k + fzf (Ctrl+R/Ctrl+T/Alt+C)
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),

@@ -1,0 +1,95 @@
+/* gtk.css — Rice "Debian Crimson"
+ * Se aplica ENCIMA de Adwaita-dark en todas las apps GTK3 (Thunar,
+ * pavucontrol, blueman, simple-scan, Print Settings, file-roller...).
+ * Adwaita lleva el azul #3584e4 grabado en selecciones, switches, foco y
+ * barras de progreso: aqui se sustituye por el carmesi/dorado de la casa.
+ * Recarga: cerrar y abrir la app (GTK no relee el css en caliente).
+ */
+
+@define-color crimson  #D70A53;
+@define-color dorado   #E8B04B;
+@define-color fondo    #0f0f12;
+@define-color fondo2   #141418;
+@define-color fondo3   #191920;
+@define-color borde    #2b2b2e;
+@define-color texto    #d6d6d6;
+@define-color texto2   #b3b3b8;
+@define-color apagado  #45474e;
+
+/* nombres que Adwaita exporta y algunas apps consultan */
+@define-color theme_selected_bg_color @crimson;
+@define-color theme_selected_fg_color @fondo;
+@define-color theme_bg_color @fondo;
+@define-color theme_base_color @fondo2;
+@define-color theme_fg_color @texto;
+@define-color theme_text_color @texto;
+@define-color borders @borde;
+
+/* ── fondos ── */
+window, .background, dialog, popover, menu, .csd, headerbar, .titlebar,
+toolbar, .sidebar, placessidebar, notebook > header, statusbar, paned {
+    background-color: @fondo;
+    color: @texto;
+}
+.view, treeview.view, iconview, textview, textview text, list, listview,
+notebook > stack, scrolledwindow > viewport {
+    background-color: @fondo2;
+    color: @texto;
+}
+headerbar, .titlebar { border-bottom: 1px solid @borde; box-shadow: none; }
+menu, popover { border: 1px solid @borde; }
+
+/* ── seleccion: carmesi con texto oscuro ── */
+*:selected, *:selected:focus,
+.view:selected, treeview.view:selected, iconview:selected,
+row:selected, row.activatable:selected, list row:selected,
+menuitem:hover, menu menuitem:hover,
+placessidebar row:selected, placessidebar row:selected:hover,
+treeview.view header button:active {
+    background-color: @crimson;
+    color: @fondo;
+    outline-color: transparent;
+}
+placessidebar row:hover, list row:hover, .view:hover, treeview.view:hover {
+    background-color: @fondo3;
+}
+
+/* ── entradas de texto ── */
+entry, entry.flat, searchbar entry {
+    background-color: @fondo3;
+    color: @texto;
+    border: 1px solid @borde;
+    caret-color: @dorado;
+}
+entry:focus, entry:focus-within { border-color: @crimson; box-shadow: none; }
+entry selection { background-color: @crimson; color: @fondo; }
+
+/* ── botones, switches, checks, radios ── */
+button { background: @fondo3; color: @texto; border: 1px solid @borde; text-shadow: none; box-shadow: none; }
+button:hover { background: @borde; }
+button:active, button:checked { background: @crimson; color: @fondo; }
+switch { background-color: @apagado; border-color: @borde; }
+switch:checked { background-color: @crimson; }
+switch slider { background-color: @texto; }
+checkbutton check:checked, radiobutton radio:checked,
+check:checked, radio:checked { background-color: @crimson; border-color: @crimson; color: @fondo; }
+*:focus { outline-color: @crimson; }
+
+/* ── barras y deslizadores ── */
+progressbar progress, progressbar trough progress { background-color: @crimson; border-color: @crimson; }
+progressbar trough { background-color: @borde; }
+scale highlight { background-color: @crimson; border-color: @crimson; }
+scale slider { background-color: @dorado; border-color: @dorado; }
+scale trough { background-color: @borde; }
+levelbar block.filled { background-color: @crimson; }
+
+/* ── scrollbars finas ── */
+scrollbar { background-color: transparent; }
+scrollbar slider { background-color: @apagado; min-width: 6px; min-height: 6px; border-radius: 3px; }
+scrollbar slider:hover, scrollbar slider:active { background-color: @crimson; }
+
+/* ── pestañas, tooltips, cabeceras de tabla ── */
+notebook > header tab:checked { border-bottom: 2px solid @crimson; color: @dorado; }
+tooltip, tooltip.background { background-color: @fondo3; color: @texto; border: 1px solid @crimson; }
+treeview.view header button { background: @fondo; color: @texto2; border-color: @borde; }
+link, *:link { color: @dorado; }
