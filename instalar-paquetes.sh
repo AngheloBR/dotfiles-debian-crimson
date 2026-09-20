@@ -8,11 +8,11 @@ set -e
 echo "=== Paquetes base ==="
 sudo apt update
 sudo apt install -y \
-  xorg x11-xserver-utils xinput \
+  xorg x11-xserver-utils x11-xkb-utils x11-utils xinput xdg-utils \
   bspwm sxhkd \
   picom polybar rofi \
   kitty \
-  feh dunst libnotify-bin \
+  feh dunst libnotify-bin pulseaudio-utils \
   flameshot maim \
   lightdm lightdm-gtk-greeter i3lock imagemagick \
   firefox-esr \
@@ -30,7 +30,7 @@ if ! systemd-detect-virt -q; then
     network-manager \
     brightnessctl \
     pipewire pipewire-pulse pavucontrol \
-    blueman gammastep xss-lock tlp
+    bluez blueman gammastep xss-lock tlp
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon
   sudo systemctl enable --now tlp
