@@ -49,7 +49,8 @@ dotfiles/
 ├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
 ├── zathura/     lector de PDF en la paleta (modo oscuro con "i")
 ├── fastfetch/   logo Debian propio en carmesi/dorado, claves con iconos
-├── sistema/     archivos de /etc (nftables.conf): los copia instalar-paquetes.sh
+├── sistema/     archivos de /etc (nftables.conf, lightdm-gtk-greeter.conf):
+│                los copia instalar-paquetes.sh
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
 ```
 
@@ -122,6 +123,9 @@ si `instalar-paquetes.sh` se queda corto.
 - **VPN**: el modulo detecta cualquier VPN por su interfaz (tun/wg/tailscale0/wt0)
   y el menu ofrece lo que haya: conexiones de NetworkManager, tailscale, netbird,
   wg-quick. Importar: `nmcli con import type openvpn file X.ovpn`.
+- **Login (lightdm)**: fondo debian.png, Adwaita-dark + el gtk.css del rice copiado
+  al home del usuario lightdm (por eso el cuadro sale carmesi). Probar sin cerrar
+  sesion: `dm-tool add-nested-seat` (paquete xserver-xephyr).
 - **Firewall**: nftables, todo lo entrante cerrado salvo respuestas, ping y mDNS
   (impresora). SSH entrante bloqueado: descomentar la regla en `sistema/etc/nftables.conf`.
 - **USB**: udiskie monta pendrives solo y avisa; F9 → Expulsar USB.

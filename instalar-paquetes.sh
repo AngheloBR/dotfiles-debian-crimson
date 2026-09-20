@@ -77,6 +77,14 @@ echo "=== Firewall (nftables) ==="
 sudo cp "$(dirname "$0")/sistema/etc/nftables.conf" /etc/nftables.conf
 sudo systemctl enable --now nftables
 
+echo "=== Pantalla de login (lightdm-gtk-greeter) ==="
+REPO="$(cd "$(dirname "$0")" && pwd)"
+sudo install -D -m644 "$REPO/sistema/etc/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
+sudo install -D -m644 "$REPO/wallpapers/debian.png" /usr/share/backgrounds/crimson/debian.png
+# el greeter es GTK y corre como "lightdm": mismo css del rice para que sea carmesi
+sudo install -D -m644 -o lightdm -g lightdm "$REPO/gtk/.config/gtk-3.0/gtk.css" /var/lib/lightdm/.config/gtk-3.0/gtk.css
+sudo install -D -m644 -o lightdm -g lightdm "$REPO/gtk/.config/gtk-3.0/settings.ini" /var/lib/lightdm/.config/gtk-3.0/settings.ini
+
 echo "=== Carpetas de usuario en espanol ==="
 LANG=es_ES.UTF-8 xdg-user-dirs-update
 
