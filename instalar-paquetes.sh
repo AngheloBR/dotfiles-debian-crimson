@@ -54,6 +54,11 @@ sudo apt install -y firefox firefox-l10n-es-mx
 # fuera el ESR si quedo de una instalacion anterior
 dpkg -l firefox-esr 2>/dev/null | grep -q '^ii' && sudo apt purge -y firefox-esr && sudo apt autoremove -y
 
+echo "=== Repo de Claude Desktop (solo el repo; la app: apt install claude-desktop) ==="
+sudo install -m644 "$(dirname "$0")/sistema/usr/share/keyrings/claude-desktop-archive-keyring.asc" /usr/share/keyrings/
+sudo install -m644 "$(dirname "$0")/sistema/etc/apt/sources.list.d/claude-desktop.list" /etc/apt/sources.list.d/
+sudo apt update
+
 echo "=== Nerd Fonts (iconos) ==="
 if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
   mkdir -p ~/.local/share/fonts
@@ -87,6 +92,16 @@ if ! ~/.local/bin/nvim --version 2>/dev/null | grep -q 'NVIM v0\.1[2-9]'; then
   echo "-> nvim $("${HOME}/.local/bin/nvim" --version | head -1) instalado en ~/.local/opt"
 fi
 # nvim del sistema (0.10 de Debian) queda, ~/.local/bin gana el PATH
+
+echo "=== Agentes de IA en la terminal (instaladores oficiales, en ~/.local y ~/.opencode) ==="
+# Claude Code: ~/.local/bin/claude (symlink que .gitignore ignora)
+if ! command -v claude >/dev/null && [ ! -x ~/.local/bin/claude ]; then
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+# opencode: ~/.opencode/bin (el .zshrc ya lo tiene en el PATH)
+if [ ! -x ~/.opencode/bin/opencode ]; then
+  curl -fsSL https://opencode.ai/install | bash
+fi
 
 echo "=== Firewall (nftables) con perfiles privada/publica ==="
 REPO="$(cd "$(dirname "$0")" && pwd)"

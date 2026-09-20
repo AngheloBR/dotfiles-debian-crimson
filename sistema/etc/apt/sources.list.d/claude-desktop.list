@@ -1,0 +1,5 @@
+### Repo de Claude Desktop (app de escritorio de Anthropic). Rice "Debian Crimson".
+### Mismo nombre y clave que usa el paquete claude-desktop: al instalarlo
+### reescribe este archivo con el mismo contenido (sin duplicados).
+### Instalar la app: sudo apt install claude-desktop
+deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/claude-desktop-archive-keyring.asc] https://downloads.claude.ai/claude-desktop/apt/stable stable main
