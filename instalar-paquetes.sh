@@ -80,6 +80,7 @@ sudo systemctl enable --now nftables
 echo "=== Pantalla de login (lightdm-gtk-greeter) ==="
 REPO="$(cd "$(dirname "$0")" && pwd)"
 sudo install -D -m644 "$REPO/sistema/etc/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
+sudo install -D -m644 "$REPO/sistema/etc/lightdm/lightdm.conf.d/50-crimson.conf" /etc/lightdm/lightdm.conf.d/50-crimson.conf
 sudo install -D -m644 "$REPO/wallpapers/debian.png" /usr/share/backgrounds/crimson/debian.png
 # el greeter es GTK y corre como "lightdm": mismo css del rice para que sea carmesi
 sudo install -D -m644 -o lightdm -g lightdm "$REPO/gtk/.config/gtk-3.0/gtk.css" /var/lib/lightdm/.config/gtk-3.0/gtk.css
