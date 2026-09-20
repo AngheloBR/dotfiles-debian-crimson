@@ -22,7 +22,7 @@ sudo apt install -y \
   xdg-user-dirs \
   fonts-jetbrains-mono \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt \
-  mpv zathura playerctl \
+  mpv zathura playerctl fastfetch \
   git stow curl wget unzip
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="

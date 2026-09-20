@@ -46,6 +46,7 @@ dotfiles/
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
 ├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
 ├── zathura/     lector de PDF en la paleta (modo oscuro con "i")
+├── fastfetch/   logo Debian propio en carmesi/dorado, claves con iconos
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
 ```
 
