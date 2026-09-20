@@ -26,13 +26,13 @@ dotfiles/
 ├── polybar/     barra superior (escritorios, Wi-Fi, bluetooth, cpu, mem,
 │                bateria, volumen, mic, power) — iconos Material Nerd Font
 ├── kitty/       terminal (JetBrainsMono Nerd Font, transparencia)
-├── nvim/        LazyVim con tema "Debian Crimson" custom
+├── nvim/        LazyVim con tema "Debian Crimson" custom + shellcheck
 ├── rofi/        lanzador de apps
 ├── dunst/       notificaciones
 ├── picom/       compositor glx + blur (hardware real)
 ├── picom-vm/    versión ligera para VMs
 ├── gtk/         tema oscuro Adwaita-dark + Papirus
-├── zsh/         .zshrc + powerlevel10k
+├── zsh/         .zshrc + powerlevel10k + fzf (Ctrl+R/Ctrl+T/Alt+C)
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),
 │                ajustar-monitores.sh, aviso-bateria.sh, fondo.sh,
@@ -109,3 +109,5 @@ si `instalar-paquetes.sh` se queda corto.
   `config.rasi` de rofi tienen que ir literales; cada uno lleva su
   codepoint en un comentario al lado por si hay que restaurarlo.
 - **Reiniciar polybar**: `polybar-msg cmd restart` (IPC), no `pkill`.
+- **Bateria**: `tlp` con sus defaults (`sudo tlp-stat -s` para ver el modo).
+  LazyVim no comprueba updates al arrancar: `:Lazy update` a mano.

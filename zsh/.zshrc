@@ -32,3 +32,18 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
 # binarios propios (~/.local/bin: scripts del rice, nvim 0.12) y opencode
 export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+
+# fzf (busqueda difusa): Ctrl+R historial, Ctrl+T archivos, Alt+C carpetas
+# Los archivos los da fd (paquete fd-find, binario "fdfind" en Debian):
+# respeta .gitignore y salta node_modules, .git, etc.
+if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+  source /usr/share/doc/fzf/examples/completion.zsh
+  command -v fdfind >/dev/null && export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND='fdfind --type d --hidden --exclude .git'
+  # paleta de la casa: seleccion carmesi, resaltado dorado, fondo del rice
+  export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border=rounded \
+    --color=bg+:#2b2b2e,fg+:#e6e6ea,hl:#E8B04B,hl+:#E8B04B \
+    --color=border:#D70A53,prompt:#D70A53,pointer:#D70A53,marker:#E8B04B,info:#45474e,spinner:#E8B04B"
+fi

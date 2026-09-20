@@ -21,7 +21,7 @@ sudo apt install -y \
   zsh zsh-autosuggestions zsh-syntax-highlighting \
   xdg-user-dirs \
   fonts-jetbrains-mono \
-  ripgrep fd-find lazygit xclip \
+  ripgrep fd-find fzf lazygit xclip shellcheck shfmt \
   git stow curl wget unzip
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="
@@ -30,7 +30,10 @@ if ! systemd-detect-virt -q; then
     network-manager \
     brightnessctl \
     pipewire pipewire-pulse pavucontrol \
-    blueman gammastep xss-lock
+    blueman gammastep xss-lock tlp
+  # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
+  # con sus defaults; no coexiste con power-profiles-daemon
+  sudo systemctl enable --now tlp
 fi
 
 echo "=== Nerd Fonts (iconos) ==="

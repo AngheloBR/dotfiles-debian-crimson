@@ -31,10 +31,9 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
-  checker = {
-    enabled = true, -- check for plugin updates periodically
-    notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+  -- sin comprobar actualizaciones al arrancar: los plugins se actualizan
+  -- a mano con :Lazy update cuando uno quiere (Debian: estabilidad)
+  checker = { enabled = false },
   performance = {
     rtp = {
       -- disable some rtp plugins

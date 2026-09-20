@@ -21,7 +21,7 @@ case "$1" in
     ruta)
         ruta_actual ;;
     elegir)
-        ELEC=$(cd "$DIR" && ls *.png | sed 's/\.png$//' | \
+        ELEC=$(for f in "$DIR"/*.png; do basename "${f%.png}"; done | \
             rofi -dmenu -i -p " ${ICON}  Fondo " \
             -theme-str "listview { columns: 1; lines: 6; } element { orientation: horizontal; }")
         [ -z "$ELEC" ] && exit 0
