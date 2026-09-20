@@ -73,7 +73,6 @@ sus plugins solo en el primer arranque.
 | F9 → Cambiar fondo | elige entre los fondos de `wallpapers/` |
 | `Print` / `shift + Print` | flameshot gui / captura completa |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
-| `super + shift + Tab` | cambiar de ventana (rofi, todas las abiertas) |
 | `super + v` | historial del portapapeles (ultima opcion: borrar) |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + Escape` | recargar sxhkd |

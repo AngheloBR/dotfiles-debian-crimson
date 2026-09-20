@@ -26,11 +26,6 @@ super + b
 super + n
 	kitty -e ~/.local/bin/nvim
 
-# cambiar de ventana: lista de TODAS las ventanas abiertas, con busqueda
-# (en X11 "shift + Tab" es la tecla ISO_Left_Tab, no Tab con shift)
-super + shift + ISO_Left_Tab
-	rofi -show window -theme-str 'listview { columns: 1; lines: 8; } element { orientation: horizontal; }'
-
 # notificaciones: volver a mostrar la ultima que se cerro / cerrar todas
 super + shift + n
 	dunstctl history-pop
