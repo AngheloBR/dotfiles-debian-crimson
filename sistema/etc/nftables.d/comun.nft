@@ -8,6 +8,11 @@ table inet filter
 flush table inet filter
 
 table inet filter {
+    # la cadena del perfil se declara aqui VACIA para que el "jump" de abajo
+    # la encuentre (nft lee en orden); el archivo del perfil le añade reglas
+    chain perfil {
+    }
+
     chain input {
         type filter hook input priority 0; policy drop;
 
