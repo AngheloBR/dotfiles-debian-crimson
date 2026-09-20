@@ -33,7 +33,7 @@ zsh -n zsh/.zshrc 2>/dev/null && ok zshrc || ko zshrc
 /usr/sbin/visudo -cf sistema/etc/sudoers.d/firewall-perfil >/dev/null 2>&1 && ok sudoers || ko sudoers
 
 echo "3. paquetes stow vs instalador.sh"
-LISTA=$(grep -oE '^stow .*' instalador.sh | sed 's/^stow //')
+LISTA=$(grep -oE '^stow .*' instalador.sh | sed 's/^stow //; s/ *-[A-Za-z]* */ /g')
 for d in */; do d=${d%/}; case $d in docs|sistema|wallpapers|nvim|picom|picom-vm) continue;; esac
     echo " $LISTA " | grep -q " $d " && ok "$d" || ko "falta en instalador.sh: $d"; done
 for s in $LISTA; do [ -d "$s" ] || ko "instalador.sh cita paquete inexistente: $s"; done
