@@ -39,6 +39,7 @@ dotfiles/
 │                bloquear.sh (lock con blur + candado; auto via xss-lock),
 │                wifi-menu.sh (redes con señal/clave desde rofi),
 │                portapapeles.sh (historial del clipboard, super+v),
+│                atajos.sh (chuleta de atajos, super+F1),
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
 ├── xdg/         apps por defecto (mimeapps.list) + nvim/feh .desktop propios
@@ -75,6 +76,7 @@ sus plugins solo en el primer arranque.
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
 | `super + v` | historial del portapapeles (ultima opcion: borrar) |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
+| `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
 
 ## Dependencias manuales

@@ -14,9 +14,13 @@ super + d
 super + e
         thunar
 
-# recargar la configuracion de sxhkd:
+# recargar la configuracion de sxhkd
 super + Escape
         pkill -USR1 -x sxhkd
+
+# chuleta con todos los atajos (esta lista sale de este archivo)
+super + F1
+        ~/.local/bin/atajos.sh
 
 # navegador
 super + b
@@ -26,9 +30,11 @@ super + b
 super + n
 	kitty -e ~/.local/bin/nvim
 
-# notificaciones: volver a mostrar la ultima que se cerro / cerrar todas
+# notificaciones: volver a mostrar la ultima que se cerro
 super + shift + n
 	dunstctl history-pop
+
+# notificaciones: cerrar todas
 super + ctrl + n
 	dunstctl close-all
 
