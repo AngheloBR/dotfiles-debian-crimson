@@ -98,7 +98,8 @@ sus plugins solo en el primer arranque.
 | `F10` (candado) | bloquear pantalla (con blur) |
 | `F4` / `F8` / `F9` | mic mute / modo avion / menu de ajustes (Wi-Fi, BT, VPN, audio, impresoras, escaner, brillo, luz nocturna, fondo, monitores, limpiar, actualizar, atajos, dotfiles, recargas) |
 | F9 → Cambiar fondo | elige entre los fondos de `wallpapers/` |
-| `Print` / `shift + Print` | flameshot gui / captura completa |
+| `Print` | flameshot (anotar) |
+| `shift + Print` / `super + Print` / `super + shift + Print` | pantalla / ventana / region → portapapeles + `~/Imagenes/Capturas` |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
 | `super + v` | historial del portapapeles (ultima opcion: borrar) |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |

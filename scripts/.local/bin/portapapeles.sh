@@ -21,6 +21,11 @@ case "$1" in
     daemon)
         ULTIMO=""
         while true; do
+            # si lo copiado es una imagen (captura.sh, Firefox...), no es
+            # texto: xclip devolveria los bytes del PNG como si lo fueran
+            if timeout 1 xclip -o -selection clipboard -t TARGETS 2>/dev/null | grep -q '^image/'; then
+                sleep 1; continue
+            fi
             ACTUAL=$(timeout 1 xclip -o -selection clipboard 2>/dev/null)
             if [ -n "${ACTUAL// /}" ] && [ "$ACTUAL" != "$ULTIMO" ] && [ ${#ACTUAL} -le 102400 ]; then
                 HASH=$(printf '%s' "$ACTUAL" | md5sum | cut -c1-12)

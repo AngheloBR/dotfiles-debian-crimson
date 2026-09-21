@@ -149,13 +149,21 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
         bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# captura de pantalla con flameshot
+# captura con flameshot (para anotar: flechas, texto; su boton copia)
 Print
         flameshot gui
 
-# captura de pantalla completa (sin seleccionar)
+# captura de toda la pantalla -> portapapeles + ~/Imagenes/Capturas
 shift + Print
-        flameshot full -c
+        ~/.local/bin/captura.sh pantalla
+
+# captura de la ventana enfocada -> portapapeles + archivo
+super + Print
+        ~/.local/bin/captura.sh ventana
+
+# captura de una region (arrastrar) -> portapapeles + archivo, sin menus
+super + shift + Print
+        ~/.local/bin/captura.sh region
 
 # bloquear pantalla: tecla del candado (F10) o su version XF86 si Fn-lock
 # la emite asi. Las llaves {a,b} en sxhkd = "cualquiera de las dos".
