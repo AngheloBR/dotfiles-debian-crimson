@@ -21,6 +21,11 @@ I_MON=$(printf '\U000f0379')      # nf-md-monitor
 I_CLEAN=$(printf '\U000f0322')    # nf-md-laptop
 I_UPD=$(printf '\U000f06b0')      # nf-md-package_variant
 I_KEYS=$(printf '\U000f030c')     # nf-md-keyboard
+I_CAM=$(printf '\U000f0100')      # nf-md-camera
+I_OCR=$(printf '\U000f0b0d')      # nf-md-text_recognition
+I_COLOR=$(printf '\U000f0765')    # nf-md-eyedropper
+I_ICONO=$(printf '\U000f0b7f')    # nf-md-shape_plus
+I_DND=$(printf '\U000f009b')      # nf-md-bell_off
 I_USB=$(printf '\U000f0dae')       # nf-md-usb_flash_drive
 I_BROOM=$(printf '\U000f00e2')     # nf-md-broom
 I_EDIT=$(printf '\U000f03eb')     # nf-md-pencil
@@ -41,6 +46,13 @@ OPC=(
     "${I_FONDO}  Cambiar fondo"
     "${I_MON}  Detectar monitores"
     "${I_CLEAN}  Limpiar pantalla (60 s)"
+    "${I_CAM}  Captura: ventana"
+    "${I_CAM}  Captura: region"
+    "${I_CAM}  Captura: pantalla"
+    "${I_OCR}  OCR: texto de una region"
+    "${I_COLOR}  Color de un pixel"
+    "${I_ICONO}  Buscar icono Nerd Font"
+    "${I_DND}  No molestar on/off"
     "${I_UPD}  Actualizar sistema"
     "${I_BROOM}  Limpiar sistema"
     "${I_KEYS}  Chuleta de atajos"
@@ -76,6 +88,14 @@ case "$ELEC" in
     # desactiva teclado/touchpad/raton 60 s (screen-clean) en una kitty
     # flotante con la cuenta atras; al terminar se cierra sola
     *"Limpiar pantalla"*)   kitty --class limpiar -e ~/.local/bin/screen-clean --duration 60 >/dev/null 2>&1 & ;;
+    # capturas/OCR/color: cerrar rofi antes de capturar (sleep) para que no salga en la foto
+    *"Captura: ventana")    sleep 0.4; ~/.local/bin/captura.sh ventana ;;
+    *"Captura: region")     sleep 0.4; ~/.local/bin/captura.sh region ;;
+    *"Captura: pantalla")   sleep 0.4; ~/.local/bin/captura.sh pantalla ;;
+    *"OCR:"*)               sleep 0.4; ~/.local/bin/ocr.sh ;;
+    *"Color de un pixel")   sleep 0.4; ~/.local/bin/color.sh ;;
+    *"Buscar icono"*)       ~/.local/bin/iconos.sh ;;
+    *"No molestar"*)        ~/.local/bin/no-molestar.sh toggle ;;
     *"Actualizar sistema")  ~/.local/bin/actualizaciones.sh instalar ;;
     *"Limpiar sistema")     kitty --class limpieza -e ~/.local/bin/limpiar-sistema.sh >/dev/null 2>&1 & ;;
     *"Chuleta de atajos")   ~/.local/bin/atajos.sh ;;
