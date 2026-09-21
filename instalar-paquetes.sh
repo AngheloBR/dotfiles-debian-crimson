@@ -36,7 +36,12 @@ if ! systemd-detect-virt -q; then
     brightnessctl \
     bluez blueman gammastep xss-lock tlp \
     cups system-config-printer printer-driver-escpr sane-airscan simple-scan \
-    obs-studio
+    obs-studio \
+    lxd lxd-tools
+  # LXD: contenedores (sandbox sin perder CPU). Puente lxdbr0 con NAT; el
+  # firewall ya deja pasar lxdbr*. El grupo aplica al siguiente login.
+  sudo lxd init --auto
+  sudo usermod -aG lxd "$USER"
   sudo systemctl enable --now cups
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon

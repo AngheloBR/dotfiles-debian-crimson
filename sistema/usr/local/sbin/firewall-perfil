@@ -7,7 +7,10 @@
 #   firewall-perfil auto            elige segun la red Wi-Fi actual
 #   firewall-perfil confiar  SSID   añade SSID a las redes privadas (y aplica)
 #   firewall-perfil olvidar  SSID   la quita (y aplica)
-#   firewall-perfil estado          imprime "privada" o "publica"
+#   firewall-perfil estado          imprime "privada", "publica" o "apagado"
+#   firewall-perfil apagar          EMERGENCIA: quita nuestra tabla (todo pasa).
+#                                   Se vuelve a activar solo al cambiar de red
+#                                   (dispatcher) o con privada/publica/auto.
 #
 # Redes de confianza: /etc/nftables.d/redes-privadas.txt (una por linea).
 # Estado actual: /run/firewall-perfil (lo lee polybar; /run se vacia al
@@ -46,8 +49,12 @@ case "$1" in
         [ -n "$2" ] || { echo "falta el SSID" >&2; exit 1; }
         grep -vxF "$2" "$LISTA" > "$LISTA.tmp" || true; mv "$LISTA.tmp" "$LISTA"
         "$0" auto ;;
+    apagar)
+        nft delete table inet filter 2>/dev/null || true
+        echo apagado > "$ESTADO"; chmod 644 "$ESTADO"
+        echo apagado ;;
     estado)
         cat "$ESTADO" 2>/dev/null || echo publica ;;
     *)
-        echo "uso: firewall-perfil {privada|publica|auto|confiar SSID|olvidar SSID|estado}" >&2; exit 1 ;;
+        echo "uso: firewall-perfil {privada|publica|auto|apagar|confiar SSID|olvidar SSID|estado}" >&2; exit 1 ;;
 esac

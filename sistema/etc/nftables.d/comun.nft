@@ -23,12 +23,14 @@ table inet filter {
         udp dport 546 accept                             # DHCPv6
         # puentes de virtualizacion: la laptop les da DHCP/DNS. Por prefijo,
         # para cubrir KVM (virbr*), LXD/Incus (lxdbr*, incusbr*), LXC (lxcbr*)
-        # y Docker (docker*) sin tocar esto cada vez que se añade una
+        # Docker (docker*) y Podman (podman*, cni*) sin tocar esto cada vez
         iifname "virbr*" accept
         iifname "lxdbr*" accept
         iifname "incusbr*" accept
         iifname "lxcbr*" accept
         iifname "docker*" accept
+        iifname "podman*" accept
+        iifname "cni*" accept
 
         jump perfil                                      # lo que depende del perfil
     }
@@ -42,11 +44,15 @@ table inet filter {
         iifname "incusbr*" accept
         iifname "lxcbr*" accept
         iifname "docker*" accept
+        iifname "podman*" accept
+        iifname "cni*" accept
         oifname "virbr*" ct state established,related accept
         oifname "lxdbr*" ct state established,related accept
         oifname "incusbr*" ct state established,related accept
         oifname "lxcbr*" ct state established,related accept
         oifname "docker*" ct state established,related accept
+        oifname "podman*" ct state established,related accept
+        oifname "cni*" ct state established,related accept
     }
 
     chain output {
