@@ -47,3 +47,18 @@ if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
     --color=bg+:#2b2b2e,fg+:#e6e6ea,hl:#E8B04B,hl+:#E8B04B \
     --color=border:#D70A53,prompt:#D70A53,pointer:#D70A53,marker:#E8B04B,info:#45474e,spinner:#E8B04B"
 fi
+
+# Aviso cuando un comando tarda mas de 30 s y la terminal NO esta enfocada
+# (un apt upgrade, una compilacion...): preexec apunta la hora al empezar,
+# precmd la compara al terminar. WINDOWID lo pone kitty; bspc dice cual
+# es la ventana con foco. Si sigues mirando la terminal, no molesta.
+_crimson_inicio=0; _crimson_cmd=""
+preexec() { _crimson_inicio=$EPOCHSECONDS; _crimson_cmd="$1"; }
+precmd() {
+  local dur=$(( EPOCHSECONDS - _crimson_inicio ))
+  if (( _crimson_inicio > 0 && dur >= 30 )) && [[ -n "$WINDOWID" ]] \
+     && [[ "$(printf '0x%08X' "$WINDOWID")" != "$(bspc query -N -n focused 2>/dev/null | tr a-f A-F)" ]]; then
+    dunstify -h string:x-dunst-stack-tag:cmd "$(printf '\U000f0489')  Termino en $((dur/60))m $((dur%60))s" "${_crimson_cmd:0:60}"
+  fi
+  _crimson_inicio=0
+}

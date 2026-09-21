@@ -165,6 +165,22 @@ super + Print
 super + shift + Print
         ~/.local/bin/captura.sh region
 
+# OCR: seleccionar una region y copiar el TEXTO que contiene
+super + ctrl + Print
+        ~/.local/bin/ocr.sh
+
+# selector de color: click en un pixel -> #hex al portapapeles
+super + shift + c
+        ~/.local/bin/color.sh
+
+# buscador de iconos Nerd Font (Enter copia el icono, shift+Enter el escape)
+super + period
+        ~/.local/bin/iconos.sh
+
+# no molestar: pausar/reanudar las notificaciones
+super + shift + d
+        ~/.local/bin/no-molestar.sh toggle
+
 # bloquear pantalla: tecla del candado (F10) o su version XF86 si Fn-lock
 # la emite asi. Las llaves {a,b} en sxhkd = "cualquiera de las dos".
 {F10,XF86ScreenSaver}

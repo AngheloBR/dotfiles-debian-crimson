@@ -43,7 +43,8 @@ dotfiles/
 │                wifi-menu.sh (redes con señal/clave desde rofi),
 │                vpn.sh, actualizaciones.sh, luz-nocturna.sh, estado-*.sh,
 │                portapapeles.sh (historial del clipboard, super+v),
-│                atajos.sh (chuleta de atajos, super+F1),
+│                atajos.sh (chuleta de atajos, super+F1), captura.sh, ocr.sh,
+│                color.sh, iconos.sh (+ share/crimson/iconos.txt), no-molestar.sh,
 │                screen-clean (desactiva teclado/touchpad para limpiar)
 ├── gammastep/   luz nocturna (3800K de noche, ubicacion fija Lima)
 ├── xdg/         nvim/feh .desktop propios (apps por defecto: sistema/etc/xdg)
@@ -102,6 +103,10 @@ sus plugins solo en el primer arranque.
 | `shift + Print` / `super + Print` / `super + shift + Print` | pantalla / ventana / region → portapapeles + `~/Imagenes/Capturas` |
 | Teclas multimedia | volumen, brillo, mute (con notificación) |
 | `super + v` | historial del portapapeles (ultima opcion: borrar) |
+| `super + ctrl + Print` | OCR: el texto de una region de pantalla → portapapeles |
+| `super + shift + c` | click en un pixel → su `#hex` al portapapeles |
+| `super + .` | buscador de iconos Nerd Font (Enter icono, shift+Enter escape printf) |
+| `super + shift + d` | no molestar (pausa notificaciones; campana en la barra) |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
@@ -189,5 +194,7 @@ si `instalar-paquetes.sh` se queda corto.
   Las VMs de KVM tienen red en ambos perfiles (flush por tabla, no global: libvirt
   tiene su propia tabla de NAT).
 - **USB**: udiskie monta pendrives solo y avisa; F9 → Expulsar USB.
+- **zsh avisa** con dunst si un comando tardo > 30 s y la terminal no tiene el foco.
+- **CPU > 90 °C**: notificacion critica (una vez por episodio).
 - **Bateria**: `tlp` con sus defaults (`sudo tlp-stat -s` para ver el modo).
   LazyVim no comprueba updates al arrancar: `:Lazy update` a mano.

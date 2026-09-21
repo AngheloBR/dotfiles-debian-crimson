@@ -23,6 +23,7 @@ sudo apt install -y \
   fonts-jetbrains-mono \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt gcc make \
   mpv zathura playerctl fastfetch udiskie nftables \
+  tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng xdotool \
   git stow curl wget unzip
 
 # (network-manager y pipewire van en base: los scripts de la barra usan
@@ -34,7 +35,8 @@ if ! systemd-detect-virt -q; then
   sudo apt install -y \
     brightnessctl \
     bluez blueman gammastep xss-lock tlp \
-    cups system-config-printer printer-driver-escpr sane-airscan simple-scan
+    cups system-config-printer printer-driver-escpr sane-airscan simple-scan \
+    obs-studio
   sudo systemctl enable --now cups
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon
