@@ -36,6 +36,7 @@ dotfiles/
 ├── thunar/      acciones de click derecho (terminal aqui, nvim, copiar ruta,
 │                extraer, comprimir, poner como fondo)
 ├── zsh/         .zshrc + powerlevel10k + fzf (Ctrl+R/Ctrl+T/Alt+C)
+├── git/         .gitconfig (nombre, email, credenciales via gh)
 ├── scripts/     ~/.local/bin: menus rofi (power, ajustes F9, bluetooth),
 │                estado-* para polybar, multimedia.sh (teclas Fn),
 │                ajustar-monitores.sh (+ monitor-interno.sh), aviso-bateria.sh, fondo.sh,

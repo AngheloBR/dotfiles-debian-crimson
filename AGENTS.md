@@ -10,7 +10,7 @@ Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
   afecta el sistema en vivo inmediatamente.** Y `~/.dotfiles` NO se
   borra ni se mueve: es el sistema.
 - Paquetes: bspwm sxhkd polybar kitty rofi dunst picom picom-vm gtk thunar
-  gammastep xdg zathura fastfetch zsh nvim(LazyVim) scripts wallpapers
+  gammastep xdg zathura fastfetch zsh git nvim(LazyVim) scripts wallpapers
 - Teclado: `latam`. Shell: zsh + p10k. Terminal: kitty. Editor: LazyVim
   (nvim 0.12 en `~/.local/opt`, NO el 0.10 de Debian).
 
