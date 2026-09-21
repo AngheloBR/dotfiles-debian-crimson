@@ -7,7 +7,8 @@ Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
 
 - Los archivos ORIGINALES viven aquí; `~/.config/*`, `~/.zshrc`, `~/.local/bin`
   son ENLACES SIMBÓLICOS a este repo (GNU stow). **Cualquier cambio aquí
-  afecta el sistema en vivo inmediatamente.**
+  afecta el sistema en vivo inmediatamente.** Y `~/.dotfiles` NO se
+  borra ni se mueve: es el sistema.
 - Paquetes: bspwm sxhkd polybar kitty rofi dunst picom picom-vm gtk thunar
   gammastep xdg zathura fastfetch zsh nvim(LazyVim) scripts wallpapers
 - Teclado: `latam`. Shell: zsh + p10k. Terminal: kitty. Editor: LazyVim

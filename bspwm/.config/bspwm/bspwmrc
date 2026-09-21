@@ -87,6 +87,9 @@ command -v udiskie >/dev/null && { pgrep -x udiskie >/dev/null || udiskie --auto
 # historial del portapapeles (super+v)
 pgrep -f "portapapeles.sh daemon" >/dev/null || portapapeles.sh daemon &
 
+# aviso si ~/.dotfiles tiene cambios sin subir a GitHub
+aviso-dotfiles.sh &
+
 # luz nocturna (temperatura de color segun la hora; config en ~/.config/gammastep)
 command -v gammastep >/dev/null && { pgrep -x gammastep >/dev/null || gammastep &}
 

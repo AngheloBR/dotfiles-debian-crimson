@@ -102,6 +102,21 @@ sus plugins solo en el primer arranque.
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
 
+## `~/.dotfiles` es el sistema: no se borra
+
+Con stow, `~/.config/*`, `~/.zshrc` y `~/.local/bin` son **enlaces** a esta
+carpeta; los archivos reales solo existen aqui. Ventaja: editar la config es
+editar el repo, nunca hay dos copias. Precio: si borras `~/.dotfiles`, el
+rice desaparece (bspwm pelado, sin barra, sin scripts). Recuperar:
+
+```bash
+git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
+cd ~/.dotfiles && ./instalador.sh
+```
+
+GitHub solo se actualiza con `git commit` + `git push`: al iniciar sesion,
+`aviso-dotfiles.sh` avisa si hay cambios sin subir (o commits sin bajar).
+
 ## Actualizar una instalacion
 
 ```bash
