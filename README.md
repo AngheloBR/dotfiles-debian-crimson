@@ -192,8 +192,8 @@ si `instalar-paquetes.sh` se queda corto.
   mDNS para impresora) y **publica** (calle: invisible). Se elige solo al conectar
   segun la red este en `/etc/nftables.d/redes-privadas.txt`; F9 → Firewall lo fuerza
   o marca la red actual como privada. Icono en la barra: escudo dorado/carmesi.
-  Las VMs de KVM tienen red en ambos perfiles (flush por tabla, no global: libvirt
-  tiene su propia tabla de NAT).
+  VMs y contenedores (KVM virbr*, LXD lxdbr*, Incus, LXC, Docker) tienen red en
+  ambos perfiles (flush por tabla, no global: cada herramienta pone su NAT).
 - **USB**: udiskie monta pendrives solo y avisa; F9 → Expulsar USB.
 - **zsh avisa** con dunst si un comando tardo > 30 s y la terminal no tiene el foco.
 - **CPU > 90 °C**: notificacion critica (una vez por episodio).

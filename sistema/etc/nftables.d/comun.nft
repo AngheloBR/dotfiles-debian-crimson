@@ -21,15 +21,32 @@ table inet filter {
         ct state invalid drop
         ip6 nexthdr icmpv6 accept                        # ipv6 necesita esto (vecinos, router)
         udp dport 546 accept                             # DHCPv6
-        iifname "virbr0" accept                          # VMs de KVM: DHCP/DNS de la laptop
+        # puentes de virtualizacion: la laptop les da DHCP/DNS. Por prefijo,
+        # para cubrir KVM (virbr*), LXD/Incus (lxdbr*, incusbr*), LXC (lxcbr*)
+        # y Docker (docker*) sin tocar esto cada vez que se añade una
+        iifname "virbr*" accept
+        iifname "lxdbr*" accept
+        iifname "incusbr*" accept
+        iifname "lxcbr*" accept
+        iifname "docker*" accept
 
         jump perfil                                      # lo que depende del perfil
     }
 
     chain forward {
         type filter hook forward priority 0; policy drop;
-        iifname "virbr0" accept                          # VMs hacia internet (NAT lo pone libvirt)
-        oifname "virbr0" ct state established,related accept
+        # VMs y contenedores hacia internet (el NAT lo pone cada herramienta:
+        # libvirt, LXD...) y las respuestas de vuelta
+        iifname "virbr*" accept
+        iifname "lxdbr*" accept
+        iifname "incusbr*" accept
+        iifname "lxcbr*" accept
+        iifname "docker*" accept
+        oifname "virbr*" ct state established,related accept
+        oifname "lxdbr*" ct state established,related accept
+        oifname "incusbr*" ct state established,related accept
+        oifname "lxcbr*" ct state established,related accept
+        oifname "docker*" ct state established,related accept
     }
 
     chain output {
