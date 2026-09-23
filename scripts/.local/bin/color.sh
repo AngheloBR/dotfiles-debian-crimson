@@ -9,7 +9,9 @@
 command -v xdotool >/dev/null || { dunstify -u critical "color: falta xdotool"; exit 1; }
 ICON=$(printf '\U000f0765')   # nf-md-eyedropper
 xdotool selectwindow >/dev/null 2>&1 || exit 0
-eval "$(xdotool getmouselocation --shell)"      # define X e Y
+# coordenadas sin eval (mismo motivo que en vpn.sh: no ejecutar texto)
+POS=$(xdotool getmouselocation --shell)
+X=$(sed -n 's/^X=//p' <<< "$POS"); Y=$(sed -n 's/^Y=//p' <<< "$POS")
 HEX=$(maim -u -g "1x1+${X}+${Y}" 2>/dev/null | magick - -format '%[hex:p{0,0}]' info: 2>/dev/null | cut -c1-6)
 [ -z "$HEX" ] && exit 1
 printf '#%s' "$HEX" | xclip -selection clipboard
