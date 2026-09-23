@@ -352,6 +352,19 @@ instalar-paquetes.sh:
 - libvirt en Debian 13 usa iptables por defecto y crea sus cadenas UNA
   vez al arrancar el demonio; si se borran no las regenera. Poner
   firewall_backend = "nftables" en /etc/libvirt/network.conf.
+- Lock con monitor externo: X trata los dos monitores como UNA pantalla
+  (xdpyinfo da 3840x1080) e i3lock estira la imagen sobre todo. Hay que
+  generar el PNG de ese tamaño, con una copia del fondo por monitor
+  (xrandr da la geometria WxH+X+Y) y el candado desplazado al centro
+  del monitor interno, no al del escritorio.
+- ImageMagick dentro de un array bash: usar '(' y ')' entre comillas y
+  "-modulate '65,85'"; si no, shellcheck lo lee como lista con comas.
+- eval con datos del sistema (nombres de conexiones, rutas) es una
+  puerta de inyeccion: guardar el comando como array o con separador y
+  ejecutarlo como "${ARGS[@]}".
+- Nombres de hardware (BAT0, ADP0, k10temp): tampoco a fuego. Buscar
+  con globs en /sys y pasarlos a polybar por variables de entorno
+  (${env:BATERIA:BAT0}).
 - Nombres de monitor: NUNCA a fuego. eDP en la laptop, Virtual-1 en una
   VM (virtio), eDP-1/LVDS-1 en otros equipos. monitor-interno.sh da el
   primario de xrandr; los externos son "los demas conectados". Lo

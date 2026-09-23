@@ -15,6 +15,7 @@ DIR=~/.cache/portapapeles
 MAX=30
 ICON=$(printf '\U000f018f')   # nf-md-clipboard_text
 I_DEL=$(printf '\U000f01b4')  # nf-md-delete
+command -v xclip >/dev/null || { dunstify -u critical "Portapapeles: falta xclip"; exit 1; }
 mkdir -p "$DIR"
 
 case "$1" in

@@ -10,6 +10,8 @@ I_LINK=$(printf '\U000f0337')     # nf-md-link
 I_LINK_OFF=$(printf '\U000f0338') # nf-md-link_off
 I_SEARCH=$(printf '\U000f00b0')   # nf-md-bluetooth_audio (buscar)
 
+command -v bluetoothctl >/dev/null || { dunstify -u critical "Falta bluetoothctl (paquete bluez)"; exit 1; }
+
 encendido() { bluetoothctl show 2>/dev/null | grep -q "Powered: yes"; }
 
 alternar() {

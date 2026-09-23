@@ -54,25 +54,25 @@ OPC=(); CMD=()
 if [ -n "$IF" ]; then
     OPC+=("${I_DOWN}  Desconectar $(nombre_vpn "$IF")")
     case "$IF" in
-        tailscale*) CMD+=("tailscale down") ;;
-        wt*|nb*)    CMD+=("netbird down") ;;
+        tailscale*) CMD+=("tailscale|down") ;;
+        wt*|nb*)    CMD+=("netbird|down") ;;
         wg*)        if nmcli -t -f DEVICE con show --active 2>/dev/null | grep -qx "$IF"; then
-                        CMD+=("nmcli con down id \"$(nombre_vpn "$IF")\"")
-                    else CMD+=("sudo wg-quick down $IF"); fi ;;
-        *)          CMD+=("nmcli con down id \"$(nombre_vpn "$IF")\"") ;;
+                        CMD+=("nmcli|con|down|id|$(nombre_vpn "$IF")")
+                    else CMD+=("sudo|wg-quick|down|$IF"); fi ;;
+        *)          CMD+=("nmcli|con|down|id|$(nombre_vpn "$IF")") ;;
     esac
 fi
 # conexiones VPN de NetworkManager (importadas con: nmcli con import type openvpn|wireguard file X)
 while IFS=: read -r nombre tipo; do
     [ "$nombre" = "$(nombre_vpn "$IF")" ] && continue
-    OPC+=("${I_UP}  $nombre ($tipo)"); CMD+=("nmcli con up id \"$nombre\"")
+    OPC+=("${I_UP}  $nombre ($tipo)"); CMD+=("nmcli|con|up|id|$nombre")
 done < <(nmcli -t -f NAME,TYPE con show 2>/dev/null | grep -E ':(vpn|wireguard)$' | sed 's/:wireguard$/:wireguard/; s/:vpn$/:vpn/')
-command -v tailscale >/dev/null && [ "$(nombre_vpn "$IF")" != "tailscale" ] && { OPC+=("${I_UP}  Tailscale"); CMD+=("tailscale up"); }
-command -v netbird   >/dev/null && [ "$(nombre_vpn "$IF")" != "netbird" ]   && { OPC+=("${I_UP}  NetBird");   CMD+=("netbird up"); }
+command -v tailscale >/dev/null && [ "$(nombre_vpn "$IF")" != "tailscale" ] && { OPC+=("${I_UP}  Tailscale"); CMD+=("tailscale|up"); }
+command -v netbird   >/dev/null && [ "$(nombre_vpn "$IF")" != "netbird" ]   && { OPC+=("${I_UP}  NetBird");   CMD+=("netbird|up"); }
 for f in /etc/wireguard/*.conf; do
     [ -e "$f" ] || continue; n=$(basename "${f%.conf}")
     [ "$n" = "$IF" ] && continue
-    OPC+=("${I_UP}  WireGuard: $n"); CMD+=("sudo wg-quick up $n")
+    OPC+=("${I_UP}  WireGuard: $n"); CMD+=("sudo|wg-quick|up|$n")
 done
 
 if [ ${#OPC[@]} -eq 0 ]; then
@@ -85,7 +85,10 @@ IDX=$(printf '%s\n' "${OPC[@]}" | rofi -dmenu -i -format i -p " ${I_ON}  VPN " \
     -theme-str "listview { columns: 1; lines: $N; } element { orientation: horizontal; }")
 [ -z "$IDX" ] && exit 0
 dunstify "${TAG[@]}" "${I_ON}  ${OPC[$IDX]#*  }..."
-if eval "${CMD[$IDX]}" >/dev/null 2>&1; then
+# los comandos se guardan con "|" entre argumentos y se ejecutan como
+# array: nada de eval, asi un nombre de conexion raro no puede inyectar
+IFS='|' read -r -a ARGS <<< "${CMD[$IDX]}"
+if "${ARGS[@]}" >/dev/null 2>&1; then
     dunstify "${TAG[@]}" "${I_ON}  VPN: ${OPC[$IDX]#*  } listo"
 else
     dunstify -u critical "${TAG[@]}" "${I_OFF}  Fallo: ${OPC[$IDX]#*  }"

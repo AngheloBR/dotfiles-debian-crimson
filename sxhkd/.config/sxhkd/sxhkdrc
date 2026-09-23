@@ -192,15 +192,19 @@ super + shift + d
 # ~/.local/bin/multimedia.sh: aqui solo se mapea la tecla.
 #
 
+# subir volumen 5% (con notificacion)
 XF86AudioRaiseVolume
 	~/.local/bin/multimedia.sh vol +
 
+# bajar volumen 5%
 XF86AudioLowerVolume
 	~/.local/bin/multimedia.sh vol -
 
+# silenciar / activar el sonido
 XF86AudioMute
 	~/.local/bin/multimedia.sh vol mute
 
+# subir / bajar el brillo de la pantalla
 XF86MonBrightness{Up,Down}
 	~/.local/bin/multimedia.sh brillo {+,-}
 

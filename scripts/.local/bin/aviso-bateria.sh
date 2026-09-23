@@ -8,8 +8,12 @@
 #
 # En Debian 13 no existe "batsignal" en los repos; esto lo reemplaza.
 
-BAT=/sys/class/power_supply/BAT0
-[ -r "$BAT/capacity" ] || exit 0     # sin bateria (VM, sobremesa): nada que hacer
+# la primera bateria que exista (BAT0 en esta laptop, BAT1 en otras)
+BAT=""
+for b in /sys/class/power_supply/BAT*; do
+    [ -r "$b/capacity" ] && { BAT="$b"; break; }
+done
+[ -z "$BAT" ] && exit 0              # sin bateria (VM, sobremesa): nada que hacer
 
 ICON_BAJA=$(printf '\U000f0083')     # nf-md-battery_alert
 ICON_CARGA=$(printf '\U000f0084')    # nf-md-battery_charging

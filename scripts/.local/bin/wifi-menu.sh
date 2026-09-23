@@ -41,6 +41,8 @@ icono_senal() {   # 0-100 -> icono de barras
 }
 
 # ── Wi-Fi apagado: solo ofrecer encenderlo ──
+command -v nmcli >/dev/null || { dunstify -u critical "Wi-Fi: falta nmcli (network-manager)"; exit 1; }
+
 if ! LANG=C nmcli radio wifi | grep -q enabled; then
     IDX=$(printf '%s  Encender Wi-Fi' "$I_WIFI" | menu "${I_OFF}  Wi-Fi apagado" 1)
     [ "$IDX" = "0" ] && ~/.local/bin/red-wifi.sh toggle

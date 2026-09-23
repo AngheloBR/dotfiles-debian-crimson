@@ -23,17 +23,27 @@ if ! command -v magick >/dev/null || [ ! -f "$WALLPAPER" ]; then
     exit 0
 fi
 
-# Resolucion real de la pantalla (soporta multimonitor despues)
+# Resolucion del ESCRITORIO COMPLETO (con un monitor externo, X lo trata
+# como una sola pantalla: 3840x1080). i3lock estira la imagen sobre todo,
+# asi que hay que generarla de ese tamaño...
 RES=$(xdpyinfo 2>/dev/null | awk -F'[ x]+' '/dimensions/{print $3"x"$4; exit}')
 [ -z "$RES" ] && RES="1920x1080"
+# ...y el candado va centrado en el monitor INTERNO, no en medio de los dos
+GEO=$(xrandr --query | awk '/ connected primary/{print $4; exit}')
+[ -z "$GEO" ] && GEO=$(xrandr --query | awk '/ connected [0-9]/{print $3; exit}')
+MW=${GEO%%x*}; R=${GEO#*x}; MH=${R%%+*}; R=${R#*+}; MX=${R%%+*}; MY=${R#*+}
+[ -z "$MW" ] && { MW=${RES%x*}; MH=${RES#*x}; MX=0; MY=0; }
+# desplazamiento del centro del monitor respecto al centro del escritorio
+OFF_X=$(( MX + MW/2 - ${RES%x*}/2 ))
+OFF_Y=$(( MY + MH/2 - ${RES#*x}/2 ))
 
 CACHE=~/.cache/lockscreen.png
 HASH_FILE=~/.cache/lockscreen.md5
 mkdir -p ~/.cache
 
-# el hash lleva un sufijo de version: si cambia el dibujo (candado, texto)
-# se regenera aunque el wallpaper sea el mismo
-HNEW="$(md5sum "$WALLPAPER" | cut -d' ' -f1)-v2"
+# el hash lleva la resolucion y una version: se regenera si cambia el
+# wallpaper, si se enchufa/quita un monitor o si cambia el dibujo
+HNEW="$(md5sum "$WALLPAPER" | cut -d' ' -f1)-${RES}-${OFF_X}x${OFF_Y}-v3"
 HOLD=$(cat "$HASH_FILE" 2>/dev/null)
 
 if [ "$HNEW" != "$HOLD" ] || [ ! -f "$CACHE" ]; then
@@ -42,16 +52,25 @@ if [ "$HNEW" != "$HOLD" ] || [ ! -f "$CACHE" ]; then
     # blur fuerte + oscurecer al 65%, y encima el candado carmesi con halo
     # (arriba del centro: i3lock dibuja su circulo de "escribiendo" en el
     # centro exacto y no queremos que se pisen) + usuario@equipo en dorado
-    magick "$WALLPAPER" \
-        -resize "${RES}^" -gravity center -extent "$RES" \
-        -blur 0x10 \
-        -modulate 65,85 \
+    # Lienzo del tamaño del escritorio y, encima, UNA copia del wallpaper
+    # por monitor (ajustada a su geometria): asi no se estira entre
+    # pantallas. Cada copia va con blur y oscurecida al 65%.
+    CAPAS=()
+    while read -r g; do
+        [ -z "$g" ] && continue
+        w=${g%%x*}; r=${g#*x}; h=${r%%+*}; r=${r#*+}; x=${r%%+*}; y=${r#*+}
+        # '(' y ')' entre comillas: son argumentos de ImageMagick, no
+        # subshells (con \( shellcheck cree que es una lista)
+        CAPAS+=( '(' "$WALLPAPER" -resize "${w}x${h}^" -gravity center -extent "${w}x${h}" \
+                 -blur 0x10 -modulate '65,85' -repage "+${x}+${y}" ')' )
+    done < <(xrandr --query | awk '/ connected [0-9]|connected primary/{for(i=3;i<=4;i++) if ($i ~ /^[0-9]+x[0-9]+\+/) {print $i; break}}')
+    magick -size "$RES" xc:'#0f0f12' "${CAPAS[@]}" -layers flatten \
         -font "$FUENTE" -gravity center \
-        \( +clone -fill none -pointsize 170 -fill '#D70A53' -annotate +0-200 "$CANDADO" \
+        \( +clone -fill none -pointsize 170 -fill '#D70A53' -annotate "+$OFF_X+$((OFF_Y-200))" "$CANDADO" \
            -blur 0x18 \) -compose lighten -composite \
-        -pointsize 170 -fill '#D70A53' -annotate +0-200 "$CANDADO" \
-        -pointsize 22 -fill '#E8B04B' -annotate +0+190 "$USER @ $(hostname)" \
-        -pointsize 16 -fill '#b3b3b8' -annotate +0+225 "escribe tu contrasena y pulsa Enter" \
+        -pointsize 170 -fill '#D70A53' -annotate "+$OFF_X+$((OFF_Y-200))" "$CANDADO" \
+        -pointsize 22 -fill '#E8B04B' -annotate "+$OFF_X+$((OFF_Y+190))" "$USER @ $(hostname)" \
+        -pointsize 16 -fill '#b3b3b8' -annotate "+$OFF_X+$((OFF_Y+225))" "escribe tu contrasena y pulsa Enter" \
         "$CACHE"
     echo "$HNEW" > "$HASH_FILE"
 fi

@@ -7,6 +7,8 @@ ICON_WIFI=$(printf '\U000f0928')      # nf-md-wifi_strength_4
 ICON_WIFI_OFF=$(printf '\U000f092e')  # nf-md-wifi_strength_off
 ICON_AVION=$(printf '\U000f001d')     # nf-md-airplane
 
+command -v nmcli >/dev/null || exit 0     # sin NetworkManager: modulo vacio
+
 if [ "$1" = "toggle" ]; then
     if LANG=C nmcli radio wifi | grep -q enabled; then
         nmcli radio wifi off && \

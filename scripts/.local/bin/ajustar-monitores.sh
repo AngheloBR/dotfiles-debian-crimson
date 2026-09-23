@@ -53,10 +53,15 @@ for OUT in $EXTERNOS; do
     fi
 done
 
-# barra: solo en el interno (polybar lee MONITOR de la config)
+# barra: solo en el interno. polybar lee de estas variables el monitor,
+# la bateria y el adaptador (nombres distintos segun el equipo)
 pkill -x polybar 2>/dev/null
 sleep 0.4
-MONITOR="$INTERNO" setsid polybar main >/dev/null 2>&1 < /dev/null &
+BATERIA=BAT0; ADAPTADOR=ADP0
+for b in /sys/class/power_supply/BAT*;        do [ -d "$b" ] && { BATERIA=$(basename "$b"); break; }; done
+for a in /sys/class/power_supply/{ADP,AC}*;   do [ -d "$a" ] && { ADAPTADOR=$(basename "$a"); break; }; done
+MONITOR="$INTERNO" BATERIA="$BATERIA" ADAPTADOR="$ADAPTADOR" \
+    setsid polybar main >/dev/null 2>&1 < /dev/null &
 
 # re-aplicar el wallpaper al nuevo acomodo de monitores
 ~/.local/bin/fondo.sh >/dev/null 2>&1

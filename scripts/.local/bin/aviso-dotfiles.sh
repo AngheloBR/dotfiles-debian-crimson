@@ -12,7 +12,8 @@ sleep 8   # dejar que dunst y la red esten listos
 
 ICON=$(printf '\U000f02a2')   # nf-md-git
 MOD=$(git -C "$REPO" status --porcelain 2>/dev/null | wc -l)
-git -C "$REPO" fetch -q 2>/dev/null
+# timeout: sin red (o con red lenta) git puede tardar minutos
+timeout 20 git -C "$REPO" fetch -q 2>/dev/null
 SIN_SUBIR=$(git -C "$REPO" rev-list --count '@{u}..HEAD' 2>/dev/null || echo 0)
 SIN_BAJAR=$(git -C "$REPO" rev-list --count 'HEAD..@{u}' 2>/dev/null || echo 0)
 

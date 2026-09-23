@@ -11,6 +11,10 @@
 # ~/Imagenes/Capturas/AAAA-MM-DD_HH-MM-SS.png por si se quiere despues.
 # La copia de texto (portapapeles.sh) no se entera: solo lee texto.
 
+for d in maim xclip; do
+    command -v "$d" >/dev/null || { dunstify -u critical "Captura: falta $d"; exit 1; }
+done
+
 DIR="$(xdg-user-dir PICTURES 2>/dev/null || echo ~/Imágenes)/Capturas"
 mkdir -p "$DIR"
 ARCHIVO="$DIR/$(date '+%Y-%m-%d_%H-%M-%S').png"
@@ -18,7 +22,12 @@ ICON=$(printf '\U000f0100')   # nf-md-camera
 TAG=(-h "string:x-dunst-stack-tag:captura")
 
 case "$1" in
-    ventana)  maim -u -i "$(bspc query -N -n focused)" "$ARCHIVO" ;;
+    ventana)  VENTANA=$(bspc query -N -n focused 2>/dev/null)
+              if [ -z "$VENTANA" ]; then
+                  dunstify "${TAG[@]}" "${ICON}  No hay ninguna ventana enfocada" "Usa la captura de region o de pantalla"
+                  exit 0
+              fi
+              maim -u -i "$VENTANA" "$ARCHIVO" ;;
     region)   maim -u -s -b 2 -c 0.843,0.039,0.325 "$ARCHIVO" ;;   # borde carmesi al seleccionar
     pantalla) maim -u "$ARCHIVO" ;;
     *) echo "uso: captura.sh {ventana|region|pantalla}" >&2; exit 1 ;;

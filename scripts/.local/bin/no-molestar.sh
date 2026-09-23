@@ -8,6 +8,8 @@
 ICON_ON=$(printf '\U000f009b')    # nf-md-bell_off
 ICON_OFF=$(printf '\U000f009a')   # nf-md-bell
 
+command -v dunstctl >/dev/null || { echo ""; exit 0; }   # sin dunst: modulo vacio
+
 if [ "$1" = "toggle" ]; then
     dunstctl set-paused toggle
     if [ "$(dunstctl is-paused)" = "true" ]; then

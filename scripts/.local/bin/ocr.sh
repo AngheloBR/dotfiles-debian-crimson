@@ -8,6 +8,7 @@
 # --psm 6: "bloque de texto uniforme", el modo que mejor va para trozos
 # de pantalla. Ampliar x3 antes mejora mucho el acierto con letra pequeña.
 
+command -v maim >/dev/null || { dunstify -u critical "OCR: falta maim"; exit 1; }
 command -v tesseract >/dev/null || { dunstify -u critical "OCR: falta tesseract-ocr"; exit 1; }
 ICON=$(printf '\U000f0b0d')   # nf-md-text_recognition
 TAG=(-h "string:x-dunst-stack-tag:ocr")
