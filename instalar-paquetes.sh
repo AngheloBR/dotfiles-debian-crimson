@@ -24,7 +24,7 @@ sudo apt install -y \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt gcc make \
   mpv zathura playerctl fastfetch udiskie nftables \
   tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng xdotool \
-  git stow curl wget unzip
+  python3 git stow curl wget unzip
 
 # (network-manager y pipewire van en base: los scripts de la barra usan
 #  nmcli y pactl tambien en una VM; gcc/make los necesita LazyVim para
@@ -108,6 +108,23 @@ fi
 # opencode: ~/.opencode/bin (el .zshrc ya lo tiene en el PATH)
 if [ ! -x ~/.opencode/bin/opencode ]; then
   curl -fsSL https://opencode.ai/install | bash
+fi
+
+echo "=== Voz (Piper: lee texto en alto, local y sin internet) ==="
+mkdir -p ~/.local/opt ~/.local/share/piper-voces
+if [ ! -x ~/.local/opt/piper/piper ]; then
+  tmpd=$(mktemp -d)
+  curl -fsSL -o "$tmpd/piper.tar.gz" \
+    https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz
+  tar xzf "$tmpd/piper.tar.gz" -C "$tmpd"
+  rm -rf ~/.local/opt/piper && mv "$tmpd/piper" ~/.local/opt/piper
+  rm -rf "$tmpd"
+fi
+# voz mexicana (la mas cercana al español de Peru); ~60 MB
+VOZ_URL=https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx
+if [ ! -f ~/.local/share/piper-voces/es_MX-claude-high.onnx ]; then
+  curl -fsSL -o ~/.local/share/piper-voces/es_MX-claude-high.onnx "$VOZ_URL"
+  curl -fsSL -o ~/.local/share/piper-voces/es_MX-claude-high.onnx.json "$VOZ_URL.json"
 fi
 
 echo "=== Firewall (nftables) con perfiles privada/publica ==="

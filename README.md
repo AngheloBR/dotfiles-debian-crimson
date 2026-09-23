@@ -51,6 +51,7 @@ dotfiles/
 ├── xdg/         nvim/feh .desktop propios (apps por defecto: sistema/etc/xdg)
 ├── zathura/     lector de PDF en la paleta (modo oscuro con "i")
 ├── fastfetch/   logo Debian propio en carmesi/dorado, claves con iconos
+├── claude-code/ settings.json (hook que lee las respuestas en voz alta)
 ├── sistema/     archivos de /etc (nftables.conf, lightdm-gtk-greeter.conf):
 │                los copia instalar-paquetes.sh
 └── wallpapers/  fondos (generar-fondos.sh los fabrica con ImageMagick)
@@ -108,6 +109,8 @@ sus plugins solo en el primer arranque.
 | `super + shift + c` | click en un pixel → su `#hex` al portapapeles |
 | `super + .` | buscador de iconos Nerd Font (Enter icono, shift+Enter escape printf) |
 | `super + shift + d` | no molestar (pausa notificaciones; campana en la barra) |
+| `super + shift + v` | leer el portapapeles en voz alta (Piper, local) |
+| `super + shift + s` / `x` / `z` | voz: pausar-reanudar / cortar / repetir 10 s |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
@@ -149,6 +152,9 @@ Algunas cosas no van por apt y el script las instala aparte:
 
 - **Neovim 0.12+** → `~/.local/opt/nvim` (el 0.10 de Debian 13 es
   demasiado viejo para LazyVim ≥ 0.11.2)
+- **Piper (voz)** → `~/.local/opt/piper` + voz es_MX en `~/.local/share/piper-voces`.
+  El hook `Stop` de Claude Code (paquete `claude-code`) manda cada respuesta a
+  `leer-respuesta.sh`. Quitarlo: `/hooks` dentro de Claude Code.
 - **Firefox** → del repo oficial de Mozilla (`sistema/etc/apt/`), no el ESR
 - **Claude Desktop** → solo el repo (`apt install claude-desktop` cuando se quiera)
 - **Claude Code y opencode** → instaladores oficiales a `~/.local/bin` y `~/.opencode`

@@ -13,7 +13,7 @@ cd "$(dirname "$0")"
 echo "==> Enlazando configs con stow..."
 
 # Paquetes comunes (siempre)
-stow -R bspwm sxhkd polybar kitty rofi dunst gtk thunar zsh git scripts gammastep xdg zathura fastfetch
+stow -R bspwm sxhkd polybar kitty rofi dunst gtk thunar zsh git scripts gammastep xdg zathura fastfetch claude-code
 
 # Neovim (LazyVim) — solo si no hay ya una config del usuario
 if [ -e ~/.config/nvim ] && [ ! -L ~/.config/nvim ]; then

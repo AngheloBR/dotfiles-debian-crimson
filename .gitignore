@@ -5,3 +5,7 @@ scripts/.local/bin/claude
 # Caches
 .cache/
 *.log
+
+# Claude Code: solo se versiona settings.json (el resto es estado/credenciales)
+claude-code/.claude/*
+!claude-code/.claude/settings.json

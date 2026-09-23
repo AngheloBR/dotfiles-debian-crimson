@@ -26,6 +26,7 @@ I_OCR=$(printf '\U000f0b0d')      # nf-md-text_recognition
 I_COLOR=$(printf '\U000f0765')    # nf-md-eyedropper
 I_ICONO=$(printf '\U000f0b7f')    # nf-md-shape_plus
 I_DND=$(printf '\U000f009b')      # nf-md-bell_off
+I_VOZ=$(printf '\U000f057e')      # nf-md-volume_high
 I_USB=$(printf '\U000f0dae')       # nf-md-usb_flash_drive
 I_BROOM=$(printf '\U000f00e2')     # nf-md-broom
 I_EDIT=$(printf '\U000f03eb')     # nf-md-pencil
@@ -53,6 +54,7 @@ OPC=(
     "${I_COLOR}  Color de un pixel"
     "${I_ICONO}  Buscar icono Nerd Font"
     "${I_DND}  No molestar on/off"
+    "${I_VOZ}  Leer el portapapeles en voz alta"
     "${I_UPD}  Actualizar sistema"
     "${I_BROOM}  Limpiar sistema"
     "${I_KEYS}  Chuleta de atajos"
@@ -96,6 +98,7 @@ case "$ELEC" in
     *"Color de un pixel")   sleep 0.4; ~/.local/bin/color.sh ;;
     *"Buscar icono"*)       ~/.local/bin/iconos.sh ;;
     *"No molestar"*)        ~/.local/bin/no-molestar.sh toggle ;;
+    *"Leer el portapapeles"*) ~/.local/bin/leer.sh "$(xclip -o -selection clipboard)" ;;
     *"Actualizar sistema")  ~/.local/bin/actualizaciones.sh instalar ;;
     *"Limpiar sistema")     kitty --class limpieza -e ~/.local/bin/limpiar-sistema.sh >/dev/null 2>&1 & ;;
     *"Chuleta de atajos")   ~/.local/bin/atajos.sh ;;

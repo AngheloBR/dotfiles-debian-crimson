@@ -33,7 +33,9 @@ zsh -n zsh/.zshrc 2>/dev/null && ok zshrc || ko zshrc
 /usr/sbin/visudo -cf sistema/etc/sudoers.d/firewall-perfil >/dev/null 2>&1 && ok sudoers || ko sudoers
 
 echo "3. paquetes stow vs instalador.sh"
-LISTA=$(grep -oE '^stow .*' instalador.sh | sed 's/^stow //; s/ *-[A-Za-z]* */ /g')
+# se quitan las opciones (" -R "), no los guiones de los nombres (claude-code)
+# se quitan las opciones (-R), no los guiones de los nombres (claude-code)
+LISTA=$(grep -oE '^stow .*' instalador.sh | sed 's/^stow //' | tr ' ' '\n' | grep -v '^-' | tr '\n' ' ')
 for d in */; do d=${d%/}; case $d in docs|sistema|wallpapers|nvim|picom|picom-vm) continue;; esac
     echo " $LISTA " | grep -q " $d " && ok "$d" || ko "falta en instalador.sh: $d"; done
 for s in $LISTA; do [ -d "$s" ] || ko "instalador.sh cita paquete inexistente: $s"; done
@@ -56,6 +58,12 @@ declare -A V; for b in $BINS; do
     case "$P" in /usr/bin/*|/usr/sbin/*|/bin/*|/sbin/*) ;; *) continue;; esac
     PK=$(dpkg -S "$P" 2>/dev/null | head -1 | cut -d: -f1); [ -z "$PK" ] || [ -n "${V[$PK]}" ] && continue; V[$PK]=1
     echo "$PKGS" | grep -qx "$PK" && continue
+    # el binario puede venir de un paquete del que SI instalamos su "padre"
+    # (python3 -> python3-minimal, firefox -> firefox-esr...): mirar quien
+    # depende de el y ver si ese esta en la lista
+    if apt-cache rdepends --installed "$PK" 2>/dev/null | tail -n +3 | tr -d ' |' | grep -qxF -f <(echo "$PKGS"); then
+        continue
+    fi
     PRIO=$(apt-cache show "$PK" 2>/dev/null | grep -m1 '^Priority:' | awk '{print $2}')
     case "$PRIO" in required|important|standard) ;; *) ko "$b -> $PK no esta en el instalador";; esac
 done; ok "binarios revisados"

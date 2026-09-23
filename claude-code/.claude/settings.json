@@ -1,0 +1,18 @@
+{
+  "model": "opus",
+  "theme": "dark",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.local/bin/leer-respuesta.sh",
+            "async": true,
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
