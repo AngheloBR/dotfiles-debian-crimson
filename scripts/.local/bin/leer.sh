@@ -43,13 +43,24 @@ case "$1" in
     atras)    ipc seek -10 >/dev/null; exit 0 ;;
     adelante) ipc seek 10  >/dev/null; exit 0 ;;
     estado)
-        # nf-md-volume_high / nf-md-pause  (solo se ve si hay algo sonando)
+        # Botones propios dentro del texto, como el modulo de musica: cada
+        # icono hace UNA cosa clara (%{A1:cmd:}) en vez de clicks ocultos.
+        # Solo aparece mientras hay algo sonando o en pausa.
         { pgrep -x mpv >/dev/null && [ -S "$SOCK" ]; } || exit 0
+        YO=~/.local/bin/leer.sh
+        I_ATRAS=$(printf '\U000f0d2b')   # nf-md-rewind_10
+        I_PAUSA=$(printf '\U000f03e4')   # nf-md-pause
+        I_PLAY=$(printf '\U000f040a')    # nf-md-play
+        I_STOP=$(printf '\U000f04db')    # nf-md-stop
         if ipc get_property pause | grep -q '"data":true'; then
-            printf '%%{F#45474e}\U000f03e4%%{F-}\n'
+            CENTRO="%{A1:$YO pausa:}%{F#E8B04B}${I_PLAY}%{F-}%{A}"
         else
-            printf '%%{F#E8B04B}\U000f057e%%{F-}\n'
+            CENTRO="%{A1:$YO pausa:}%{F#E8B04B}${I_PAUSA}%{F-}%{A}"
         fi
+        printf '%s %s %s\n' \
+            "%{A1:$YO atras:}%{F#b3b3b8}${I_ATRAS}%{F-}%{A}" \
+            "$CENTRO" \
+            "%{A1:$YO parar:}%{F#D70A53}${I_STOP}%{F-}%{A}"
         exit 0 ;;
 esac
 

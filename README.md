@@ -110,7 +110,8 @@ sus plugins solo en el primer arranque.
 | `super + .` | buscador de iconos Nerd Font (Enter icono, shift+Enter escape printf) |
 | `super + shift + d` | no molestar (pausa notificaciones; campana en la barra) |
 | `super + shift + v` | leer el portapapeles en voz alta (Piper, local) |
-| `super + shift + s` / `x` / `z` | voz: pausar-reanudar / cortar / repetir 10 s |
+| `super + shift + s` / `x` / `z` | voz: pausar-reanudar / cortar / repetir 10 s
+  (los mismos tres botones salen en la barra mientras lee) |
 | `super + shift + n` / `super + ctrl + n` | reabrir ultima notificacion / cerrar todas |
 | `super + F1` | chuleta con todos los atajos (leida del sxhkdrc) |
 | `super + Escape` | recargar sxhkd |
