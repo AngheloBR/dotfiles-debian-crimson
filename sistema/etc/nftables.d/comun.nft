@@ -21,16 +21,17 @@ table inet filter {
         ct state invalid drop
         ip6 nexthdr icmpv6 accept                        # ipv6 necesita esto (vecinos, router)
         udp dport 546 accept                             # DHCPv6
-        # puentes de virtualizacion: la laptop les da DHCP/DNS. Por prefijo,
-        # para cubrir KVM (virbr*), LXD/Incus (lxdbr*, incusbr*), LXC (lxcbr*)
-        # Docker (docker*) y Podman (podman*, cni*) sin tocar esto cada vez
-        iifname "virbr*" accept
-        iifname "lxdbr*" accept
-        iifname "incusbr*" accept
-        iifname "lxcbr*" accept
-        iifname "docker*" accept
-        iifname "podman*" accept
-        iifname "cni*" accept
+        # Puentes de virtualizacion y contenedores: la laptop les hace de
+        # router y les da DHCP y DNS. Van por PREFIJO en un conjunto, asi
+        # añadir uno nuevo es escribir una palabra mas:
+        #   virbr*            KVM / libvirt
+        #   lxdbr*, incusbr*  LXD / Incus
+        #   lxcbr*            LXC
+        #   docker*           Docker
+        #   podman*, cni*     Podman
+        #   waydroid*         Waydroid (Android); sin esto no recibe IP
+        iifname { "virbr*", "lxdbr*", "incusbr*", "lxcbr*",
+                  "docker*", "podman*", "cni*", "waydroid*" } accept
 
         jump perfil                                      # lo que depende del perfil
     }
@@ -39,20 +40,10 @@ table inet filter {
         type filter hook forward priority 0; policy drop;
         # VMs y contenedores hacia internet (el NAT lo pone cada herramienta:
         # libvirt, LXD...) y las respuestas de vuelta
-        iifname "virbr*" accept
-        iifname "lxdbr*" accept
-        iifname "incusbr*" accept
-        iifname "lxcbr*" accept
-        iifname "docker*" accept
-        iifname "podman*" accept
-        iifname "cni*" accept
-        oifname "virbr*" ct state established,related accept
-        oifname "lxdbr*" ct state established,related accept
-        oifname "incusbr*" ct state established,related accept
-        oifname "lxcbr*" ct state established,related accept
-        oifname "docker*" ct state established,related accept
-        oifname "podman*" ct state established,related accept
-        oifname "cni*" ct state established,related accept
+        iifname { "virbr*", "lxdbr*", "incusbr*", "lxcbr*",
+                  "docker*", "podman*", "cni*", "waydroid*" } accept
+        oifname { "virbr*", "lxdbr*", "incusbr*", "lxcbr*",
+                  "docker*", "podman*", "cni*", "waydroid*" } ct state established,related accept
     }
 
     chain output {

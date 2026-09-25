@@ -199,7 +199,7 @@ si `instalar-paquetes.sh` se queda corto.
   mDNS para impresora) y **publica** (calle: invisible). Se elige solo al conectar
   segun la red este en `/etc/nftables.d/redes-privadas.txt`; F9 → Firewall lo fuerza
   o marca la red actual como privada. Icono en la barra: escudo dorado/carmesi.
-  VMs y contenedores (KVM virbr*, LXD lxdbr*, Incus, LXC, Docker, Podman) tienen
+  VMs y contenedores (KVM virbr*, LXD lxdbr*, Incus, LXC, Docker, Podman, Waydroid) tienen
   red en ambos perfiles (flush por tabla, no global: cada herramienta pone su NAT).
   **Emergencia** (sin red tras un cambio): click en el escudo → APAGAR firewall, o
   `sudo firewall-perfil apagar`; se reactiva solo al cambiar de red.
