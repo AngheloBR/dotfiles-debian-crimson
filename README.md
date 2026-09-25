@@ -23,7 +23,8 @@ Minimalista, en español, gestionado con GNU **stow**.
 dotfiles/
 ├── bspwm/       gestor de ventanas
 ├── sxhkd/       atajos de teclado (+ teclas multimedia c/ notifs)
-├── polybar/     barra superior (escritorios, musica, actualizaciones, vpn,
+├── polybar/     barra superior (escritorios, musica, bandeja del sistema,
+│                actualizaciones, vpn,
 │                Wi-Fi, bluetooth, temperatura, cpu, mem, bateria, volumen,
 │                mic, luz nocturna, power) — iconos Material Nerd Font
 ├── kitty/       terminal (JetBrainsMono Nerd Font, transparencia)
