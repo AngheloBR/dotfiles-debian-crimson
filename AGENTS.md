@@ -3,6 +3,10 @@
 Este repo son los dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie)
 + bspwm + GNU stow, en español y minimalista. Léelo TODO antes de tocar nada.
 
+> **Lee también `CONTEXTO.md`**: quién es el dueño, qué está construido, las
+> decisiones y su porqué, lo ya descartado (no volver a proponerlo), lo
+> pendiente y la situación del disco. Es la memoria del proyecto.
+
 ## Cómo está montado
 
 - Los archivos ORIGINALES viven aquí; `~/.config/*`, `~/.zshrc`, `~/.local/bin`

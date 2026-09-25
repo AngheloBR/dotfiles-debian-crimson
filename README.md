@@ -141,6 +141,13 @@ cd ~/.dotfiles && git pull && ./instalador.sh
 El `instalador.sh` hace falta si el pull trae scripts nuevos (stow enlaza
 archivo por archivo en `~/.local/bin`). Si cambio el bspwmrc: `bspc wm -r`.
 
+## Contexto del proyecto
+
+`CONTEXTO.md` es la memoria: perfil, hardware, todo lo construido, las
+decisiones y su porqué, lo descartado, lo pendiente y la situacion del disco.
+Sobrevive a una instalacion limpia porque vive en el repo: tras reinstalar,
+clona y pidele a la IA que lo lea.
+
 ## Comprobar el repo
 
 `./comprobar.sh` valida todo antes de commitear o reinstalar: shellcheck de
