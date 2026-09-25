@@ -17,7 +17,7 @@
 - **anghelo** (usuario `anghelo`, host `debian`), Perú.
   `es_PE.UTF-8`, zona horaria `America/Lima`, teclado **latam**.
 - Estudia **redes y seguridad informática**. Usará o usa: GNS3, Wireshark,
-  nmap, AnyDesk, RustDesk, OBS, virt-manager/KVM, LXD, Waydroid.
+  nmap, AnyDesk, RustDesk, OBS, virt-manager/KVM, LXD.
 - Viene de Fedora; eligió **Debian por estabilidad** (harto de actualizaciones
   constantes). Esa es la razón de fondo de casi todas las decisiones.
 - **Quiere entender lo que hace**: explicar el porqué de cada cambio, en
@@ -155,7 +155,8 @@ auto-montaje USB (udiskie) · luz nocturna · aviso de repo sin subir.
 
 **Seguridad**: firewall nftables con **dos perfiles automáticos por red**
 (privada/pública), modo `apagar` de emergencia en el escudo de la barra.
-VMs y contenedores (KVM, LXD, Docker, Podman, Waydroid) con red en ambos.
+VMs y contenedores (KVM, LXD, Docker, Podman, Waydroid) con red en ambos:
+las reglas van por prefijo de puente, cubrir uno de mas no cuesta nada.
 
 **Voz**: Piper local (voz `es_MX-claude-high`) lee las respuestas de Claude
 Code vía hook `Stop`; mpv reproduce y permite pausar/reanudar (`super+shift+s`).
@@ -182,7 +183,8 @@ sintaxis de todas las configs, paquetes stow vs instalador, existencia de los
 
 ## 7. Descartado explícitamente (NO volver a proponer)
 
-Calendario en la barra · terminal desplegable · apps fijadas a escritorios ·
+**Waydroid** (se probó, no se usa: no respaldarlo ni reinstalarlo) ·
+calendario en la barra · terminal desplegable · apps fijadas a escritorios ·
 toggle de gaps · listar ventanas con rofi (`super+shift+Tab` no dispara con
 teclado latam) · disco en la barra · indicador de Caps Lock (el teclado se
 ilumina solo) · vatios de consumo · KDE Connect · grabar con ffmpeg (usa OBS) ·
@@ -220,7 +222,6 @@ Todo esto **se pierde** al formatear. A un disco externo o USB grande:
 |---|---|---|
 | `~/Descargas` | **13 GB** | lo más grande; revisar qué merece la pena |
 | `~/.mozilla` | 954 MB | marcadores, contraseñas, pestañas de Firefox |
-| `~/.local/share/waydroid` | 2,1 GB | la imagen de Android y sus apps |
 | **`~/.ssh`** | 8 KB | **claves privadas — irreemplazables** |
 | `~/.config/gh` | 12 KB | token de GitHub (se puede rehacer con `gh auth login`) |
 | `~/Imágenes`, `~/Documentos` | 2 MB | incluye `~/Imágenes/Capturas` |
@@ -275,7 +276,6 @@ sudo reboot
   el instalador).
 - **LXD**: `sudo lxd init --auto` lo hace el instalador; los contenedores hay
   que recrearlos.
-- **Waydroid**: `sudo waydroid init` y restaurar su carpeta.
 - **VMs de libvirt**: copiar los discos a `/var/lib/libvirt/images/` y
   `virsh define`.
 - **Claude Desktop**: `sudo apt install claude-desktop` (el repo ya queda
