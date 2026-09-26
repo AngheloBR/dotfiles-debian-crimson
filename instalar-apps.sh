@@ -12,33 +12,24 @@
 # ═══════════════════════════════════════════════════════
 set -e
 
-echo "=== Preparar apt para Steam (32 bits + contrib/non-free) ==="
-# Steam es de 32 bits y vive en non-free. Sin estos dos pasos, el
-# paquete ni aparece en los repos.
-if ! dpkg --print-foreign-architectures | grep -q i386; then
-  sudo dpkg --add-architecture i386
-fi
-if ! grep -q 'contrib' /etc/apt/sources.list 2>/dev/null; then
-  sudo sed -i 's/ main non-free-firmware/ main contrib non-free non-free-firmware/' /etc/apt/sources.list
-fi
-sudo apt update
-
 echo "=== Apps de los repos de Debian ==="
 sudo apt install -y \
   gimp \
-  vlc \
-  steam-installer
+  vlc
 
 echo "=== Flatpak + Flathub ==="
 # Discord, OnlyOffice y Obsidian se distribuyen como .deb que NO se
 # actualizan con apt: Discord incluso se niega a arrancar hasta que
 # bajas el nuevo a mano. En Flatpak se actualizan solos y van aislados.
+# Steam tambien: en apt exige activar i386 y añadir contrib/non-free al
+# sistema; el Flatpak trae sus librerias de 32 bits dentro, aisladas.
 sudo apt install -y flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install -y --noninteractive flathub \
   com.discordapp.Discord \
   org.onlyoffice.desktopeditors \
-  md.obsidian.Obsidian
+  md.obsidian.Obsidian \
+  com.valvesoftware.Steam
 
 echo "=== AnyDesk (repo propio: se actualiza con apt) ==="
 # OJO: AnyDesk solo funciona bien en X11 — es una de las razones de que

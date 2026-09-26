@@ -287,7 +287,7 @@ sudo reboot
 | App | Como se instala |
 |---|---|
 | GIMP, VLC | apt |
-| Steam | apt, **tras** `dpkg --add-architecture i386` y añadir `contrib non-free` |
+| Steam | **Flatpak** (en apt exige i386 + `contrib non-free` en el sistema; el Flatpak trae sus librerías de 32 bits aisladas) |
 | Discord, OnlyOffice, Obsidian | **Flatpak** (sus `.deb` no se actualizan con apt; Discord se niega a arrancar hasta actualizarlo a mano) |
 | AnyDesk | repo propio (se actualiza con apt). **Solo X11** |
 | JetBrains Toolbox | tarball a `~/.local/opt`, versión consultada a su API |
