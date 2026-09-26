@@ -279,8 +279,13 @@ sudo reboot
 | Discord, OnlyOffice, Obsidian | **Flatpak** (sus `.deb` no se actualizan con apt; Discord se niega a arrancar hasta actualizarlo a mano) |
 | AnyDesk | repo propio (se actualiza con apt). **Solo X11** |
 | JetBrains Toolbox | tarball a `~/.local/opt`, versión consultada a su API |
-| **Android Studio** | **manual**: Google genera el enlace con JavaScript. `~/.local/opt`. Emulador acelerado (KVM listo). 20-30 GB con SDK |
+| **Android Studio** | el script ofrece: **tarball oficial** (recomendado: emulador y adb por USB sin pegas) o **Flatpak** `com.google.AndroidStudio` (se actualiza solo, pero el sandbox complica emulador y USB). No se automatiza el tarball: el feed de Google da la versión como *"Quail 4 \| 2026.1.4 Patch 1"* y la URL necesita el número de compilación interno, que no publica |
+| **JetBrains Toolbox** | **opcional**, el script pregunta. Para Android NO hace falta: **Android Studio ES IntelliJ IDEA** con el SDK y las herramientas de Google. Tiene sentido para PyCharm (scripts de redes) u otros lenguajes |
 | **Antigravity** (IDE de Google) | **sin verificar**: mirar si ofrece `.deb` |
+
+> **Licencia de estudiante**: JetBrains regala las versiones Ultimate con
+> correo universitario (`jetbrains.com/student`). No usar Community si se
+> puede tener Ultimate gratis.
 
 `~/.local/bin-apps` está en el PATH desde el `.zshrc`.
 
