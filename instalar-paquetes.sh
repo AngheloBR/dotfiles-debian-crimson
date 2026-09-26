@@ -58,11 +58,16 @@ if ! systemd-detect-virt -q; then
     bluez blueman gammastep xss-lock tlp \
     cups system-config-printer printer-driver-escpr sane-airscan simple-scan \
     obs-studio \
-    lxd lxd-tools
+    lxd lxd-tools \
+    qemu-system-x86 qemu-utils libvirt-daemon-system virt-manager
   # LXD: contenedores (sandbox sin perder CPU). Puente lxdbr0 con NAT; el
   # firewall ya deja pasar lxdbr*. El grupo aplica al siguiente login.
   sudo lxd init --auto
   sudo usermod -aG lxd "$USER"
+  # KVM: VMs completas (otro kernel, Windows, laboratorios de redes). El
+  # grupo libvirt deja usar virt-manager/virsh sin sudo. La red la ajusta
+  # la seccion del firewall, que ya ve /etc/libvirt/network.conf.
+  sudo usermod -aG libvirt "$USER"
   sudo systemctl enable --now cups
   # tlp: ahorro de bateria (governor, USB autosuspend, Wi-Fi power save...)
   # con sus defaults; no coexiste con power-profiles-daemon
