@@ -17,7 +17,7 @@
 - **anghelo** (usuario `anghelo`, host `debian`), Perú.
   `es_PE.UTF-8`, zona horaria `America/Lima`, teclado **latam**.
 - Estudia **redes y seguridad informática**. Usará o usa: GNS3, Wireshark,
-  nmap, AnyDesk, RustDesk, OBS, virt-manager/KVM, LXD.
+  nmap, AnyDesk, OBS, virt-manager/KVM, LXD.
 - Viene de Fedora; eligió **Debian por estabilidad** (harto de actualizaciones
   constantes). Esa es la razón de fondo de casi todas las decisiones.
 - **Quiere entender lo que hace**: explicar el porqué de cada cambio, en
@@ -176,7 +176,7 @@ sintaxis de todas las configs, paquetes stow vs instalador, existencia de los
 | **Módulos internos de polybar** | fecha y volumen sin scripts ni polling (volumen por eventos de pipewire) |
 | **`polybar-msg cmd restart`** | IPC nativo, no `pkill` + sleep |
 | **Duplicación de iconos/colores: se acepta** | una librería común haría que ningún script se entienda suelto. **Valorado y descartado**, no reproponer |
-| **X11, no Wayland** | AnyDesk es solo X11 y RustDesk va parcial: el control remoto entrante es justo lo que Wayland restringe por diseño. Con AMD, Wayland iría bien — el problema es el software de su carrera |
+| **X11, no Wayland** | AnyDesk es solo X11: el control remoto entrante es justo lo que Wayland restringe por diseño. Con AMD, Wayland iría bien — el problema es el software de su carrera |
 | **bspwm, no un DE** | ya tiene todo lo que da un DE (udiskie, tlp, dunst, xss-lock, CUPS, F9, bandeja), pieza a pieza y entendiéndolas |
 | **Firefox de Mozilla** | Debian solo trae ESR |
 | **LXD para sandbox, no KVM** | comparte kernel: 100 % de CPU, arranca en 1 s |
@@ -189,7 +189,7 @@ calendario en la barra · terminal desplegable · apps fijadas a escritorios ·
 toggle de gaps · listar ventanas con rofi (`super+shift+Tab` no dispara con
 teclado latam) · disco en la barra · indicador de Caps Lock (el teclado se
 ilumina solo) · vatios de consumo · KDE Connect · grabar con ffmpeg (usa OBS) ·
-repo charm.sh · librería común para iconos/colores · niri (no está en Debian;
+repo charm.sh · RustDesk (se queda solo con AnyDesk) · librería común para iconos/colores · niri (no está en Debian;
 habría que compilarlo y mantenerlo a mano, contra la razón de usar Debian).
 
 ## 8. Pendientes reales
@@ -291,6 +291,9 @@ sudo reboot
 | Discord, OnlyOffice, Obsidian | **Flatpak** (sus `.deb` no se actualizan con apt; Discord se niega a arrancar hasta actualizarlo a mano) |
 | AnyDesk | repo propio (se actualiza con apt). **Solo X11** |
 | JetBrains Toolbox | tarball a `~/.local/opt`, versión consultada a su API |
+| nmap, Wireshark | apt. Wireshark con captura sin root (grupo `wireshark`, preguntas de debconf respondidas de antemano) |
+| adb por USB | `android-sdk-platform-tools-common` (reglas udev) |
+| **GNS3** | no está en Debian: `pipx` (gui + server, con el PyQt6 de apt) + ubridge y dynamips **compilados** a `/usr/local/bin` (Debian 13 los quitó) + `vpcs` de apt |
 | **Android Studio** | el script ofrece: **tarball oficial** (recomendado: emulador y adb por USB sin pegas) o **Flatpak** `com.google.AndroidStudio` (se actualiza solo, pero el sandbox complica emulador y USB). El tarball se descarga solo: la web `developer.android.com/studio` trae la URL completa y el sha256 (el **primero** de la página es el del `.exe` de Windows, no el de Linux) |
 | **JetBrains Toolbox** | **opcional**, el script pregunta. Para Android NO hace falta: **Android Studio ES IntelliJ IDEA** con el SDK y las herramientas de Google. Tiene sentido para PyCharm (scripts de redes) u otros lenguajes |
 | **Antigravity** (IDE de Google) | **sin verificar**: mirar si ofrece `.deb` |

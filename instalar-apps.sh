@@ -13,9 +13,24 @@
 set -e
 
 echo "=== Apps de los repos de Debian ==="
+# nmap: escaner de redes (carrera de redes y seguridad).
+# android-sdk-platform-tools-common: reglas udev para que el movil por USB
+# se pueda usar con adb sin ser root (si no: "no permissions").
 sudo apt install -y \
   gimp \
-  vlc
+  vlc \
+  nmap \
+  android-sdk-platform-tools-common
+
+echo "=== Wireshark (capturar trafico sin ser root) ==="
+# Al instalarse pregunta si los usuarios normales pueden capturar. Se
+# responde que SI de antemano: dumpcap (el que captura) recibe permisos
+# de red y basta con estar en el grupo "wireshark". Asi no hay que abrir
+# toda la interfaz grafica como root. El grupo aplica al siguiente login.
+echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive apt install -y wireshark
+sudo dpkg-reconfigure -f noninteractive wireshark-common
+sudo usermod -aG wireshark "$USER"
 
 echo "=== Flatpak + Flathub ==="
 # Discord, OnlyOffice y Obsidian se distribuyen como .deb que NO se
@@ -42,6 +57,47 @@ echo "deb [signed-by=/etc/apt/keyrings/anydesk.asc] http://deb.anydesk.com/ all 
   | sudo tee /etc/apt/sources.list.d/anydesk.list >/dev/null
 sudo apt update
 sudo apt install -y anydesk
+
+echo "=== GNS3 (laboratorios de redes) ==="
+# GNS3 no esta en Debian. La GUI y el servidor van con pipx: cada
+# programa Python en su propio entorno, sin mezclarse con el sistema.
+# --system-site-packages: la GUI usa el PyQt6 de apt (no lo trae pip).
+# ubridge (conecta los nodos entre si) y dynamips (routers Cisco IOS)
+# tampoco estan en Debian 13: se compilan de su codigo oficial y van a
+# /usr/local/bin. vpcs (PCs de prueba) si esta en apt.
+# Las VMs de los labs usan el KVM que instala instalar-paquetes.sh.
+sudo apt install -y pipx python3-pyqt6 python3-pyqt6.qtsvg python3-pyqt6.qtwebsockets \
+  vpcs libpcap-dev libelf-dev cmake
+for PAQ in gns3-server gns3-gui; do
+  pipx list --short 2>/dev/null | grep -q "^$PAQ " || pipx install --system-site-packages "$PAQ"
+done
+if ! command -v ubridge >/dev/null; then
+  tmpd=$(mktemp -d)
+  git clone -q --depth 1 -b v1.2.3 https://github.com/GNS3/ubridge "$tmpd/ubridge"
+  make -C "$tmpd/ubridge"
+  # su "make install" copia a /usr/local/bin y le da permisos de red (setcap)
+  sudo make -C "$tmpd/ubridge" install
+  rm -rf "$tmpd"
+fi
+if ! command -v dynamips >/dev/null; then
+  tmpd=$(mktemp -d)
+  git clone -q --depth 1 -b v0.2.25 https://github.com/GNS3/dynamips "$tmpd/dynamips"
+  cmake -S "$tmpd/dynamips" -B "$tmpd/build"
+  make -C "$tmpd/build" -j"$(nproc)"
+  sudo make -C "$tmpd/build" install
+  rm -rf "$tmpd"
+fi
+# lanzador para rofi (pipx no crea ninguno)
+cat > ~/.local/share/applications/gns3.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=GNS3
+Comment=Simulador de redes
+Exec=$HOME/.local/bin/gns3 %f
+Icon=gns3
+Categories=Network;Education;
+Terminal=false
+EOF
 
 echo "=== Android Studio (lo principal para apps Android) ==="
 # Android Studio ES IntelliJ IDEA con el SDK de Android, el emulador y las
