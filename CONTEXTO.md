@@ -220,21 +220,29 @@ Todo esto **se pierde** al formatear. A un disco externo o USB grande:
 
 | Qué | Tamaño | Por qué importa |
 |---|---|---|
-| `~/Descargas` | **13 GB** | lo más grande; revisar qué merece la pena |
-| `~/Escritorio` | **374 MB** | contiene `Crimson.tar.gz` (185 MB) y `PA DEBIAN` (190 MB) |
-| **`~/Labs`** | 480 KB | **laboratorios de redes** (`alma-infra`, `demo`, `demo-f3`, `demo-grande`) con sus `lab.sqlite`, evidencias, backups y exports. Pequeño pero es trabajo propio |
-| **`~/vms`** | 1,3 MB | claves y resultados de pruebas (`hk-test`: `testkey`, `histkey`, `results`) |
-| `~/.mozilla` | 954 MB | marcadores, contraseñas, pestañas de Firefox |
-| `~/.android` | 1 MB | `adbkey` (autorización de dispositivos). **Cuando firmes apps, aquí vivirá la keystore: perderla impide actualizar una app ya publicada** |
 | **`~/.ssh`** | 8 KB | **claves privadas — irreemplazables** |
-| `~/.config/gh` | 12 KB | token de GitHub (se puede rehacer con `gh auth login`) |
+| **`~/vms`** | 1,3 MB | claves y resultados de pruebas (`hk-test`) |
 | `~/Imágenes` | 2 MB | incluye `~/Imágenes/Capturas` |
+| `~/.config/gh` | 12 KB | token de GitHub (se puede rehacer con `gh auth login`) |
+| `~/.mozilla` | 954 MB | marcadores, contraseñas, pestañas de Firefox |
+| `~/Descargas` | **13 GB** | lo más grande; revisar qué merece la pena |
 | VM `debian13` de libvirt | varios GB | en `/var/lib/libvirt/images/` (necesita sudo) |
 | La partición `fedora` (p3) | rescatar antes de borrar | montar en **solo lectura** primero |
 
-**No hace falta respaldar**: el rice (está en GitHub) ni lo que reinstala el
-instalador (nvim 40 MB, piper 52 MB + voz 61 MB, p10k, fuentes Nerd 233 MB,
-Claude Code 677 MB, opencode 239 MB).
+**NO respaldar** — decidido por el dueño, no volver a preguntarlo:
+
+- `~/Labs` — laboratorios de prueba, descartados.
+- `~/Escritorio` (374 MB) — `Crimson.tar.gz` y `PA DEBIAN`: lo que ya sacó de
+  Fedora a Debian. Migración terminada, se borra.
+- `~/.android` — solo `adbkey`, se regenera al autorizar el móvil.
+- El rice (está en GitHub) ni lo que reinstala el instalador (nvim 40 MB,
+  piper 52 MB + voz 61 MB, p10k, fuentes Nerd 233 MB, Claude Code 677 MB,
+  opencode 239 MB).
+
+> **Aviso para el futuro**: cuando empiece a firmar apps Android, la
+> **keystore de release** vivirá en `~/.android`. Perderla impide actualizar
+> una app ya publicada en Google Play — a partir de ese momento esa carpeta
+> pasa a ser de lo más crítico del home.
 
 ### 9.2 Antes de borrar: el arranque
 
