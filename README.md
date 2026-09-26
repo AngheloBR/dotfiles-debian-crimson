@@ -68,14 +68,11 @@ Instala Debian 13 (netinst) con **solo "Utilidades estándar del sistema"**
   lo de abajo funciona.
 - Teclado **latinoamericano**, idioma español.
 
-Al primer login en la consola. El repo es **privado**: hay que autenticarse
-en GitHub antes de clonar (`gh auth login` abre el navegador o da un codigo
-para meterlo desde otro dispositivo):
+Al primer login en la consola:
 
 ```bash
-sudo apt install -y git gh
-gh auth login          # GitHub.com → HTTPS → Login with a web browser
-gh repo clone AngheloBR/dotfiles-debian-crimson ~/.dotfiles
+sudo apt install -y git
+git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
 cd ~/.dotfiles
 ./instalar-paquetes.sh   # apt + nerd fonts + nvim 0.12 + p10k + firewall + lightdm
 ./instalador.sh          # stow (detecta VM vs hardware real)
@@ -129,7 +126,7 @@ editar el repo, nunca hay dos copias. Precio: si borras `~/.dotfiles`, el
 rice desaparece (bspwm pelado, sin barra, sin scripts). Recuperar:
 
 ```bash
-gh auth login && gh repo clone AngheloBR/dotfiles-debian-crimson ~/.dotfiles
+git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
 cd ~/.dotfiles && ./instalador.sh
 ```
 

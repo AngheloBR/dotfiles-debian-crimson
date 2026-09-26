@@ -8,7 +8,7 @@
 > **Para anghelo**: este archivo sobrevive a una instalación limpia porque vive
 > en el repo (GitHub). Tras reinstalar: clona y pide que lo lean.
 >
-> Estado: 2026-09-25 · commit `20a6c9b` · 69 commits · 101 archivos
+> Estado: 2026-09-25 · 76 commits · repo **público** para la reinstalación
 
 ---
 
@@ -52,8 +52,9 @@ detectan (ver §6). Lo aprendimos probando en una VM, donde el monitor se llama
 Dotfiles del rice **"Debian Crimson"**: Debian 13 (trixie) + X11 + bspwm,
 español, minimalista, con **GNU stow**.
 
-- **Privado** en `github.com/AngheloBR/dotfiles-debian-crimson`.
-  Para clonar: `gh auth login` primero.
+- `github.com/AngheloBR/dotfiles-debian-crimson`. **Público mientras dure la
+  reinstalación** (así se clona sin autenticarse); el dueño lo devuelve a
+  privado cuando termine — preguntárselo si pasan días.
 - `~/.config/*`, `~/.zshrc`, `~/.local/bin` son **enlaces simbólicos** al repo:
   editar aquí cambia el sistema en vivo. **`~/.dotfiles` no se borra ni se
   mueve: es el sistema.**
@@ -269,9 +270,8 @@ Si el GRUB activo es el de Fedora, resolverlo **antes**, no después.
 ### 9.4 Después de instalar
 
 ```bash
-sudo apt install -y git gh
-gh auth login                                    # el repo es privado
-gh repo clone AngheloBR/dotfiles-debian-crimson ~/.dotfiles
+sudo apt install -y git
+git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
 cd ~/.dotfiles
 ./instalar-paquetes.sh   # 82 paquetes + Mozilla + nerd fonts + nvim 0.12 + p10k
                          # + piper + firewall + lightdm + Claude Code + opencode
@@ -301,7 +301,16 @@ sudo reboot
 
 `~/.local/bin-apps` está en el PATH desde el `.zshrc`.
 
-### 9.5 Lo que hay que rehacer a mano (no está en el repo)
+### 9.5 Al terminar: devolver el repo a privado
+
+Se puso público solo para poder clonarlo sin autenticarse durante la
+instalación limpia:
+
+```bash
+gh repo edit AngheloBR/dotfiles-debian-crimson --visibility private
+```
+
+### 9.6 Lo que hay que rehacer a mano (no está en el repo)
 
 - **Wi-Fi**: las 2 redes guardadas se pierden → reconectar (el menú de la barra).
 - **Firefox**: restaurar `~/.mozilla` o iniciar sesión en Sync.
