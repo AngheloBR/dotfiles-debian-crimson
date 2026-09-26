@@ -24,11 +24,32 @@ sudo apt install -y \
   ripgrep fd-find fzf lazygit xclip shellcheck shfmt gcc make \
   mpv zathura playerctl fastfetch udiskie nftables \
   tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng xdotool \
-  python3 git stow curl wget unzip
+  python3 git gh stow curl wget unzip
 
 # (network-manager y pipewire van en base: los scripts de la barra usan
 #  nmcli y pactl tambien en una VM; gcc/make los necesita LazyVim para
-#  compilar los parsers de treesitter)
+#  compilar los parsers de treesitter; gh porque el .gitconfig le pide
+#  las credenciales de GitHub: sin el, git push falla)
+
+echo "=== Wi-Fi: que lo gestione NetworkManager, no ifupdown ==="
+# El instalador de Debian deja el Wi-Fi configurado en /etc/network/interfaces.
+# NetworkManager IGNORA toda interfaz que aparezca ahi ("sin gestion"): ni la
+# barra, ni el menu Wi-Fi, ni el perfil automatico del firewall funcionan.
+# Se copia esa red a NetworkManager y el archivo queda solo con "lo".
+# Surte efecto al reiniciar (hasta entonces la conexion actual sigue viva).
+if sudo grep -qE '^[[:space:]]*wpa-(ssid|psk)' /etc/network/interfaces 2>/dev/null; then
+  SSID=$(sudo sed -n 's/^[[:space:]]*wpa-ssid[[:space:]]\+//p' /etc/network/interfaces | head -1)
+  PSK=$(sudo sed -n 's/^[[:space:]]*wpa-psk[[:space:]]\+//p' /etc/network/interfaces | head -1)
+  if [ -n "$SSID" ] && ! nmcli -t -f NAME connection show | grep -qxF "$SSID"; then
+    sudo nmcli connection add type wifi con-name "$SSID" ssid "$SSID" \
+      ${PSK:+wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$PSK"}
+  fi
+  sudo cp -n /etc/network/interfaces /etc/network/interfaces.instalador-debian
+  printf 'source /etc/network/interfaces.d/*\n\nauto lo\niface lo inet loopback\n' \
+    | sudo tee /etc/network/interfaces >/dev/null
+  # la copia tiene la clave del Wi-Fi en claro: solo root la lee
+  sudo chmod 600 /etc/network/interfaces.instalador-debian
+fi
 
 echo "=== Extras de HARDWARE REAL (no VM) ==="
 if ! systemd-detect-virt -q; then

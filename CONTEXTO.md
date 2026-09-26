@@ -347,7 +347,7 @@ gh repo edit AngheloBR/dotfiles-debian-crimson --visibility private
 
 ## 11. Lecciones que más han mordido
 
-Las **28** están en `GUIA-RICE-DEBIAN-BSPWM.txt` §7. Las peores:
+Las **30** están en `GUIA-RICE-DEBIAN-BSPWM.txt` §7. Las peores:
 
 - **lightdm arranca bspwm con un PATH sin `~/.local/bin`** → hay que exportarlo
   al principio de `bspwmrc`. Tuvo a polybar sin arrancar sin dar ningún error.

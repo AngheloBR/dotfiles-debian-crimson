@@ -13,7 +13,13 @@ cd "$(dirname "$0")"
 echo "==> Enlazando configs con stow..."
 
 # Paquetes comunes (siempre)
-stow -R bspwm sxhkd polybar kitty rofi dunst gtk thunar zsh git scripts gammastep xdg zathura fastfetch claude-code
+stow -R bspwm sxhkd polybar kitty rofi dunst gtk thunar zsh git scripts gammastep zathura fastfetch claude-code
+
+# xdg sin "plegar": si ~/.local/share/applications no existe, stow la
+# convierte entera en un symlink al repo, y entonces Firefox, Claude Code
+# o update-desktop-database escriben SUS archivos dentro del repo.
+# --no-folding crea la carpeta real y enlaza solo nvim.desktop y feh.desktop.
+stow -R --no-folding xdg
 
 # Neovim (LazyVim) — solo si no hay ya una config del usuario
 if [ -e ~/.config/nvim ] && [ ! -L ~/.config/nvim ]; then

@@ -370,6 +370,14 @@ instalar-paquetes.sh:
   primario de xrandr; los externos son "los demas conectados". Lo
   descubrio la prueba en VM: polybar no arrancaba y los escritorios no
   se creaban.
+- Instalacion limpia: el netinst de Debian deja el Wi-Fi en
+  /etc/network/interfaces y NetworkManager lo marca "sin gestion": ni
+  barra, ni menu Wi-Fi, ni perfil del firewall. Pasar la red a NM y
+  dejar ese archivo solo con "lo" (lo hace instalar-paquetes.sh).
+- stow "pliega": si la carpeta destino no existe, crea UN symlink a la
+  carpeta entera del repo, y las apps escriben dentro del repo (paso con
+  ~/.local/share/applications). Para carpetas donde escriben otros
+  programas: stow --no-folding.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)
