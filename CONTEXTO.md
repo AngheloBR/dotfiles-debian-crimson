@@ -221,10 +221,14 @@ Todo esto **se pierde** al formatear. A un disco externo o USB grande:
 | Qué | Tamaño | Por qué importa |
 |---|---|---|
 | `~/Descargas` | **13 GB** | lo más grande; revisar qué merece la pena |
+| `~/Escritorio` | **374 MB** | contiene `Crimson.tar.gz` (185 MB) y `PA DEBIAN` (190 MB) |
+| **`~/Labs`** | 480 KB | **laboratorios de redes** (`alma-infra`, `demo`, `demo-f3`, `demo-grande`) con sus `lab.sqlite`, evidencias, backups y exports. Pequeño pero es trabajo propio |
+| **`~/vms`** | 1,3 MB | claves y resultados de pruebas (`hk-test`: `testkey`, `histkey`, `results`) |
 | `~/.mozilla` | 954 MB | marcadores, contraseñas, pestañas de Firefox |
+| `~/.android` | 1 MB | `adbkey` (autorización de dispositivos). **Cuando firmes apps, aquí vivirá la keystore: perderla impide actualizar una app ya publicada** |
 | **`~/.ssh`** | 8 KB | **claves privadas — irreemplazables** |
 | `~/.config/gh` | 12 KB | token de GitHub (se puede rehacer con `gh auth login`) |
-| `~/Imágenes`, `~/Documentos` | 2 MB | incluye `~/Imágenes/Capturas` |
+| `~/Imágenes` | 2 MB | incluye `~/Imágenes/Capturas` |
 | VM `debian13` de libvirt | varios GB | en `/var/lib/libvirt/images/` (necesita sudo) |
 | La partición `fedora` (p3) | rescatar antes de borrar | montar en **solo lectura** primero |
 
