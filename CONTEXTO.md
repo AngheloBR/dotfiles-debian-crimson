@@ -265,7 +265,24 @@ cd ~/.dotfiles
                          # + piper + firewall + lightdm + Claude Code + opencode
 ./instalador.sh          # stow (detecta VM vs hardware real para picom)
 sudo reboot
+# y cuando se quiera, los programas de usuario (van aparte a proposito):
+./instalar-apps.sh       # GIMP, VLC, Steam, Discord, OnlyOffice, Obsidian,
+                         # AnyDesk, JetBrains Toolbox
 ```
+
+### Programas de usuario (`instalar-apps.sh`)
+
+| App | Como se instala |
+|---|---|
+| GIMP, VLC | apt |
+| Steam | apt, **tras** `dpkg --add-architecture i386` y añadir `contrib non-free` |
+| Discord, OnlyOffice, Obsidian | **Flatpak** (sus `.deb` no se actualizan con apt; Discord se niega a arrancar hasta actualizarlo a mano) |
+| AnyDesk | repo propio (se actualiza con apt). **Solo X11** |
+| JetBrains Toolbox | tarball a `~/.local/opt`, versión consultada a su API |
+| **Android Studio** | **manual**: Google genera el enlace con JavaScript. `~/.local/opt`. Emulador acelerado (KVM listo). 20-30 GB con SDK |
+| **Antigravity** (IDE de Google) | **sin verificar**: mirar si ofrece `.deb` |
+
+`~/.local/bin-apps` está en el PATH desde el `.zshrc`.
 
 ### 9.5 Lo que hay que rehacer a mano (no está en el repo)
 

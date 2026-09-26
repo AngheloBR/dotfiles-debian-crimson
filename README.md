@@ -82,6 +82,10 @@ cd ~/.dotfiles
 sudo reboot
 ```
 
+Aparte, `./instalar-apps.sh` instala los programas de usuario (GIMP, VLC,
+Steam, Discord, OnlyOffice, Obsidian, AnyDesk, JetBrains Toolbox). Va
+separado a proposito: el rice debe poder instalarse solo.
+
 Tras reiniciar, lightdm muestra el login del rice; entra y ya estás en
 bspwm. En una VM no hay batería, Wi-Fi ni bluetooth: esos módulos de la
 barra se ocultan solos.

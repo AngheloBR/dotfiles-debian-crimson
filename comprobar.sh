@@ -14,7 +14,7 @@ ko() { echo "  ✗ $*"; FALLOS=$((FALLOS+1)); }
 ok() { echo "  ✓ $*"; }
 
 echo "1. scripts"
-SCRIPTS=(scripts/.local/bin/*.sh bspwm/.config/bspwm/bspwmrc instalador.sh instalar-paquetes.sh wallpapers/generar-fondos.sh comprobar.sh sistema/usr/local/sbin/firewall-perfil sistema/etc/NetworkManager/dispatcher.d/*)
+SCRIPTS=(scripts/.local/bin/*.sh bspwm/.config/bspwm/bspwmrc instalador.sh instalar-paquetes.sh instalar-apps.sh wallpapers/generar-fondos.sh comprobar.sh sistema/usr/local/sbin/firewall-perfil sistema/etc/NetworkManager/dispatcher.d/*)
 for s in "${SCRIPTS[@]}"; do bash -n "$s" 2>/dev/null || ko "sintaxis: $s"; done
 if command -v shellcheck >/dev/null; then
     OUT=$(shellcheck -f gcc "${SCRIPTS[@]}" 2>&1); [ -z "$OUT" ] && ok "shellcheck limpio" || { ko "shellcheck:"; echo "$OUT" | sed 's/^/      /'; }

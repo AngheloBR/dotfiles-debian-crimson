@@ -32,6 +32,8 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
 # binarios propios (~/.local/bin: scripts del rice, nvim 0.12) y opencode
 export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+# apps instaladas por instalar-apps.sh (JetBrains Toolbox, Android Studio...)
+[ -d "$HOME/.local/bin-apps" ] && export PATH="$HOME/.local/bin-apps:$PATH"
 
 # fzf (busqueda difusa): Ctrl+R historial, Ctrl+T archivos, Alt+C carpetas
 # Los archivos los da fd (paquete fd-find, binario "fdfind" en Debian):
