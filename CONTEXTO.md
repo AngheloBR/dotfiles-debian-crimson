@@ -274,7 +274,7 @@ sudo apt install -y git
 git clone https://github.com/AngheloBR/dotfiles-debian-crimson ~/.dotfiles
 cd ~/.dotfiles
 ./instalar-paquetes.sh   # 82 paquetes + Mozilla + nerd fonts + nvim 0.12 + p10k
-                         # + piper + firewall + lightdm + Claude Code + opencode
+                         # + piper + firewall + lightdm + Claude Code + opencode + agy
 ./instalador.sh          # stow (detecta VM vs hardware real para picom)
 sudo reboot
 # y cuando se quiera, los programas de usuario (van aparte a proposito):
@@ -291,7 +291,7 @@ sudo reboot
 | Discord, OnlyOffice, Obsidian | **Flatpak** (sus `.deb` no se actualizan con apt; Discord se niega a arrancar hasta actualizarlo a mano) |
 | AnyDesk | repo propio (se actualiza con apt). **Solo X11** |
 | JetBrains Toolbox | tarball a `~/.local/opt`, versión consultada a su API |
-| **Android Studio** | el script ofrece: **tarball oficial** (recomendado: emulador y adb por USB sin pegas) o **Flatpak** `com.google.AndroidStudio` (se actualiza solo, pero el sandbox complica emulador y USB). No se automatiza el tarball: el feed de Google da la versión como *"Quail 4 \| 2026.1.4 Patch 1"* y la URL necesita el número de compilación interno, que no publica |
+| **Android Studio** | el script ofrece: **tarball oficial** (recomendado: emulador y adb por USB sin pegas) o **Flatpak** `com.google.AndroidStudio` (se actualiza solo, pero el sandbox complica emulador y USB). El tarball se descarga solo: la web `developer.android.com/studio` trae la URL completa y el sha256 (el **primero** de la página es el del `.exe` de Windows, no el de Linux) |
 | **JetBrains Toolbox** | **opcional**, el script pregunta. Para Android NO hace falta: **Android Studio ES IntelliJ IDEA** con el SDK y las herramientas de Google. Tiene sentido para PyCharm (scripts de redes) u otros lenguajes |
 | **Antigravity** (IDE de Google) | **sin verificar**: mirar si ofrece `.deb` |
 
@@ -323,7 +323,7 @@ gh repo edit AngheloBR/dotfiles-debian-crimson --visibility private
   `virsh define`.
 - **Claude Desktop**: `sudo apt install claude-desktop` (el repo ya queda
   configurado).
-- **Sesión de Claude Code / opencode**: volver a autenticarse.
+- **Sesión de Claude Code / opencode / agy (Antigravity CLI)**: volver a autenticarse.
 
 ## 10. Cómo trabajar (flujo)
 
@@ -347,7 +347,7 @@ gh repo edit AngheloBR/dotfiles-debian-crimson --visibility private
 
 ## 11. Lecciones que más han mordido
 
-Las **30** están en `GUIA-RICE-DEBIAN-BSPWM.txt` §7. Las peores:
+Las **31** están en `GUIA-RICE-DEBIAN-BSPWM.txt` §7. Las peores:
 
 - **lightdm arranca bspwm con un PATH sin `~/.local/bin`** → hay que exportarlo
   al principio de `bspwmrc`. Tuvo a polybar sin arrancar sin dar ningún error.

@@ -135,6 +135,13 @@ fi
 if [ ! -x ~/.opencode/bin/opencode ]; then
   curl -fsSL https://opencode.ai/install | bash
 fi
+# Antigravity CLI (agy, de Google): ~/.local/bin/agy. Su instalador AÑADE
+# un "export PATH" a ~/.zshrc, que es el del repo (symlink): se deshace,
+# el .zshrc ya pone ~/.local/bin en el PATH.
+if [ ! -x ~/.local/bin/agy ]; then
+  curl -fsSL https://antigravity.google/cli/install.sh | bash
+  git -C "$(dirname "$0")" checkout -- zsh/.zshrc
+fi
 
 echo "=== Voz (Piper: lee texto en alto, local y sin internet) ==="
 mkdir -p ~/.local/opt ~/.local/share/piper-voces

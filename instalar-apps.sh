@@ -48,10 +48,9 @@ echo "=== Android Studio (lo principal para apps Android) ==="
 # herramientas de Google encima: para hacer apps Android NO hace falta
 # ademas IntelliJ.
 #
-# No se automatiza la descarga del tarball a proposito: Google publica la
-# version como "Quail 4 | 2026.1.4 Patch 1" pero la URL necesita el numero
-# de compilacion interno (2026.1.4.13), que no aparece en ningun feed. Una
-# URL fija caducaria en la siguiente version.
+# La web de descargas trae la URL completa (con el numero de compilacion
+# interno) y, en la tabla, el sha256 justo despues del nombre de cada
+# archivo. Ojo: el PRIMER hash de la pagina es el del .exe de Windows.
 if [ -d ~/.local/opt/android-studio ] || flatpak info com.google.AndroidStudio >/dev/null 2>&1; then
   echo "-> ya esta instalado"
 else
@@ -66,16 +65,37 @@ else
       flatpak install -y --noninteractive flathub com.google.AndroidStudio
       ;;
     1|"")
-      echo ""
-      echo "  Descarga el .tar.gz de https://developer.android.com/studio"
-      echo "  y cuando lo tengas en ~/Descargas, ejecuta:"
-      echo ""
-      echo "    mkdir -p ~/.local/opt"
-      echo "    tar xzf ~/Descargas/android-studio-*-linux.tar.gz -C ~/.local/opt/"
-      echo "    ~/.local/opt/android-studio/bin/studio.sh"
-      echo ""
-      echo "  En el primer arranque descarga el SDK (8-12 GB). El emulador"
-      echo "  ira acelerado: /dev/kvm ya esta y el usuario pertenece al grupo."
+      PAGINA=$(curl -fsSL https://developer.android.com/studio)
+      AS_URL=$(grep -oE 'https://[^"]*/android-studio-[a-z0-9-]+-linux\.tar\.gz' <<<"$PAGINA" | head -1)
+      AS_ARCHIVO=${AS_URL##*/}
+      AS_SHA=$(grep -oE "$AS_ARCHIVO|[0-9a-f]{64}" <<<"$PAGINA" | grep -A1 -xF "$AS_ARCHIVO" | grep -m1 -xE '[0-9a-f]{64}')
+      if [ -z "$AS_URL" ] || [ -z "$AS_SHA" ]; then
+        echo "  No se pudo leer la web (cambio de formato?). Descargalo de"
+        echo "  https://developer.android.com/studio y descomprimelo en ~/.local/opt/"
+      else
+        tmpd=$(mktemp -d)
+        echo "  Descargando $AS_ARCHIVO (~1,5 GB)..."
+        curl -fL -o "$tmpd/$AS_ARCHIVO" "$AS_URL"
+        # si el hash no coincide, set -e para aqui y no se instala nada
+        echo "$AS_SHA  $tmpd/$AS_ARCHIVO" | sha256sum -c
+        mkdir -p ~/.local/opt
+        tar xzf "$tmpd/$AS_ARCHIVO" -C ~/.local/opt/
+        rm -rf "$tmpd"
+        # lanzador para rofi (no va en el repo: apunta a esta instalacion)
+        cat > ~/.local/share/applications/android-studio.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=Android Studio
+Comment=IDE oficial para apps Android
+Exec=$HOME/.local/opt/android-studio/bin/studio %f
+Icon=$HOME/.local/opt/android-studio/bin/studio.svg
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-studio
+EOF
+        echo "-> Android Studio en ~/.local/opt. En el primer arranque descarga"
+        echo "   el SDK (8-12 GB). Se actualiza desde el propio programa."
+      fi
       ;;
   esac
 fi

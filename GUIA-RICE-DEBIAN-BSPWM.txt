@@ -378,6 +378,9 @@ instalar-paquetes.sh:
   carpeta entera del repo, y las apps escriben dentro del repo (paso con
   ~/.local/share/applications). Para carpetas donde escriben otros
   programas: stow --no-folding.
+- Instaladores "curl | bash" (Antigravity CLI...) escriben en ~/.zshrc,
+  que es un symlink: la linea acaba DENTRO del repo. Mirar git status
+  despues de instalar cualquier cosa y deshacerlo si sobra.
 
 ════════════════════════════════════════════════════════════════
  8. PENDIENTES TÉCNICOS (hardware real)
